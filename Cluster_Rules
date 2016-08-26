@@ -1,0 +1,71 @@
+# E_YY10
+2
+COMB
+1
+1
+aust
+ALL
+
+# E_YY1U
+2
+COMB
+1
+1
+mart
+IN
+
+# E_YY2U
+2
+COMB
+1
+1
+mart
+OUT
+
+# E_YZ10
+2
+PERM
+1 2
+1 2
+aust
+ALL
+
+# E_YZ1U
+2
+PERM
+1 2
+1 2
+mart
+IN
+
+# E_YZ2U
+2
+PERM
+1 2
+1 2
+mart
+OUT
+
+# E_ZZ10
+2
+COMB
+2
+2
+aust
+ALL
+
+# E_ZZ1U
+2
+COMB
+2
+2
+mart
+IN
+
+# E_ZZ2U
+2
+COMB
+2
+2
+mart
+OUT

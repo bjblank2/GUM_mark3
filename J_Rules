@@ -1,0 +1,87 @@
+# J2a0
+1
+PERM
+0 1
+0 1
+aust
+ALL
+
+# J2aU
+1
+PERM
+0 1
+0 1
+mart
+OUT
+
+# J1b0
+2
+COMB
+1 2
+1 2
+aust
+ALL
+
+# J1bU
+2
+COMB
+1 2
+1 2
+mart
+IN
+
+# J2bU
+2
+COMB
+1 2
+1 2
+mart
+OUT
+
+# J1c0
+3
+COMB
+1 2
+1 2
+aust
+ALL
+
+# J1cU
+3
+COMB
+1 2
+1 2
+mart
+IN
+
+# J2cU
+3
+COMB
+1 2
+1 2
+mart
+OUT
+
+# J1d0
+2
+COMB
+0
+0
+aust
+ALL
+
+# J1dU
+2
+COMB
+0
+0
+mart
+IN
+
+# J2dU
+2
+COMB
+0
+0
+mart
+OUT
