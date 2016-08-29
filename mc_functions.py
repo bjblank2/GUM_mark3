@@ -3,12 +3,12 @@ import numpy as np
 from copy import deepcopy
 
 def init_supercell(num_pts):
-    supercell = np.empty((num_pts,num_pts,num_pts),dtype=list)
+    supercell = np.empty((num_pts,num_pts,num_pts*2),dtype=list)
     supercell_list = []
     count = 0
     for i in range(num_pts):
         for j in range(num_pts):
-            for k in range(num_pts):
+            for k in range(num_pts*2):
                 if np.mod(k,2) == 0 :
                     params = [0,i*.5,j*.5,k*.25,1,0,0]
                 else:
@@ -52,12 +52,13 @@ def apply_bc(i,inc,limit):
     return new_i
 
 def calc_neighbors(supercell):
-    length = len(supercell)
+    print(supercell.shape)
+    length_i,length_j,length_k = supercell.shape
     neighbor_list = []
     neighbor_plain_list = []
-    for i in range(length):
-        for j in range(length):
-            for k in range(length):
+    for i in range(length_i):
+        for j in range(length_j):
+            for k in range(length_k):
                 nn_list = ['_']*8
                 nn_plain = ['-']*8
                 nnn_list = ['_']*6
@@ -65,84 +66,84 @@ def calc_neighbors(supercell):
                 nnnn_list = ['_']*12
                 nnnn_plain = ['_']*12
 
-                nn = supercell[i,j,apply_bc(k,1,length)]
+                nn = supercell[i,j,apply_bc(k,1,length_k)]
                 nn_list[0] = nn[0]
                 nn_plain[0] = 'OUT'
-                nn = supercell[i,j,apply_bc(k,-1,length)]
+                nn = supercell[i,j,apply_bc(k,-1,length_k)]
                 nn_list[1] = nn[0]
                 nn_plain[1] = 'OUT'
-                nn = supercell[i,apply_bc(j,-1,length),apply_bc(k,1,length)]
+                nn = supercell[i,apply_bc(j,-1,length_j),apply_bc(k,1,length_k)]
                 nn_list[2] = nn[0]
                 nn_plain[2] = 'OUT'
-                nn = supercell[i,apply_bc(j,-1,length),apply_bc(k,-1,length)]
+                nn = supercell[i,apply_bc(j,-1,length_j),apply_bc(k,-1,length_k)]
                 nn_list[3] = nn[0]
                 nn_plain[3] = 'OUT'
-                nn = supercell[apply_bc(i,-1,length),apply_bc(j,-1,length),apply_bc(k,1,length)]
+                nn = supercell[apply_bc(i,-1,length_i),apply_bc(j,-1,length_j),apply_bc(k,1,length_k)]
                 nn_list[4] = nn[0]
                 nn_plain[4] = 'OUT'
-                nn = supercell[apply_bc(i,-1,length),apply_bc(j,-1,length),apply_bc(k,-1,length)]
+                nn = supercell[apply_bc(i,-1,length_i),apply_bc(j,-1,length_j),apply_bc(k,-1,length_k)]
                 nn_list[5] = nn[0]
                 nn_plain[5] = 'OUT'
-                nn = supercell[apply_bc(i,-1,length),j,apply_bc(k,1,length)]
+                nn = supercell[apply_bc(i,-1,length_i),j,apply_bc(k,1,length_k)]
                 nn_list[6] = nn[0]
                 nn_plain[6] = 'OUT'
-                nn = supercell[apply_bc(i,-1,length),j,apply_bc(k,-1,length)]
+                nn = supercell[apply_bc(i,-1,length_i),j,apply_bc(k,-1,length_k)]
                 nn_list[7] = nn[0]
                 nn_plain[7] = 'OUT'
 
-                nnn = supercell[apply_bc(i,1,length),j,k]
+                nnn = supercell[apply_bc(i,1,length_i),j,k]
                 nnn_list[0] = nnn[0]
                 nnn_plain[0] = 'IN'
-                nnn = supercell[apply_bc(i,-1,length),j,k]
+                nnn = supercell[apply_bc(i,-1,length_i),j,k]
                 nnn_list[1] = nnn[0]
                 nnn_plain[1] = 'IN'
-                nnn = supercell[i,apply_bc(j,1,length),k]
+                nnn = supercell[i,apply_bc(j,1,length_j),k]
                 nnn_list[2] = nnn[0]
                 nnn_plain[2] = 'IN'
-                nnn = supercell[i,apply_bc(j,-1,length),k]
+                nnn = supercell[i,apply_bc(j,-1,length_j),k]
                 nnn_list[3] = nnn[0]
                 nnn_plain[3] = 'IN'
-                nnn = supercell[i,j,apply_bc(k,2,length)]
+                nnn = supercell[i,j,apply_bc(k,2,length_k)]
                 nnn_list[4] = nnn[0]
                 nnn_plain[4] = 'OUT'
-                nnn = supercell[i,j,apply_bc(k,-2,length)]
+                nnn = supercell[i,j,apply_bc(k,-2,length_k)]
                 nnn_list[5] = nnn[0]
                 nnn_plain[5] = 'OUT'
 
-                nnnn = supercell[apply_bc(i,1,length),j,apply_bc(k,2,length)]
+                nnnn = supercell[apply_bc(i,1,length_i),j,apply_bc(k,2,length_k)]
                 nnnn_list[0] = nnnn[0]
                 nnnn_plain[0] = 'OUT'
-                nnnn = supercell[apply_bc(i,1,length),j,apply_bc(k,-2,length)]
+                nnnn = supercell[apply_bc(i,1,length_i),j,apply_bc(k,-2,length_k)]
                 nnnn_list[1] = nnnn[0]
                 nnnn_plain[1] = 'OUT'
-                nnnn = supercell[apply_bc(i,-1,length),j,apply_bc(k,2,length)]
+                nnnn = supercell[apply_bc(i,-1,length_i),j,apply_bc(k,2,length_k)]
                 nnnn_list[2] = nnnn[0]
                 nnnn_plain[2] = 'OUT'
-                nnnn = supercell[apply_bc(i,-1,length),j,apply_bc(k,-2,length)]
+                nnnn = supercell[apply_bc(i,-1,length_i),j,apply_bc(k,-2,length_k)]
                 nnnn_list[3] = nnnn[0]
                 nnnn_plain[3] = 'OUT'
-                nnnn = supercell[i,apply_bc(j,1,length),apply_bc(k,2,length)]
+                nnnn = supercell[i,apply_bc(j,1,length_j),apply_bc(k,2,length_k)]
                 nnnn_list[4] = nnnn[0]
                 nnnn_plain[4] = 'OUT'
-                nnnn = supercell[i,apply_bc(j,1,length),apply_bc(k,-2,length)]
+                nnnn = supercell[i,apply_bc(j,1,length_j),apply_bc(k,-2,length_k)]
                 nnnn_list[5] = nnnn[0]
                 nnnn_plain[5] = 'OUT'
-                nnnn = supercell[i,apply_bc(j,-1,length),apply_bc(k,2,length)]
+                nnnn = supercell[i,apply_bc(j,-1,length_j),apply_bc(k,2,length_k)]
                 nnnn_list[6] = nnnn[0]
                 nnnn_plain[6] = 'OUT'
-                nnnn = supercell[i,apply_bc(j,-1,length),apply_bc(k,-2,length)]
+                nnnn = supercell[i,apply_bc(j,-1,length_j),apply_bc(k,-2,length_k)]
                 nnnn_list[7] = nnnn[0]
                 nnnn_plain[7] = 'OUT'
-                nnnn = supercell[apply_bc(i,1,length),apply_bc(j,1,length),k]
+                nnnn = supercell[apply_bc(i,1,length_i),apply_bc(j,1,length_j),k]
                 nnnn_list[8] = nnnn[0]
                 nnnn_plain[8] = 'IN'
-                nnnn = supercell[apply_bc(i,1,length),apply_bc(j,-1,length),k]
+                nnnn = supercell[apply_bc(i,1,length_i),apply_bc(j,-1,length_j),k]
                 nnnn_list[9] = nnnn[0]
                 nnnn_plain[9] = 'IN'
-                nnnn = supercell[apply_bc(i,-1,length),apply_bc(j,1,length),k]
+                nnnn = supercell[apply_bc(i,-1,length_i),apply_bc(j,1,length_j),k]
                 nnnn_list[10] = nnnn[0]
                 nnnn_plain[10] = 'IN'
-                nnnn = supercell[apply_bc(i,-1,length),apply_bc(j,-1,length),k]
+                nnnn = supercell[apply_bc(i,-1,length_i),apply_bc(j,-1,length_j),k]
                 nnnn_list[11] = nnnn[0]
                 nnnn_plain[11] = 'IN'
 

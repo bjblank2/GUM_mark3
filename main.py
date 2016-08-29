@@ -42,8 +42,8 @@ Cp.write_output(M_structures, BEG_rules, Cluster_rules, J_rules, Js, 200)
 #--------------------------------------------------------------#
 
 #--------------------------------------------------------------#
-pts = 7 # this refers to sub-lattice
-T = 1001
+pts = 4 # this refers to sub-lattice
+T = 1.001
 Kb = .000086173324 #8.6173324(78)×10−5 eV*K^-1
 supercell_list,supercell = mc.init_supercell(pts)
 neighbor_list,plane_list = mc.calc_neighbors(supercell)
@@ -58,7 +58,7 @@ print(H_total,H_mag)
 # plt.show()
 
 plt.figure(1)
-plt.plot(0,H_total/(pts**3),lw=3,marker='o',color='b')
+plt.plot(0,H_total/np.size(supercell),lw=3,marker='o',color='b')
 inc = 0
 for passes in range(1,1500):
     m = 0
@@ -97,8 +97,8 @@ for passes in range(1,1500):
         else:
             #H_total += H_new-H_old
             x = 0
-        m2 += home_site[5]**2/pts**3
-        m += home_site[5]/pts**3
+        m2 += home_site[5]**2/np.size(supercell)
+        m += home_site[5]/np.size(supercell)
     H_total,H_mag = mc.eval_supercell(supercell_list,neighbor_list,plane_list,BEG_rules,Cluster_rules,J_rules,Js)
     inc +=1
     if inc >= 100:
@@ -109,10 +109,10 @@ for passes in range(1,1500):
         print(passes)
         print(T)
     plt.figure(1)
-    plt.plot(passes,H_total/(pts**3),lw=3,marker='o',color='b')
+    plt.plot(passes,H_total/np.size(supercell),lw=3,marker='o',color='b')
     plt.figure(2)
-    plt.plot(passes,m/pts**3,lw=3,marker='o',color='b')
+    plt.plot(passes,m/np.size(supercell),lw=3,marker='o',color='b')
     plt.figure(3)
-    plt.plot(passes,m2/pts**3,lw=3,marker='o',color='b')
+    plt.plot(passes,m2/np.size(supercell),lw=3,marker='o',color='b')
 plt.show()
 
