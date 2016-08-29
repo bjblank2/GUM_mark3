@@ -43,7 +43,7 @@ Cp.write_output(M_structures, BEG_rules, Cluster_rules, J_rules, Js, 200)
 
 #--------------------------------------------------------------#
 pts = 4 # this refers to sub-lattice
-T = 1.001
+T = 1001
 Kb = .000086173324 #8.6173324(78)×10−5 eV*K^-1
 supercell_list,supercell = mc.init_supercell(pts)
 neighbor_list,plane_list = mc.calc_neighbors(supercell)
@@ -100,14 +100,23 @@ for passes in range(1,1500):
         m2 += home_site[5]**2/np.size(supercell)
         m += home_site[5]/np.size(supercell)
     H_total,H_mag = mc.eval_supercell(supercell_list,neighbor_list,plane_list,BEG_rules,Cluster_rules,J_rules,Js)
-    inc +=1
+    # inc +=1
+    # if inc >= 100:
+    #     T -= 100
+    #     inc = 0
+    #     if T <= 0:
+    #         T = 1
+    #     print(passes)
+    #     print(T)
+    T -= 1
+    if T <= 0:
+        T = 1
+    inc += 1
     if inc >= 100:
-        T -= 100
         inc = 0
-        if T <= 0:
-            T = 1
         print(passes)
         print(T)
+        
     plt.figure(1)
     plt.plot(passes,H_total/np.size(supercell),lw=3,marker='o',color='b')
     plt.figure(2)
