@@ -52,7 +52,6 @@ def apply_bc(i,inc,limit):
     return new_i
 
 def calc_neighbors(supercell):
-    print(supercell.shape)
     length_i,length_j,length_k = supercell.shape
     neighbor_list = []
     neighbor_plain_list = []
