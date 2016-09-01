@@ -1,6 +1,7 @@
 __author__ = 'brian'
 import calc_params as Cp
 import mc_functions as mc
+import mc_supercell as ms
 import numpy as np
 import matplotlib.pyplot as plt
 #--------------------------------------------------------------#
@@ -42,13 +43,15 @@ Cp.write_output(M_structures, BEG_rules, Cluster_rules, J_rules, Js, 200)
 #--------------------------------------------------------------#
 
 #--------------------------------------------------------------#
-pts = 2 # this refers to sub-lattice
 T = 1001
 Kb = .000086173324 #8.6173324(78)×10−5 eV*K^-1
-supercell_list,supercell = mc.init_supercell(pts)
-neighbor_list,plane_list = mc.calc_neighbors(supercell)
-H_total,H_mag = mc.eval_supercell(supercell_list,neighbor_list,plane_list,BEG_rules,Cluster_rules,J_rules,Js)
-print(H_total,H_mag)
+x_pts = 2
+y_pts = 2
+z_pts = 4
+lattice = ms.mc_supercellObj((x_pts,y_pts,z_pts),(0,1),(.5,.5))
+lattice.find_neighbors()
+H_total = mc.eval_supercell(lattice,BEG_rules,Cluster_rules,J_rules,Js)
+print(H_total/np.size(lattice.supercell))
 
 # for i in range(4000):
 #     supercell_list,supercell = mc.init_supercell(pts)
@@ -58,48 +61,48 @@ print(H_total,H_mag)
 # plt.show()
 
 plt.figure(1)
-plt.plot(0,H_total/np.size(supercell),lw=3,marker='o',color='b')
+plt.plot(0,H_total/np.size(lattice.supercell),lw=3,marker='o',color='b')
 inc = 0
 for passes in range(1,1500):
     m = 0
     m2 = 0
-    for i in range(len(supercell_list)):
-        home_site = supercell_list[i]
-        H_new = 0
-        H_old = 0
-        H_old,H_mag_old = mc.eval_site(supercell_list[i],supercell_list,neighbor_list[i],plane_list[i],BEG_rules,Cluster_rules,J_rules,Js)
-        old_home_site = mc.flip_phase(i,supercell_list)
-        H_new,H_mag_old = mc.eval_site(supercell_list[i],supercell_list,neighbor_list[i],plane_list[i],BEG_rules,Cluster_rules,J_rules,Js)
-        if H_new > H_old:
-            rand = np.random.random()
-            prob = np.exp(-1/(Kb*T)*(H_new-H_old))
-            if rand > prob:
-                supercell_list[i] = old_home_site
-            else:
-                #H_total += H_new-H_old
-                x = 0
-        else:
-            #H_total += H_new-H_old
-            x = 0
-        H_new = 0
-        H_old = 0
-        H_old,H_mag_old = mc.eval_site(supercell_list[i],supercell_list,neighbor_list[i],plane_list[i],BEG_rules,Cluster_rules,J_rules,Js)
-        old_home_site = mc.flip_spin(i,supercell_list)
-        H_new,H_mag_old = mc.eval_site(supercell_list[i],supercell_list,neighbor_list[i],plane_list[i],BEG_rules,Cluster_rules,J_rules,Js)
-        if H_new > H_old:
-            rand = np.random.random()
-            prob = np.exp(-1/(Kb*T)*(H_new-H_old))
-            if rand > prob:
-                supercell_list[i] = old_home_site
-            else:
-                #H_total += H_new-H_old
-                x = 0
-        else:
-            #H_total += H_new-H_old
-            x = 0
-        m2 += home_site[5]**2/np.size(supercell)
-        m += home_site[5]/np.size(supercell)
-    H_total,H_mag = mc.eval_supercell(supercell_list,neighbor_list,plane_list,BEG_rules,Cluster_rules,J_rules,Js)
+    for i in range(x_pts):
+        for j in range(y_pts):
+            for k in range(z_pts):
+                home_site = lattice.supercell[i,j,k]
+                H_new = 0
+                H_old = 0
+                H_old = mc.eval_site(lattice.supercell,(i,j,k),BEG_rules,Cluster_rules,J_rules,Js)
+                old_home_site = mc.flip_phase(lattice.supercell,(i,j,k))
+                H_new = mc.eval_site(lattice.supercell,(i,j,k),BEG_rules,Cluster_rules,J_rules,Js)
+                if H_new > H_old:
+                    rand = np.random.random()
+                    prob = np.exp(-1/(Kb*T)*(H_new-H_old))
+                    if rand > prob:
+                        lattice.supercell[i,j,k] = old_home_site
+                    else:
+                        #H_total += H_new-H_old
+                        x = 0
+                else:
+                    #H_total += H_new-H_old
+                    x = 0
+                H_new = 0
+                H_old = 0
+                H_old = mc.eval_site(lattice.supercell,(i,j,k),BEG_rules,Cluster_rules,J_rules,Js)
+                old_home_site = mc.flip_spin(lattice.supercell,(i,j,k))
+                H_new = mc.eval_site(lattice.supercell,(i,j,k),BEG_rules,Cluster_rules,J_rules,Js)
+                if H_new > H_old:
+                    rand = np.random.random()
+                    prob = np.exp(-1/(Kb*T)*(H_new-H_old))
+                    if rand > prob:
+                        lattice.supercell[i,j,k] = old_home_site
+                    else:
+                        #H_total += H_new-H_old
+                        x = 0
+                else:
+                    #H_total += H_new-H_old
+                    x = 0
+    H_total = mc.eval_supercell(lattice,BEG_rules,Cluster_rules,J_rules,Js)
     # inc +=1
     # if inc >= 100:
     #     T -= 100
@@ -118,10 +121,6 @@ for passes in range(1,1500):
         print(T)
 
     plt.figure(1)
-    plt.plot(passes,H_total/np.size(supercell),lw=3,marker='o',color='b')
-    plt.figure(2)
-    plt.plot(passes,m/np.size(supercell),lw=3,marker='o',color='b')
-    plt.figure(3)
-    plt.plot(passes,m2/np.size(supercell),lw=3,marker='o',color='b')
+    plt.plot(passes,H_total/np.size(lattice.supercell),lw=3,marker='o',color='b')
 plt.show()
 
