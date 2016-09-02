@@ -101,131 +101,131 @@ class mc_supercellObj:
                     neighbor_site = self.supercell[i,j,self.apply_bc(k,1,self.k_length)]
                     site_index = neighbor_site.get_index()
                     site_pos = neighbor_site.get_pos()
-                    self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,'1','OUT'))
+                    self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,1,'OUT'))
 
                     neighbor_site = self.supercell[i,j,self.apply_bc(k,-1,self.k_length)]
                     site_index = neighbor_site.get_index()
                     site_pos = neighbor_site.get_pos()
-                    self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,'1','OUT'))
+                    self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,1,'OUT'))
 
                     neighbor_site = self.supercell[self.apply_bc(i,-1,self.i_length),j,self.apply_bc(k,1,self.k_length)]
                     site_index = neighbor_site.get_index()
                     site_pos = neighbor_site.get_pos()
-                    self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,'1','OUT'))
+                    self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,1,'OUT'))
 
                     neighbor_site = self.supercell[self.apply_bc(i,-1,self.i_length),j,self.apply_bc(k,-1,self.k_length)]
                     site_index = neighbor_site.get_index()
                     site_pos = neighbor_site.get_pos()
-                    self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,'1','OUT'))
+                    self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,1,'OUT'))
 
                     neighbor_site = self.supercell[i,self.apply_bc(j,-1,self.j_length),self.apply_bc(k,1,self.k_length)]
                     site_index = neighbor_site.get_index()
                     site_pos = neighbor_site.get_pos()
-                    self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,'1','OUT'))
+                    self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,1,'OUT'))
 
                     neighbor_site = self.supercell[i,self.apply_bc(j,-1,self.j_length),self.apply_bc(k,-1,self.k_length)]
                     site_index = neighbor_site.get_index()
                     site_pos = neighbor_site.get_pos()
-                    self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,'1','OUT'))
+                    self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,1,'OUT'))
 
                     neighbor_site = self.supercell[self.apply_bc(i,-1,self.i_length),self.apply_bc(j,-1,self.j_length),self.apply_bc(k,1,self.k_length)]
                     site_index = neighbor_site.get_index()
                     site_pos = neighbor_site.get_pos()
-                    self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,'1','OUT'))
+                    self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,1,'OUT'))
 
                     neighbor_site = self.supercell[self.apply_bc(i,-1,self.i_length),self.apply_bc(j,-1,self.j_length),self.apply_bc(k,-1,self.k_length)]
                     site_index = neighbor_site.get_index()
                     site_pos = neighbor_site.get_pos()
-                    self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,'1','OUT'))
+                    self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,1,'OUT'))
 
 
                     neighbor_site = self.supercell[self.apply_bc(i,1,self.i_length),j,k]
                     site_index = neighbor_site.get_index()
                     site_pos = neighbor_site.get_pos()
-                    self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,'2','IN'))
+                    self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,2,'IN'))
 
                     neighbor_site = self.supercell[self.apply_bc(i,-1,self.i_length),j,k]
                     site_index = neighbor_site.get_index()
                     site_pos = neighbor_site.get_pos()
-                    self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,'2','IN'))
+                    self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,2,'IN'))
 
                     neighbor_site = self.supercell[i,self.apply_bc(j,1,self.j_length),k]
                     site_index = neighbor_site.get_index()
                     site_pos = neighbor_site.get_pos()
-                    self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,'2','IN'))
+                    self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,2,'IN'))
 
                     neighbor_site = self.supercell[i,self.apply_bc(j,-1,self.j_length),k]
                     site_index = neighbor_site.get_index()
                     site_pos = neighbor_site.get_pos()
-                    self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,'2','IN'))
+                    self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,2,'IN'))
 
                     neighbor_site = self.supercell[i,j,self.apply_bc(k,2,self.k_length)]
                     site_index = neighbor_site.get_index()
                     site_pos = neighbor_site.get_pos()
-                    self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,'2','OUT'))
+                    self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,2,'OUT'))
 
                     neighbor_site = self.supercell[i,j,self.apply_bc(k,-2,self.k_length)]
                     site_index = neighbor_site.get_index()
                     site_pos = neighbor_site.get_pos()
-                    self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,'2','OUT'))
+                    self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,2,'OUT'))
 
 
                     neighbor_site = self.supercell[self.apply_bc(i,1,self.i_length),j,self.apply_bc(k,2,self.k_length)]
                     site_index = neighbor_site.get_index()
                     site_pos = neighbor_site.get_pos()
-                    self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,'3','OUT'))
+                    self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,3,'OUT'))
 
                     neighbor_site = self.supercell[self.apply_bc(i,1,self.i_length),j,self.apply_bc(k,-2,self.k_length)]
                     site_index = neighbor_site.get_index()
                     site_pos = neighbor_site.get_pos()
-                    self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,'3','OUT'))
+                    self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,3,'OUT'))
 
                     neighbor_site = self.supercell[self.apply_bc(i,-1,self.i_length),j,self.apply_bc(k,2,self.k_length)]
                     site_index = neighbor_site.get_index()
                     site_pos = neighbor_site.get_pos()
-                    self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,'3','OUT'))
+                    self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,3,'OUT'))
 
                     neighbor_site = self.supercell[self.apply_bc(i,-1,self.i_length),j,self.apply_bc(k,-2,self.k_length)]
                     site_index = neighbor_site.get_index()
                     site_pos = neighbor_site.get_pos()
-                    self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,'3','OUT'))
+                    self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,3,'OUT'))
 
                     neighbor_site = self.supercell[i,self.apply_bc(j,1,self.j_length),self.apply_bc(k,2,self.k_length)]
                     site_index = neighbor_site.get_index()
                     site_pos = neighbor_site.get_pos()
-                    self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,'3','OUT'))
+                    self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,3,'OUT'))
 
                     neighbor_site = self.supercell[i,self.apply_bc(j,1,self.j_length),self.apply_bc(k,-2,self.k_length)]
                     site_index = neighbor_site.get_index()
                     site_pos = neighbor_site.get_pos()
-                    self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,'3','OUT'))
+                    self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,3,'OUT'))
 
                     neighbor_site = self.supercell[i,self.apply_bc(j,-1,self.j_length),self.apply_bc(k,2,self.k_length)]
                     site_index = neighbor_site.get_index()
                     site_pos = neighbor_site.get_pos()
-                    self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,'3','OUT'))
+                    self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,3,'OUT'))
 
                     neighbor_site = self.supercell[i,self.apply_bc(j,-1,self.j_length),self.apply_bc(k,-2,self.k_length)]
                     site_index = neighbor_site.get_index()
                     site_pos = neighbor_site.get_pos()
-                    self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,'3','OUT'))
+                    self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,3,'OUT'))
 
                     neighbor_site = self.supercell[self.apply_bc(i,1,self.i_length),self.apply_bc(j,1,self.j_length),k]
                     site_index = neighbor_site.get_index()
                     site_pos = neighbor_site.get_pos()
-                    self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,'3','IN'))
+                    self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,3,'IN'))
 
                     neighbor_site = self.supercell[self.apply_bc(i,1,self.i_length),self.apply_bc(j,-1,self.j_length),k]
                     site_index = neighbor_site.get_index()
                     site_pos = neighbor_site.get_pos()
-                    self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,'3','IN'))
+                    self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,3,'IN'))
 
                     neighbor_site = self.supercell[self.apply_bc(i,-1,self.i_length),self.apply_bc(j,1,self.j_length),k]
                     site_index = neighbor_site.get_index()
                     site_pos = neighbor_site.get_pos()
-                    self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,'3','IN'))
+                    self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,3,'IN'))
 
                     neighbor_site = self.supercell[self.apply_bc(i,-1,self.i_length),self.apply_bc(j,-1,self.j_length),k]
                     site_index = neighbor_site.get_index()
                     site_pos = neighbor_site.get_pos()
-                    self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,'3','IN'))
+                    self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,3,'IN'))

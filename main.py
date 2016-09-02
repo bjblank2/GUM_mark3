@@ -45,13 +45,14 @@ Cp.write_output(M_structures, BEG_rules, Cluster_rules, J_rules, Js, 200)
 #--------------------------------------------------------------#
 T = 1001
 Kb = .000086173324 #8.6173324(78)×10−5 eV*K^-1
-x_pts = 2
-y_pts = 2
-z_pts = 4
+x_pts = 3
+y_pts = 3
+z_pts = 6
 lattice = ms.mc_supercellObj((x_pts,y_pts,z_pts),(0,1),(.5,.5))
 lattice.find_neighbors()
 H_total = mc.eval_supercell(lattice,BEG_rules,Cluster_rules,J_rules,Js)
 print(H_total/np.size(lattice.supercell))
+print(np.size(lattice.supercell))
 
 # for i in range(4000):
 #     supercell_list,supercell = mc.init_supercell(pts)
