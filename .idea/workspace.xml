@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f0cb30b1-c1a1-45ae-b445-2ac89e7935f6" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/mc_supercell.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.py" afterPath="$PROJECT_DIR$/main.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mc_functions.py" afterPath="$PROJECT_DIR$/mc_functions.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mc_supercell.py" afterPath="$PROJECT_DIR$/mc_supercell.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="GUM_mark3.iws" />
@@ -26,11 +24,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="main.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="main.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.14319809">
-              <caret line="86" column="43" selection-start-line="86" selection-start-column="43" selection-end-line="86" selection-end-column="43" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="52" column="0" selection-start-line="52" selection-start-column="0" selection-end-line="52" selection-end-column="0" />
               <folding>
                 <element signature="e#21#45#0" expanded="true" />
               </folding>
@@ -38,11 +36,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="mc_supercell.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="mc_supercell.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/mc_supercell.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-10.925926">
-              <caret line="69" column="32" selection-start-line="69" selection-start-column="32" selection-end-line="69" selection-end-column="32" />
+            <state vertical-scroll-proportion="-0.36363637">
+              <caret line="207" column="3" selection-start-line="207" selection-start-column="3" selection-end-line="207" selection-end-column="20" />
               <folding>
                 <element signature="e#21#39#0" expanded="true" />
                 <element signature="e#151#303#0" expanded="false" />
@@ -57,6 +55,7 @@
                 <element signature="e#808#843#0" expanded="false" />
                 <element signature="e#873#1120#0" expanded="false" />
                 <element signature="e#932#1120#0" expanded="false" />
+                <element signature="e#1206#2441#0" expanded="false" />
                 <element signature="e#2487#2662#0" expanded="false" />
               </folding>
             </state>
@@ -105,9 +104,9 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/mc_site.py" />
-        <option value="$PROJECT_DIR$/mc_supercell.py" />
         <option value="$PROJECT_DIR$/mc_functions.py" />
         <option value="$PROJECT_DIR$/main.py" />
+        <option value="$PROJECT_DIR$/mc_supercell.py" />
       </list>
     </option>
   </component>
@@ -319,9 +318,9 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.39871383" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2813505" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2813505" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
@@ -347,9 +346,20 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="3" />
+      <breakpoints>
+        <line-breakpoint enabled="true" type="python-line">
+          <url>file://$PROJECT_DIR$/main.py</url>
+          <line>52</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+      </breakpoints>
+      <option name="time" value="4" />
     </breakpoint-manager>
-    <watches-manager />
+    <watches-manager>
+      <configuration name="PythonConfigurationType">
+        <watch expression="lattice" language="Python" />
+      </configuration>
+    </watches-manager>
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/output">
@@ -368,25 +378,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/mc_supercell.py">
+    <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-10.925926">
-          <caret line="69" column="32" selection-start-line="69" selection-start-column="32" selection-end-line="69" selection-end-column="32" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="52" column="0" selection-start-line="52" selection-start-column="0" selection-end-line="52" selection-end-column="0" />
           <folding>
-            <element signature="e#21#39#0" expanded="true" />
-            <element signature="e#151#303#0" expanded="false" />
-            <element signature="e#338#355#0" expanded="false" />
-            <element signature="e#388#403#0" expanded="false" />
-            <element signature="e#440#459#0" expanded="false" />
-            <element signature="e#493#509#0" expanded="false" />
-            <element signature="e#544#554#0" expanded="false" />
-            <element signature="e#601#625#0" expanded="false" />
-            <element signature="e#669#690#0" expanded="false" />
-            <element signature="e#735#757#0" expanded="false" />
-            <element signature="e#808#843#0" expanded="false" />
-            <element signature="e#873#1120#0" expanded="false" />
-            <element signature="e#932#1120#0" expanded="false" />
-            <element signature="e#2487#2662#0" expanded="false" />
+            <element signature="e#21#45#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -405,12 +402,26 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
+    <entry file="file://$PROJECT_DIR$/mc_supercell.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.14319809">
-          <caret line="86" column="43" selection-start-line="86" selection-start-column="43" selection-end-line="86" selection-end-column="43" />
+        <state vertical-scroll-proportion="-0.36363637">
+          <caret line="207" column="3" selection-start-line="207" selection-start-column="3" selection-end-line="207" selection-end-column="20" />
           <folding>
-            <element signature="e#21#45#0" expanded="true" />
+            <element signature="e#21#39#0" expanded="true" />
+            <element signature="e#151#303#0" expanded="false" />
+            <element signature="e#338#355#0" expanded="false" />
+            <element signature="e#388#403#0" expanded="false" />
+            <element signature="e#440#459#0" expanded="false" />
+            <element signature="e#493#509#0" expanded="false" />
+            <element signature="e#544#554#0" expanded="false" />
+            <element signature="e#601#625#0" expanded="false" />
+            <element signature="e#669#690#0" expanded="false" />
+            <element signature="e#735#757#0" expanded="false" />
+            <element signature="e#808#843#0" expanded="false" />
+            <element signature="e#873#1120#0" expanded="false" />
+            <element signature="e#932#1120#0" expanded="false" />
+            <element signature="e#1206#2441#0" expanded="false" />
+            <element signature="e#2487#2662#0" expanded="false" />
           </folding>
         </state>
       </provider>

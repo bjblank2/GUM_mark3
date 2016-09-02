@@ -108,7 +108,12 @@ class mc_supercellObj:
                     site_pos = neighbor_site.get_pos()
                     self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,'nn','OUT'))
 
-                    neighbor_site = self.supercell[i,j,self.apply_bc(k,-1,self.k_length)]
+                    neighbor_site = self.supercell[self.apply_bc(i,-1,self.i_length),j,self.apply_bc(k,1,self.k_length)]
+                    site_index = neighbor_site.get_index()
+                    site_pos = neighbor_site.get_pos()
+                    self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,'nn','OUT'))
+
+                    neighbor_site = self.supercell[self.apply_bc(i,-1,self.i_length),j,self.apply_bc(k,-1,self.k_length)]
                     site_index = neighbor_site.get_index()
                     site_pos = neighbor_site.get_pos()
                     self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,'nn','OUT'))
@@ -129,16 +134,6 @@ class mc_supercellObj:
                     self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,'nn','OUT'))
 
                     neighbor_site = self.supercell[self.apply_bc(i,-1,self.i_length),self.apply_bc(j,-1,self.j_length),self.apply_bc(k,-1,self.k_length)]
-                    site_index = neighbor_site.get_index()
-                    site_pos = neighbor_site.get_pos()
-                    self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,'nn','OUT'))
-
-                    neighbor_site = self.supercell[self.apply_bc(i,-1,self.i_length),j,self.apply_bc(k,1,self.k_length)]
-                    site_index = neighbor_site.get_index()
-                    site_pos = neighbor_site.get_pos()
-                    self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,'nn','OUT'))
-
-                    neighbor_site = self.supercell[self.apply_bc(i,-1,self.i_length),j,self.apply_bc(k,-1,self.k_length)]
                     site_index = neighbor_site.get_index()
                     site_pos = neighbor_site.get_pos()
                     self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,'nn','OUT'))
