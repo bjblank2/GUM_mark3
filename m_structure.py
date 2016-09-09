@@ -17,7 +17,7 @@ class MStructureObj:
         self.mag_phase = data[itter + 2]
         self.name = data[itter + 3]
         self.u = float(data[itter + 4])
-        self.enrg = float(data[itter + 5]) / 4.0
+        self.enrg = float(data[itter + 5])
         a = float(data[itter + 6])
         b = float(data[itter + 7])
         c = float(data[itter + 8])

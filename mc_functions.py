@@ -18,9 +18,7 @@ def eval_supercell(supercell_obj,beg_rule_list, cluster_rule_list,j_rule_list,js
         for j in range(supercell_obj.j_length):
             for k in range(supercell_obj.k_length):
                 h_site = eval_site(supercell,(i,j,k),beg_rule_list,cluster_rule_list,j_rule_list,js)
-                #print(h_site)
                 h += float(h_site)
-    #print("\n")
     return float(h)
 
 def eval_site(suercell,index,beg_rule_list, cluster_rule_list,j_rule_list,js):
@@ -40,12 +38,10 @@ def eval_site(suercell,index,beg_rule_list, cluster_rule_list,j_rule_list,js):
                     if neighbor_site.species in beg_rule_list[j].neighbor_atom_list:
                         if beg_rule_list[j].phase == 'mart':
                             if check_phase(home_site) == beg_rule_list[j].phase:
-                                h += js[j] * home_site.phase * neighbor_site.phase
-                                #inc += 1
+                                h += js[j] * home_site.phase * neighbor_site.phase/6
                         if beg_rule_list[j].phase == 'aust':
                             if check_phase(home_site) == beg_rule_list[j].phase:
-                                h += js[j] * (1 - home_site.phase**2) * (1-neighbor_site.phase**2)
-                                #inc +=1
+                                h += js[j] * (1 - home_site.phase**2) * (1-neighbor_site.phase**2)/6
         # Cluster Ham
         for j in range(len(cluster_rule_list)):
             if home_site.species in cluster_rule_list[j].home_atom_list:
@@ -56,11 +52,10 @@ def eval_site(suercell,index,beg_rule_list, cluster_rule_list,j_rule_list,js):
                                 if neighbor_site.species != home_site.species:
                                     if neighbor_site.species in cluster_rule_list[j].neighbor_atom_list:
                                         h += js[len(beg_rule_list) + j]
-                                        #inc += 1
+                                        inc += 1
                             if cluster_rule_list[j].neighbor_arrangement == 'COMB':
                                 if neighbor_site.species in cluster_rule_list[j].neighbor_atom_list:
                                     h += js[len(beg_rule_list) + j]
-                                    #inc += 1
         # Mag Ham
         for j in range(len(j_rule_list)):
             if home_site.species in j_rule_list[j].home_atom_list:
@@ -71,14 +66,9 @@ def eval_site(suercell,index,beg_rule_list, cluster_rule_list,j_rule_list,js):
                                 if neighbor_site.species != home_site.species:
                                     if neighbor_site.species in j_rule_list[j].neighbor_atom_list:
                                         h += home_site.spin*neighbor_site.spin* float(js[len(beg_rule_list) + len(cluster_rule_list)+j])
-                                        #inc += 1
                             if j_rule_list[j].neighbor_arrangement == 'COMB':
                                 if neighbor_site.species in j_rule_list[j].neighbor_atom_list:
                                     h += home_site.spin*neighbor_site.spin * float(js[len(beg_rule_list) + len(cluster_rule_list)+j])
-                                    #inc += 1
-    #print(home_site.species)
-    #print(inc)
-    #print("\n")
     return float(h)
 
 def flip_species(i,supercell_list):

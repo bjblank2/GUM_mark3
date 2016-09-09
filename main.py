@@ -131,4 +131,5 @@ for i in range(lattice.i_length):
             h_site = mc.eval_site(supercell,(i,j,k),BEG_rules,Cluster_rules,J_rules,Js)
             print(h_site)
             h += float(h_site)
+print('last energy')
 print(h)
