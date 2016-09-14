@@ -28,9 +28,9 @@ class MStructureObj:
         self.LCs[self.Cindex] = self.LCs[2]
         self.LCs[2] = self.C
         self.weight = 1.0
-        self.BEG_sums = [0] * num_beg_rules
-        self.Cluster_sums = [0] * num_cluster_rules
-        self.J_sums = [0] * num_j_rules
+        self.BEG_sums = [0.0] * num_beg_rules
+        self.Cluster_sums = [0.0] * num_cluster_rules
+        self.J_sums = [0.0] * num_j_rules
         self.basis = []
         self.distances = np.ones([self.num_Atoms, self.num_Atoms * 27]) * 100
         self.mins = np.ones([self.num_Atoms, 10]) * 100

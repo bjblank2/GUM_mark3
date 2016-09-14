@@ -4,6 +4,7 @@ import mc_functions as mc
 import mc_supercell as ms
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.optimize import least_squares
 #--------------------------------------------------------------#
 root_dir = '/Volumes/TOURO/Ni-Fe-Ga/Data_Pts'
 data_file = './NiMnIn_Data'
@@ -32,9 +33,34 @@ J_rules = Cp.read_j_rules(j_file)
 M_structures = Cp.read_m_structure_data(data_file, num_species, len(BEG_rules), len(Cluster_rules), len(J_rules))
 # Calculate all sums
 Cp.calculate_sums(M_structures, BEG_rules, Cluster_rules, J_rules)
+
+t_train = []
+y_train = []
+for i in range(len(M_structures)):
+    line = list(M_structures[i].BEG_sums+M_structures[i].Cluster_sums+M_structures[i].J_sums)
+    t_train.append(line)
+    y_train.append(M_structures[i].enrg)
+def r_function(x,t,y):
+    r = np.zeros((1,len(y)))
+    r = np.matrix.tolist(r)
+    r = r[0]
+    for i in range(len(y)):
+        sums = t[i]
+        for j in range(len(sums)):
+            r[i] += x[j]*sums[j]
+        r[i] -= y[i]
+    return r
+x0 = np.ones((len(line)))*10
+r = r_function(x0,t_train,y_train)
+print('ok')
+res_lsq = least_squares(r_function, x0, loss='soft_l1', f_scale=0.05, args=(t_train, y_train))
+print('done')
+print(res_lsq.x)
 # Do weighted least squares
-Cp.find_weights(M_structures, [8, 6, 4], 1)
+#Cp.find_weights(M_structures, [8, 6, 4], 1)
 Js = Cp.do_weighted_ls(M_structures, 200)
+print(Js)
+Js = res_lsq.x
 # Display data
 Cp.write_data(M_structures, 200, Js)
 Cp.write_output(M_structures, BEG_rules, Cluster_rules, J_rules, Js, 200)
@@ -64,7 +90,7 @@ print(np.size(lattice.supercell))
 plt.figure(1)
 plt.plot(0,H_total/np.size(lattice.supercell),lw=3,marker='o',color='b')
 inc = 0
-for passes in range(1,1500):
+for passes in range(1,4500):
     for i in range(x_pts):
         for j in range(y_pts):
             for k in range(z_pts):
@@ -110,7 +136,7 @@ for passes in range(1,1500):
     #         T = 1
     #     print(passes)
     #     print(T)
-    T -= 1
+    T -= .25
     if T <= 0:
         T = 1
     inc += 1

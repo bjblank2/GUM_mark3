@@ -66,9 +66,14 @@ def eval_site(suercell,index,beg_rule_list, cluster_rule_list,j_rule_list,js):
                                 if neighbor_site.species != home_site.species:
                                     if neighbor_site.species in j_rule_list[j].neighbor_atom_list:
                                         h += home_site.spin*neighbor_site.spin* float(js[len(beg_rule_list) + len(cluster_rule_list)+j])
+                                        inc += 1
                             if j_rule_list[j].neighbor_arrangement == 'COMB':
                                 if neighbor_site.species in j_rule_list[j].neighbor_atom_list:
                                     h += home_site.spin*neighbor_site.spin * float(js[len(beg_rule_list) + len(cluster_rule_list)+j])
+                                    inc += 1
+    # print("\n")
+    # print(home_site.species)
+    # print(inc)
     return float(h)
 
 def flip_species(i,supercell_list):
