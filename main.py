@@ -34,38 +34,17 @@ M_structures = Cp.read_m_structure_data(data_file, num_species, len(BEG_rules), 
 # Calculate all sums
 Cp.calculate_sums(M_structures, BEG_rules, Cluster_rules, J_rules)
 
-t_train = []
-y_train = []
-for i in range(len(M_structures)):
-    line = list(M_structures[i].BEG_sums+M_structures[i].Cluster_sums+M_structures[i].J_sums)
-    t_train.append(line)
-    y_train.append(M_structures[i].enrg)
-def r_function(x,t,y):
-    r = np.zeros((1,len(y)))
-    r = np.matrix.tolist(r)
-    r = r[0]
-    for i in range(len(y)):
-        sums = t[i]
-        for j in range(len(sums)):
-            r[i] += x[j]*sums[j]
-        r[i] -= y[i]
-    return r
-x0 = np.ones((len(line)))*10
-r = r_function(x0,t_train,y_train)
-print('ok')
-res_lsq = least_squares(r_function, x0, loss='soft_l1', f_scale=0.05, args=(t_train, y_train))
-print('done')
-print(res_lsq.x)
+Js_r = Cp.do_robust_ls(M_structures)
 # Do weighted least squares
 #Cp.find_weights(M_structures, [8, 6, 4], 1)
 Js = Cp.do_weighted_ls(M_structures, 200)
 print(Js)
-Js = res_lsq.x
+Js = Js_r
 # Display data
 Cp.write_data(M_structures, 200, Js)
 Cp.write_output(M_structures, BEG_rules, Cluster_rules, J_rules, Js, 200)
 #Cp.plot_data()
-#Cp.plot_data2()
+Cp.plot_data2()
 #--------------------------------------------------------------#
 
 #--------------------------------------------------------------#
