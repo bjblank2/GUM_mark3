@@ -34,12 +34,59 @@ M_structures = Cp.read_m_structure_data(data_file, num_species, len(BEG_rules), 
 # Calculate all sums
 Cp.calculate_sums(M_structures, BEG_rules, Cluster_rules, J_rules)
 
-Js_r = Cp.do_robust_ls(M_structures)
+#Js_r = Cp.do_robust_ls(M_structures)
 # Do weighted least squares
 #Cp.find_weights(M_structures, [8, 6, 4], 1)
 Js = Cp.do_weighted_ls(M_structures, 200)
-print(Js)
-Js = Js_r
+#Js = Js_r
+
+
+# error_cutoff = 1
+# good_fit_cutoff = 40
+# best_error = 100000000000
+# modle_change_count = 0
+# #best_model = Js_r
+# for iterations in range (100):
+#     candidate_list = []
+#     rand_int_list = []
+#     for i in range(26):
+#         rand_int = np.random.randint(0,len(M_structures)-1)
+#         candidate_list.append(M_structures[rand_int])
+#         rand_int_list.append(rand_int)
+#     #candidate_model = Cp.do_robust_ls(candidate_list)
+#     candidate_model = Cp.do_weighted_ls(candidate_list,500)
+#     candidate_inliers = []
+#     for i in range(len(M_structures)):
+#         if i not in rand_int_list:
+#             energy = 0
+#             sums = list(M_structures[i].BEG_sums+M_structures[i].Cluster_sums+M_structures[i].J_sums)
+#             for j in range(len(candidate_model)):
+#                 energy += candidate_model[j]*sums[j]
+#             error = abs(energy-M_structures[i].enrg)
+#             if error <= error_cutoff:
+#                 candidate_inliers.append(M_structures[i])
+#     if len(candidate_inliers)+len(candidate_list) >= good_fit_cutoff:
+#         new_candidate_list = list(candidate_list+candidate_inliers)
+#         #new_candidate_model = Cp.do_robust_ls(new_candidate_list)
+#         new_candidate_model = Cp.do_weighted_ls(M_structures, 500)
+#         new_error = 0
+#         for i in range(len(new_candidate_list)):
+#             new_energy = 0
+#             new_sums = list(M_structures[i].BEG_sums+M_structures[i].Cluster_sums+M_structures[i].J_sums)
+#             for j in range(len(new_candidate_model)):
+#                 new_energy += new_candidate_model[j]*new_sums[j]
+#             new_error += abs(new_energy-new_candidate_list[i].enrg)/len(new_candidate_list)
+#         if new_error < best_error:
+#             best_error = new_error
+#             best_model = new_candidate_model
+#             modle_change_count += 1
+# print(modle_change_count)
+# print(len(new_candidate_list))
+#print(best_model)
+
+
+#Js = best_model
+#Js = Js_r
 # Display data
 Cp.write_data(M_structures, 200, Js)
 Cp.write_output(M_structures, BEG_rules, Cluster_rules, J_rules, Js, 200)
@@ -48,7 +95,7 @@ Cp.plot_data2()
 #--------------------------------------------------------------#
 
 #--------------------------------------------------------------#
-T = 1001
+T = 1.001
 Kb = .000086173324 #8.6173324(78)×10−5 eV*K^-1
 x_pts = 2
 y_pts = 2
@@ -123,6 +170,7 @@ for passes in range(1,4500):
         inc = 0
         print(passes)
         print(T)
+        print(H_total/16)
 
     plt.figure(1)
     plt.plot(passes,H_total/np.size(lattice.supercell),lw=3,marker='o',color='b')

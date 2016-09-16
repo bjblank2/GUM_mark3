@@ -365,6 +365,7 @@ def write_output(structures, beg_list, clusters_list, j_list, Js, limit):
             file.write(line + "    " + mat.mag_phase + "    " + mat.phase_name + "     " + str(mat.weight) + "\n")
     file.close()
 
+
 def r_function(x,t,y):
     r = np.zeros((1,len(y)))
     r = np.matrix.tolist(r)
@@ -376,6 +377,7 @@ def r_function(x,t,y):
         r[i] -= y[i]
     return r
 
+
 def do_robust_ls(M_structures):
     t_train = []
     y_train = []
@@ -383,9 +385,10 @@ def do_robust_ls(M_structures):
         line = list(M_structures[i].BEG_sums+M_structures[i].Cluster_sums+M_structures[i].J_sums)
         t_train.append(line)
         y_train.append(M_structures[i].enrg)
-    x0 = np.ones((len(line)))*10
+    x0 = np.ones((len(line)))*.05
     res_lsq = least_squares(r_function, x0, loss='soft_l1', f_scale=0.05, args=(t_train, y_train))
     return res_lsq.x
+
 
 def plot_data():
     plt.rc('lines', linewidth=1)

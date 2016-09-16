@@ -19,6 +19,7 @@ def eval_supercell(supercell_obj,beg_rule_list, cluster_rule_list,j_rule_list,js
             for k in range(supercell_obj.k_length):
                 h_site = eval_site(supercell,(i,j,k),beg_rule_list,cluster_rule_list,j_rule_list,js)
                 h += float(h_site)
+    # print("done")
     return float(h)
 
 def eval_site(suercell,index,beg_rule_list, cluster_rule_list,j_rule_list,js):
@@ -27,7 +28,12 @@ def eval_site(suercell,index,beg_rule_list, cluster_rule_list,j_rule_list,js):
     j_index = index[1]
     k_index = index[2]
     home_site = suercell[i_index,j_index,k_index]
-    inc = 0
+    inc_BEG = 0
+    inc_Clust = 0
+    inc_spin = 0
+    beg_sum = 0
+    clust_sum = 0
+    spin_sum = 0
     for i in range(len(home_site.neighbors)):
         neighbor_data = home_site.neighbors[i]
         neighbor_site = suercell[neighbor_data.i_pos,neighbor_data.j_pos,neighbor_data.k_pos]
@@ -36,12 +42,15 @@ def eval_site(suercell,index,beg_rule_list, cluster_rule_list,j_rule_list,js):
             if neighbor_data.order == beg_rule_list[j].neighbor_order:
                 if home_site.species in beg_rule_list[j].home_atom_list:
                     if neighbor_site.species in beg_rule_list[j].neighbor_atom_list:
-                        if beg_rule_list[j].phase == 'mart':
-                            if check_phase(home_site) == beg_rule_list[j].phase:
+                        if check_phase(home_site) == beg_rule_list[j].phase:
+                            if beg_rule_list[j].phase == 'mart':
                                 h += js[j] * home_site.phase * neighbor_site.phase/6
-                        if beg_rule_list[j].phase == 'aust':
-                            if check_phase(home_site) == beg_rule_list[j].phase:
+                                inc_BEG += js[j]/6
+                                beg_sum += js[j] * home_site.phase * neighbor_site.phase/6
+                            if beg_rule_list[j].phase == 'aust':
                                 h += js[j] * (1 - home_site.phase**2) * (1-neighbor_site.phase**2)/6
+                                inc_BEG += js[j]/6
+                                beg_sum += js[j] * (1 - home_site.phase**2) * (1-neighbor_site.phase**2)/6
         # Cluster Ham
         for j in range(len(cluster_rule_list)):
             if home_site.species in cluster_rule_list[j].home_atom_list:
@@ -52,10 +61,13 @@ def eval_site(suercell,index,beg_rule_list, cluster_rule_list,j_rule_list,js):
                                 if neighbor_site.species != home_site.species:
                                     if neighbor_site.species in cluster_rule_list[j].neighbor_atom_list:
                                         h += js[len(beg_rule_list) + j]
-                                        inc += 1
+                                        inc_Clust += js[len(beg_rule_list) + j]
+                                        clust_sum += js[len(beg_rule_list) + j]
                             if cluster_rule_list[j].neighbor_arrangement == 'COMB':
                                 if neighbor_site.species in cluster_rule_list[j].neighbor_atom_list:
                                     h += js[len(beg_rule_list) + j]
+                                    inc_Clust += js[len(beg_rule_list) + j]
+                                    clust_sum += js[len(beg_rule_list) + j]
         # Mag Ham
         for j in range(len(j_rule_list)):
             if home_site.species in j_rule_list[j].home_atom_list:
@@ -66,15 +78,19 @@ def eval_site(suercell,index,beg_rule_list, cluster_rule_list,j_rule_list,js):
                                 if neighbor_site.species != home_site.species:
                                     if neighbor_site.species in j_rule_list[j].neighbor_atom_list:
                                         h += home_site.spin*neighbor_site.spin* float(js[len(beg_rule_list) + len(cluster_rule_list)+j])
-                                        inc += 1
+                                        inc_spin += js[len(beg_rule_list) + len(cluster_rule_list)+j]
+                                        spin_sum += home_site.spin*neighbor_site.spin* float(js[len(beg_rule_list) + len(cluster_rule_list)+j])
                             if j_rule_list[j].neighbor_arrangement == 'COMB':
                                 if neighbor_site.species in j_rule_list[j].neighbor_atom_list:
                                     h += home_site.spin*neighbor_site.spin * float(js[len(beg_rule_list) + len(cluster_rule_list)+j])
-                                    inc += 1
+                                    inc_spin += js[len(beg_rule_list) + len(cluster_rule_list)+j]
+                                    spin_sum += home_site.spin*neighbor_site.spin * float(js[len(beg_rule_list) + len(cluster_rule_list)+j])
     # print("\n")
     # print(home_site.species)
-    # print(inc)
-    return float(h)
+    # print(str(inc_BEG)+'  '+str(beg_sum))
+    # print(str(inc_Clust)+'  '+str(clust_sum))
+    # print(str(inc_spin)+'  '+str(spin_sum))
+    return float(beg_sum+clust_sum+spin_sum)
 
 def flip_species(i,supercell_list):
     home_site = supercell_list[i]
