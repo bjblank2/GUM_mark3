@@ -383,11 +383,14 @@ def do_robust_ls(M_structures):
     y_train = []
     for i in range(len(M_structures)):
         line = list(M_structures[i].BEG_sums+M_structures[i].Cluster_sums+M_structures[i].J_sums)
+        for j in range(len(line)):
+            line[j] *= M_structures[i].weight
         t_train.append(line)
-        y_train.append(M_structures[i].enrg)
+        y_train.append(M_structures[i].enrg * M_structures[i].weight)
     x0 = np.ones((len(line)))*1
     res_lsq = least_squares(r_function, x0, loss='soft_l1', f_scale=0.05, args=(t_train, y_train))
     return res_lsq.x
+
 
 def ransac(M_structures,error_cutoff,good_fit_cutoff,iterations):
     best_error = 100000000000
@@ -426,6 +429,59 @@ def ransac(M_structures,error_cutoff,good_fit_cutoff,iterations):
                 best_error = new_error
                 best_model = new_candidate_model
                 modle_change_count += 1
+    print(modle_change_count)
+    print(len(new_candidate_list))
+    return best_model
+
+
+def ransacom(M_structures,error_cutoff,good_fit_cutoff,iterations):
+    best_error = 100000000000
+    modle_change_count = 0
+    for iterations in range (iterations):
+        candidate_list = []
+        rand_int_list = []
+        for i in range(26):
+            rand_int = np.random.randint(0,len(M_structures)-1)
+            if rand_int not in rand_int_list:
+                rand_int_list.append(rand_int)
+                M_structures[rand_int].weight = 1.0
+                candidate_list.append(M_structures[rand_int])
+        candidate_model = do_robust_ls(candidate_list)
+        #candidate_model = do_weighted_ls(candidate_list,500)
+        candidate_inliers = []
+        outlire_list = []
+        for i in range(len(M_structures)):
+            M_structures[i].weight = 1.0
+            if i not in rand_int_list:
+                energy = 0
+                sums = list(M_structures[i].BEG_sums+M_structures[i].Cluster_sums+M_structures[i].J_sums)
+                for j in range(len(candidate_model)):
+                    energy += candidate_model[j]*sums[j]
+                error = abs(energy-M_structures[i].enrg)
+                if error <= error_cutoff:
+                    candidate_inliers.append(M_structures[i])
+                else:
+                    M_structures[i].weight = .4
+                    outlire_list.append(M_structures[i])
+
+        if len(candidate_inliers)+len(candidate_list) >= good_fit_cutoff:
+            new_candidate_list = list(candidate_list+candidate_inliers+outlire_list)
+            new_candidate_model = do_robust_ls(new_candidate_list)
+            #new_candidate_model = do_weighted_ls(M_structures, 500)
+            new_error = 0
+            for i in range(len(M_structures)):
+                new_energy = 0
+                new_sums = list(M_structures[i].BEG_sums+M_structures[i].Cluster_sums+M_structures[i].J_sums)
+                for j in range(len(new_candidate_model)):
+                    new_energy += new_candidate_model[j]*new_sums[j]
+                new_error += abs(new_energy-new_candidate_list[i].enrg)/len(new_candidate_list)
+            if new_error < best_error:
+                best_outliers = outlire_list
+                best_error = new_error
+                best_model = new_candidate_model
+                modle_change_count += 1
+    for i in range(len(best_outliers)):
+        best_outliers[i].weight = .4
     print(modle_change_count)
     print(len(new_candidate_list))
     return best_model

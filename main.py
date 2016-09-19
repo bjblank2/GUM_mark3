@@ -39,10 +39,12 @@ Cp.calculate_sums(M_structures, BEG_rules, Cluster_rules, J_rules)
 Cp.find_weights(M_structures, [8, 6, 4], 1)
 Js_w = Cp.do_weighted_ls(M_structures, 200)
 #Js_r = Cp.do_robust_ls(M_structures)
+#Js_rancom = Cp.ransacom(M_structures,1,50,1000)
 #Js_ran = Cp.ransac(M_structures,1,50,1000)
 #Js = Js_r
 Js = Js_w
 #Js = Js_ran
+#Js = Js_rancom
 # Display data
 Cp.write_data(M_structures, 200, Js)
 Cp.write_output(M_structures, BEG_rules, Cluster_rules, J_rules, Js, 200)
