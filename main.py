@@ -55,19 +55,19 @@ Cp.plot_data2()
 #--------------------------------------------------------------#
 T = 1001
 Kb = .000086173324 #8.6173324(78)×10−5 eV*K^-1
-x_pts = 2
-y_pts = 2
-z_pts = 4
+x_pts = 4
+y_pts = 4
+z_pts = 8
 lattice = ms.mc_supercellObj((x_pts,y_pts,z_pts),(0,1),(.5,.5))
 lattice.find_neighbors()
-H_total = mc.eval_supercell(lattice,BEG_rules,Cluster_rules,J_rules,Js)
+H_total,mag,mag2,p,p2 = mc.eval_supercell(lattice,BEG_rules,Cluster_rules,J_rules,Js)
 print(H_total/np.size(lattice.supercell))
 print(np.size(lattice.supercell))
 
 # for i in range(4000):
 #     supercell_list,supercell = mc.init_supercell(pts)
 #     neighbors,neighbor_plain = mc.calc_neighbors(supercell)
-#     ham,mag_ham = mc.eval_supercell(supercell_list,neighbors,neighbor_plain,BEG_rules,Cluster_rules,J_rules,Js)
+#     ham,mag,mag2,p,p2 = mc.eval_supercell(supercell_list,neighbors,neighbor_plain,BEG_rules,Cluster_rules,J_rules,Js)
 #     plt.plot(i,ham/np.size(supercell),lw=3,marker='o',color='b')
 # plt.show()
 
@@ -111,7 +111,7 @@ for passes in range(1,4500):
                 else:
                     #H_total += H_new-H_old
                     x = 0
-    H_total = mc.eval_supercell(lattice,BEG_rules,Cluster_rules,J_rules,Js)
+    H_total,mag,mag2,p,p2 = mc.eval_supercell(lattice,BEG_rules,Cluster_rules,J_rules,Js)
     # inc +=1
     # if inc >= 100:
     #     T -= 100
@@ -132,6 +132,10 @@ for passes in range(1,4500):
 
     plt.figure(1)
     plt.plot(passes,H_total/np.size(lattice.supercell),lw=3,marker='o',color='b')
+    plt.figure(2)
+    plt.plot(passes,mag,lw=3,marker='o',color='g')
+    plt.figure(3)
+    plt.plot(passes,p,lw=3,marker='o',color='r')
 plt.show()
 
 h = 0
@@ -139,7 +143,7 @@ supercell = lattice.supercell
 for i in range(lattice.i_length):
     for j in range(lattice.j_length):
         for k in range(lattice.k_length):
-            h_site = mc.eval_site(supercell,(i,j,k),BEG_rules,Cluster_rules,J_rules,Js)
+            h_site,mag,mag2,p,p2 = mc.eval_site(supercell,(i,j,k),BEG_rules,Cluster_rules,J_rules,Js)
             print(h_site)
             h += float(h_site)
 print('last energy')

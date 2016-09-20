@@ -13,14 +13,24 @@ def check_phase(home_site):
 
 def eval_supercell(supercell_obj,beg_rule_list, cluster_rule_list,j_rule_list,js):
     h = 0
+    mag = 0
+    mag2 = 0
+    p = 0
+    p2 = 0
     supercell = supercell_obj.supercell
     for i in range(supercell_obj.i_length):
         for j in range(supercell_obj.j_length):
             for k in range(supercell_obj.k_length):
+                site = supercell[i,j,k]
                 h_site = eval_site(supercell,(i,j,k),beg_rule_list,cluster_rule_list,j_rule_list,js)
                 h += float(h_site)
+                mag += site.get_spin()/supercell_obj.num_sites
+                mag2 += site.get_spin()**2/supercell_obj.num_sites
+                p += site.get_phase()/supercell_obj.num_sites
+                p2 += site.get_phase()**2/supercell_obj.num_sites
     # print("done")
-    return float(h)
+
+    return float(h),float(mag),float(mag2),float(p),float(p2)
 
 def eval_site(suercell,index,beg_rule_list, cluster_rule_list,j_rule_list,js):
     h = 0

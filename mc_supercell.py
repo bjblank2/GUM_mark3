@@ -24,7 +24,7 @@ class mc_siteObj:
         return self.spin
 
     def get_phase(self):
-        self.phase
+        return self.phase
 
     def set_species(self,new_value):
         self.species = new_value
@@ -56,6 +56,7 @@ class mc_supercellObj:
         self.i_length = size[0]
         self.j_length = size[1]
         self.k_length = size[2]
+        self.num_sites = size[0]*size[1]*size[2]
         self.supercell = np.empty((self.i_length,self.j_length,self.k_length),dtype=mc_siteObj)
         self.supercell_list = []
         index = 0
