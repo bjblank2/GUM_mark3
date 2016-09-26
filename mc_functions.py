@@ -102,22 +102,25 @@ def eval_site(suercell,index,beg_rule_list, cluster_rule_list,j_rule_list,js):
     # print(str(inc_spin)+'  '+str(spin_sum))
     return float(beg_sum+clust_sum+spin_sum)
 
-def flip_species(i,supercell_list):
-    home_site = supercell_list[i]
-    old_home_site = list(supercell_list[i])
-    home_species = home_site[4]
+def flip_species(supercell_obj,pos):
+    i_pos = pos[0]
+    j_pos = pos[1]
+    k_pos = pos[2]
+    home_site = supercell_obj.supercell[i_pos,j_pos,k_pos]
+    old_home_site = deepcopy(supercell_obj.supercell[i_pos,j_pos,k_pos])
+    home_species = home_site.species
     site_flipped = False
     while site_flipped == False:
-        rand = np.random.randint(len(supercell_list)-1)
-        neighbor_site = supercell_list[rand]
-        old_neighbor_site = supercell_list[rand]
-        if neighbor_site[4] != 0 and neighbor_site[4] != home_site[4]:
-            home_site[4] = neighbor_site[4]
-            neighbor_site[4] = home_species
+        rand_index = [np.random.randint(0,supercell_obj.i_length),np.random.randint(0,supercell_obj.j_length),np.random.randint(0,supercell_obj.k_length)]
+        neighbor_site = supercell_obj.supercell[rand_index[0],rand_index[1],rand_index[2]]
+        old_neighbor_site = deepcopy(supercell_obj.supercell[rand_index[0],rand_index[1],rand_index[2]])
+        if neighbor_site.species != 0 and neighbor_site.species != home_site.species:
+            home_site.species = neighbor_site.species
+            neighbor_site.species = home_species
             site_flipped = True
-    supercell_list[i] = home_site
-    supercell_list[rand] = neighbor_site
-    return old_home_site,old_neighbor_site,rand
+    supercell_obj.supercell[i_pos,j_pos,k_pos] = home_site
+    supercell_obj.supercell[rand_index[0],rand_index[1],rand_index[2]] = neighbor_site
+    return old_home_site,old_neighbor_site,rand_index
 
 def flip_phase(supercell,pos):
     i_pos = pos[0]
@@ -147,17 +150,20 @@ def flip_spin(supercell,pos):
     k_pos = pos[2]
     home_site = supercell[i_pos,j_pos,k_pos]
     old_home_site = deepcopy(supercell[i_pos,j_pos,k_pos])
-    same_spin = False
-    while same_spin == False:
-        rand = np.random.random()
-        if rand <= 1/3.0:
-            spin = -1
-        elif rand > 1/3.0 and rand < 2/3.0:
-            spin = 0
-        elif rand >= 2/3.0:
-            spin = 1
-        if spin != home_site.get_spin():
-            same_spin = True
-    home_site.set_spin(spin)
+    if home_site.species == 2:
+        home_site.set_spin(0)
+    else:
+        same_spin = False
+        while same_spin == False:
+            rand = np.random.random()
+            if rand <= 1/3.0:
+                spin = -1
+            elif rand > 1/3.0 and rand < 2/3.0:
+                spin = 0
+            elif rand >= 2/3.0:
+                spin = 1
+            if spin != home_site.get_spin():
+                same_spin = True
+        home_site.set_spin(spin)
     supercell[i_pos,j_pos,k_pos] = home_site
     return old_home_site
