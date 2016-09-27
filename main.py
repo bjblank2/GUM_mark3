@@ -152,11 +152,11 @@ for passes in range(1,PASSES):
         inc = 0
 
     if passes >= PASSES*.9:
-        H_avg += H_total/(PASSES*.9)
-        mag_avg += mag/(PASSES*.9)
-        mag2_avg += mag2/(PASSES*.9)
-        p_avg += p/(PASSES*.9)
-        p2_avg += p2/(PASSES*.9)
+        H_avg += H_total/(PASSES*.1)
+        mag_avg += mag/(PASSES*.1)
+        mag2_avg += mag2/(PASSES*.1)
+        p_avg += p/(PASSES*.1)
+        p2_avg += p2/(PASSES*.1)
 
     plt.figure(1)
     plt.plot(passes,H_total/np.size(lattice.supercell),lw=3,marker='o',color='b')
