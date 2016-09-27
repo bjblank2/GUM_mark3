@@ -401,8 +401,8 @@ def ransac(M_structures,error_cutoff,good_fit_cutoff,iterations):
             rand_int = np.random.randint(0,len(M_structures)-1)
             candidate_list.append(M_structures[rand_int])
             rand_int_list.append(rand_int)
-        candidate_model = do_robust_ls(candidate_list)
-        #candidate_model = do_weighted_ls(candidate_list,500)
+        #candidate_model = do_robust_ls(candidate_list)
+        candidate_model = do_weighted_ls(candidate_list,500)
         candidate_inliers = []
         for i in range(len(M_structures)):
             if i not in rand_int_list:
@@ -415,8 +415,8 @@ def ransac(M_structures,error_cutoff,good_fit_cutoff,iterations):
                     candidate_inliers.append(M_structures[i])
         if len(candidate_inliers)+len(candidate_list) >= good_fit_cutoff:
             new_candidate_list = list(candidate_list+candidate_inliers)
-            new_candidate_model = do_robust_ls(new_candidate_list)
-            #new_candidate_model = do_weighted_ls(M_structures, 500)
+            #new_candidate_model = do_robust_ls(new_candidate_list)
+            new_candidate_model = do_weighted_ls(M_structures, 500)
             new_error = 0
             for i in range(len(new_candidate_list)):
                 new_energy = 0

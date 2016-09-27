@@ -57,6 +57,12 @@ Kb = .000086173324 #8.6173324(78)×10−5 eV*K^-1
 x_pts = 4
 y_pts = 4
 z_pts = 8
+PASSES = 1000
+H_avg = 0
+mag_avg = 0
+mag2_avg = 0
+p_avg = 0
+p2_avg = 0
 lattice = ms.mc_supercellObj((x_pts,y_pts,z_pts),(0,1,2),(64,64,0))#(64,48,16))
 lattice.find_neighbors()
 H_total,mag,mag2,p,p2 = mc.eval_supercell(lattice,BEG_rules,Cluster_rules,J_rules,Js)
@@ -72,7 +78,7 @@ H_total,mag,mag2,p,p2 = mc.eval_supercell(lattice,BEG_rules,Cluster_rules,J_rule
 plt.figure(1)
 plt.plot(0,H_total/np.size(lattice.supercell),lw=3,marker='o',color='b')
 inc = 0
-for passes in range(1,1000):
+for passes in range(1,PASSES):
     for i in range(x_pts):
         for j in range(y_pts):
             for k in range(z_pts):
@@ -140,23 +146,36 @@ for passes in range(1,1000):
     #         T = 1
     T -= .25
     if T <= 0:
-        T = 1
+        T = .25
     inc += 1
     if inc >= 100:
         inc = 0
 
+    if passes >= PASSES*.9:
+        H_avg += H_total/(PASSES*.9)
+        mag_avg += mag/(PASSES*.9)
+        mag2_avg += mag2/(PASSES*.9)
+        p_avg += p/(PASSES*.9)
+        p2_avg += p2/(PASSES*.9)
+
     plt.figure(1)
     plt.plot(passes,H_total/np.size(lattice.supercell),lw=3,marker='o',color='b')
-    plt.savefig('Enrg.png')
     plt.figure(2)
     plt.subplot(211)
     plt.plot(passes,mag,lw=3,marker='o',color='g')
     plt.subplot(212)
     plt.plot(passes,mag2,lw=3,marker='o',color='g')
-    plt.savefig('Mag.png')
     plt.figure(3)
     plt.subplot(311)
     plt.plot(passes,p,lw=3,marker='o',color='r')
     plt.subplot(312)
     plt.plot(passes,p2,lw=3,marker='o',color='r')
-    plt.savefig('Phase.png')
+
+plt.figure(1)
+plt.savefig('Enrg.png')
+plt.figure(2)
+plt.savefig('Mag.png')
+plt.figure(3)
+plt.savefig('Phase.png')
+temp_output = open('Temp_data','w')
+temp_output.write(str(T)+'  '+str(H_avg)+'  '+str(mag_avg)+'  '+str(mag2_avg)+'  '+str(p_avg)+'  '+str(p2_avg))
