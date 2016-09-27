@@ -51,7 +51,7 @@ Cp.plot_data2()
 
 #--------------------------------------------------------------#
 temp_data = open('Temp_data','w')
-temp_data.write('Temp  H_avg  mag_avg  mag2_avg  phase_avg  phase2_avg')
+temp_data.write('Temp  H_avg  mag_avg  mag2_avg  phase_avg  phase2_avg\n')
 temp_data.close()
 x_pts = 2
 y_pts = 2
