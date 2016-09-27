@@ -28,7 +28,6 @@ def eval_supercell(supercell_obj,beg_rule_list, cluster_rule_list,j_rule_list,js
                 mag2 += site.get_spin()**2/supercell_obj.num_sites
                 p += site.get_phase()/supercell_obj.num_sites
                 p2 += site.get_phase()**2/supercell_obj.num_sites
-    # print("done")
 
     return float(h),float(mag),float(mag2),float(p),float(p2)
 
@@ -95,11 +94,6 @@ def eval_site(suercell,index,beg_rule_list, cluster_rule_list,j_rule_list,js):
                                     h += home_site.spin*neighbor_site.spin * float(js[len(beg_rule_list) + len(cluster_rule_list)+j])
                                     inc_spin += js[len(beg_rule_list) + len(cluster_rule_list)+j]
                                     spin_sum += home_site.spin*neighbor_site.spin * float(js[len(beg_rule_list) + len(cluster_rule_list)+j])
-    # print("\n")
-    # print(home_site.species)
-    # print(str(inc_BEG)+'  '+str(beg_sum))
-    # print(str(inc_Clust)+'  '+str(clust_sum))
-    # print(str(inc_spin)+'  '+str(spin_sum))
     return float(beg_sum+clust_sum+spin_sum)
 
 def flip_species(supercell_obj,pos):

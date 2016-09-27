@@ -18,7 +18,6 @@ def import_data(number_of_species, root_dir, output_dir):
         for file in files:
             if 'CONTCAR' in files and 'OUTCAR' in files:
                 name = subdir.strip(root_dir)
-                #print(name)
                 flag = 1
                 if file == "CONTCAR":
                     contcar = open(subdir + '/' + file, 'r')
@@ -429,8 +428,6 @@ def ransac(M_structures,error_cutoff,good_fit_cutoff,iterations):
                 best_error = new_error
                 best_model = new_candidate_model
                 modle_change_count += 1
-    print(modle_change_count)
-    print(len(new_candidate_list))
     return best_model
 
 
@@ -446,8 +443,8 @@ def ransacom(M_structures,error_cutoff,good_fit_cutoff,iterations):
                 rand_int_list.append(rand_int)
                 M_structures[rand_int].weight = 1.0
                 candidate_list.append(M_structures[rand_int])
-        candidate_model = do_robust_ls(candidate_list)
-        #candidate_model = do_weighted_ls(candidate_list,500)
+        #candidate_model = do_robust_ls(candidate_list)
+        candidate_model = do_weighted_ls(candidate_list,500)
         candidate_inliers = []
         outlire_list = []
         for i in range(len(M_structures)):
@@ -466,8 +463,8 @@ def ransacom(M_structures,error_cutoff,good_fit_cutoff,iterations):
 
         if len(candidate_inliers)+len(candidate_list) >= good_fit_cutoff:
             new_candidate_list = list(candidate_list+candidate_inliers+outlire_list)
-            new_candidate_model = do_robust_ls(new_candidate_list)
-            #new_candidate_model = do_weighted_ls(M_structures, 500)
+            #new_candidate_model = do_robust_ls(new_candidate_list)
+            new_candidate_model = do_weighted_ls(M_structures, 500)
             new_error = 0
             for i in range(len(M_structures)):
                 new_energy = 0
@@ -482,8 +479,6 @@ def ransacom(M_structures,error_cutoff,good_fit_cutoff,iterations):
                 modle_change_count += 1
     for i in range(len(best_outliers)):
         best_outliers[i].weight = .4
-    print(modle_change_count)
-    print(len(new_candidate_list))
     return best_model
 
 
