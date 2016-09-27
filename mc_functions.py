@@ -1,5 +1,6 @@
 __author__ = 'brian'
 import numpy as np
+import matplotlib.pyplot as plt
 from copy import deepcopy
 
 
@@ -161,3 +162,114 @@ def flip_spin(supercell,pos):
         home_site.set_spin(spin)
     supercell[i_pos,j_pos,k_pos] = home_site
     return old_home_site
+
+def run_montecarlo(lattice,PASSES,start_temp,BEG_rules,Cluster_rules,J_rules,Js,do_figs=False):
+    T = start_temp
+    Kb = .000086173324 #8.6173324(78)×10−5 eV*K^-1
+    H_avg = 0
+    mag_avg = 0
+    mag2_avg = 0
+    p_avg = 0
+    p2_avg = 0
+    H_total,mag,mag2,p,p2 = eval_supercell(lattice,BEG_rules,Cluster_rules,J_rules,Js)
+    plt.figure(1)
+    plt.plot(0,H_total/np.size(lattice.supercell),lw=3,marker='o',color='b')
+    inc = 0
+    for passes in range(1,PASSES):
+        for i in range(lattice.i_length):
+            for j in range(lattice.j_length):
+                for k in range(lattice.k_length):
+
+                    if lattice.composition[2] != 0:
+                        home_site = lattice.supercell[i,j,k]
+                        H_new = 0
+                        H_old = 0
+                        H_old = eval_site(lattice.supercell,(i,j,k),BEG_rules,Cluster_rules,J_rules,Js)
+                        old_home_site,old_neighbor_site,neighbor_pos = flip_species(lattice,(i,j,k))
+                        H_new = eval_site(lattice.supercell,(i,j,k),BEG_rules,Cluster_rules,J_rules,Js)
+                        if H_new > H_old:
+                            rand = np.random.random()
+                            prob = np.exp(-1/(Kb*T)*(H_new-H_old))
+                            if rand > prob:
+                                lattice.supercell[i,j,k] = old_home_site
+                                lattice.supercell[neighbor_pos[0],neighbor_pos[1],neighbor_pos[2]] = old_neighbor_site
+                            else:
+                                #H_total += H_new-H_old
+                                x = 0
+                        else:
+                            #H_total += H_new-H_old
+                            x = 0
+
+                    H_old = eval_site(lattice.supercell,(i,j,k),BEG_rules,Cluster_rules,J_rules,Js)
+                    old_home_site = flip_phase(lattice.supercell,(i,j,k))
+                    H_new = eval_site(lattice.supercell,(i,j,k),BEG_rules,Cluster_rules,J_rules,Js)
+                    if H_new > H_old:
+                        rand = np.random.random()
+                        prob = np.exp(-1/(Kb*T)*(H_new-H_old))
+                        if rand > prob:
+                            lattice.supercell[i,j,k] = old_home_site
+                        else:
+                            #H_total += H_new-H_old
+                            x = 0
+                    else:
+                        #H_total += H_new-H_old
+                        x = 0
+
+                    H_old = eval_site(lattice.supercell,(i,j,k),BEG_rules,Cluster_rules,J_rules,Js)
+                    old_home_site = flip_spin(lattice.supercell,(i,j,k))
+                    H_new = eval_site(lattice.supercell,(i,j,k),BEG_rules,Cluster_rules,J_rules,Js)
+                    if H_new > H_old:
+                        rand = np.random.random()
+                        prob = np.exp(-1/(Kb*T)*(H_new-H_old))
+                        if rand > prob:
+                            lattice.supercell[i,j,k] = old_home_site
+                        else:
+                            #H_total += H_new-H_old
+                            x = 0
+                    else:
+                        #H_total += H_new-H_old
+                        x = 0
+
+        H_total,mag,mag2,p,p2 = eval_supercell(lattice,BEG_rules,Cluster_rules,J_rules,Js)
+        # inc +=1
+        # if inc >= 100:
+        #     T -= 100
+        #     inc = 0
+        #     if T <= 0:
+        #         T = 1
+        # T -= .25
+        # if T <= 0:
+        #     T = .25
+        # inc += 1
+        # if inc >= 100:
+        #     inc = 0
+
+        if passes >= PASSES*.9:
+            H_avg += H_total/(PASSES*.1)
+            mag_avg += mag/(PASSES*.1)
+            mag2_avg += mag2/(PASSES*.1)
+            p_avg += p/(PASSES*.1)
+            p2_avg += p2/(PASSES*.1)
+
+        plt.figure(1)
+        plt.plot(passes,H_total/np.size(lattice.supercell),lw=3,marker='o',color='b')
+        plt.figure(2)
+        plt.subplot(211)
+        plt.plot(passes,mag,lw=3,marker='o',color='g')
+        plt.subplot(212)
+        plt.plot(passes,mag2,lw=3,marker='o',color='g')
+        plt.figure(3)
+        plt.subplot(311)
+        plt.plot(passes,p,lw=3,marker='o',color='r')
+        plt.subplot(312)
+        plt.plot(passes,p2,lw=3,marker='o',color='r')
+    if do_figs is True:
+        plt.figure(1)
+        plt.savefig('Enrg.png')
+        plt.figure(2)
+        plt.savefig('Mag.png')
+        plt.figure(3)
+        plt.savefig('Phase.png')
+    temp_output = open('Temp_data','a')
+    temp_output.write(str(T)+'  '+str(H_avg)+'  '+str(mag_avg)+'  '+str(mag2_avg)+'  '+str(p_avg)+'  '+str(p2_avg)+'\n')
+    temp_output.close()

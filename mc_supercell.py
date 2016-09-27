@@ -56,6 +56,7 @@ class mc_supercellObj:
         self.i_length = size[0]
         self.j_length = size[1]
         self.k_length = size[2]
+        self.composition = composition
         self.num_sites = size[0]*size[1]*size[2]
         self.supercell = np.empty((self.i_length,self.j_length,self.k_length),dtype=mc_siteObj)
         self.supercell_list = []
