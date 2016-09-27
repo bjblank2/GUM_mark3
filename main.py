@@ -99,9 +99,9 @@ for passes in range(1,1000):
                 home_site = lattice.supercell[i,j,k]
                 H_new = 0
                 H_old = 0
-                H_old = mc.eval_site(lattice.supercell,(i,j,k),BEG_Rules,Cluster_rules,J_rules,Js)
+                H_old = mc.eval_site(lattice.supercell,(i,j,k),BEG_rules,Cluster_rules,J_rules,Js)
                 old_home_site = mc.flip_phase(lattice.supercell,(i,j,k))
-                H_new = mc.eval_site(lattice.supercell,(i,j,k),BEG_Rules,Cluster_rules,J_rules,Js)
+                H_new = mc.eval_site(lattice.supercell,(i,j,k),BEG_rules,Cluster_rules,J_rules,Js)
                 if H_new > H_old:
                     rand = np.random.random()
                     prob = np.exp(-1/(Kb*T)*(H_new-H_old))
@@ -116,9 +116,9 @@ for passes in range(1,1000):
 
                 H_new = 0
                 H_old = 0
-                H_old = mc.eval_site(lattice.supercell,(i,j,k),BEG_Rules,Cluster_rules,J_rules,Js)
+                H_old = mc.eval_site(lattice.supercell,(i,j,k),BEG_rules,Cluster_rules,J_rules,Js)
                 old_home_site = mc.flip_spin(lattice.supercell,(i,j,k))
-                H_new = mc.eval_site(lattice.supercell,(i,j,k),BEG_Rules,Cluster_rules,J_rules,Js)
+                H_new = mc.eval_site(lattice.supercell,(i,j,k),BEG_rules,Cluster_rules,J_rules,Js)
                 if H_new > H_old:
                     rand = np.random.random()
                     prob = np.exp(-1/(Kb*T)*(H_new-H_old))
@@ -131,7 +131,7 @@ for passes in range(1,1000):
                     #H_total += H_new-H_old
                     x = 0
 
-    H_total,mag,mag2,p,p2 = mc.eval_supercell(lattice,BEG_Rules,Cluster_rules,J_rules,Js)
+    H_total,mag,mag2,p,p2 = mc.eval_supercell(lattice,BEG_rules,Cluster_rules,J_rules,Js)
     # inc +=1
     # if inc >= 100:
     #     T -= 100
