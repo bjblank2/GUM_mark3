@@ -147,16 +147,16 @@ for passes in range(1,1000):
 
     plt.figure(1)
     plt.plot(passes,H_total/np.size(lattice.supercell),lw=3,marker='o',color='b')
+    plt.savefig('Enrg.png')
     plt.figure(2)
+    plt.subplot(211)
     plt.plot(passes,mag,lw=3,marker='o',color='g')
+    plt.subplot(212)
+    plt.plot(passes,mag2,lw=3,marker='o',color='g')
+    plt.savefig('Mag.png')
     plt.figure(3)
+    plt.subplot(311)
     plt.plot(passes,p,lw=3,marker='o',color='r')
-plt.show()
-
-h = 0
-supercell = lattice.supercell
-for i in range(lattice.i_length):
-    for j in range(lattice.j_length):
-        for k in range(lattice.k_length):
-            h_site = mc.eval_site(supercell,(i,j,k),BEG_rules,Cluster_rules,J_rules,Js)
-            h += float(h_site)
+    plt.subplot(312)
+    plt.plot(passes,p2,lw=3,marker='o',color='r')
+    plt.savefig('Phase.png')

@@ -515,7 +515,7 @@ def plot_data():
             flag = 1
     file.close()
     # plt.axis([0.5,2.5,-22.85,-22.4])
-    plt.show()
+    plt.savefig('fit_line.png')
 
 
 def plot_data2():
@@ -581,4 +581,4 @@ def plot_data2():
     plt.yticks(fontsize=14)
     #    plt.legend(loc='center left', bbox_to_anchor=(1, 0.5),fontsize=12)
     #    plt.xticks([2,4,6],actual_labels, rotation='horizontal',fontsize=18)
-    plt.show()
+    plt.savefig('Fit.png')
