@@ -6,7 +6,7 @@ import js
 import m_structure
 import os
 import matplotlib.pyplot as plt
-from scipy.optimize import least_squares
+#from scipy.optimize import least_squares
 
 
 def import_data(number_of_species, root_dir, output_dir):
@@ -378,18 +378,18 @@ def r_function(x,t,y):
     return r
 
 
-def do_robust_ls(M_structures):
-    t_train = []
-    y_train = []
-    for i in range(len(M_structures)):
-        line = list(M_structures[i].BEG_sums+M_structures[i].Cluster_sums+M_structures[i].J_sums)
-        for j in range(len(line)):
-            line[j] *= M_structures[i].weight
-        t_train.append(line)
-        y_train.append(M_structures[i].enrg * M_structures[i].weight)
-    x0 = np.ones((len(line)))*1
-    res_lsq = least_squares(r_function, x0, loss='soft_l1', f_scale=0.05, args=(t_train, y_train))
-    return res_lsq.x
+# def do_robust_ls(M_structures):
+#     t_train = []
+#     y_train = []
+#     for i in range(len(M_structures)):
+#         line = list(M_structures[i].BEG_sums+M_structures[i].Cluster_sums+M_structures[i].J_sums)
+#         for j in range(len(line)):
+#             line[j] *= M_structures[i].weight
+#         t_train.append(line)
+#         y_train.append(M_structures[i].enrg * M_structures[i].weight)
+#     x0 = np.ones((len(line)))*1
+#     res_lsq = least_squares(r_function, x0, loss='soft_l1', f_scale=0.05, args=(t_train, y_train))
+#     return res_lsq.x
 
 
 def ransac(M_structures,error_cutoff,good_fit_cutoff,iterations):
