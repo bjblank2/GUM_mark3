@@ -1,14 +1,13 @@
 __author__ = 'brian'
 import calc_params as Cp
 import mc_functions as mc
-import numpy as np
-import matplotlib.pyplot as plt
+import mc_supercell as ms
 #--------------------------------------------------------------#
 root_dir = '/Volumes/TOURO/Ni-Fe-Ga/Data_Pts'
 data_file = './NiMnIn_Data'
-beg_file = './BEG_rules'
-cluster_file = './Cluster_rules'
-j_file = './J_rules'
+beg_file = './BEG_Rules'
+cluster_file = './Cluster_Rules'
+j_file = './J_Rules'
 num_comps = 3
 num_species = 3
 # Determine if rules and structure data is defined
@@ -29,90 +28,37 @@ BEG_rules = Cp.read_beg_rules(beg_file)
 Cluster_rules = Cp.read_cluster_rules(cluster_file)
 J_rules = Cp.read_j_rules(j_file)
 M_structures = Cp.read_m_structure_data(data_file, num_species, len(BEG_rules), len(Cluster_rules), len(J_rules))
+Cp.linearize(M_structures)
 # Calculate all sums
 Cp.calculate_sums(M_structures, BEG_rules, Cluster_rules, J_rules)
+
 # Do weighted least squares
 Cp.find_weights(M_structures, [8, 6, 4], 1)
-Js = Cp.do_weighted_ls(M_structures, 200)
+Js_w = Cp.do_weighted_ls(M_structures, 200)
+#Js_r = Cp.do_robust_ls(M_structures)
+#Js_rancom = Cp.ransacom(M_structures,1,50,1000)
+#Js_ran = Cp.ransac(M_structures,1,50,1000)
+#Js = Js_r
+Js = Js_w
+#Js = Js_ran
+#Js = Js_rancom
 # Display data
 Cp.write_data(M_structures, 200, Js)
 Cp.write_output(M_structures, BEG_rules, Cluster_rules, J_rules, Js, 200)
 #Cp.plot_data()
-#Cp.plot_data2()
+Cp.plot_data2()
 #--------------------------------------------------------------#
 
 #--------------------------------------------------------------#
-pts = 7 # this refers to sub-lattice
-T = 1001
-Kb = .000086173324 #8.6173324(78)×10−5 eV*K^-1
-supercell_list,supercell = mc.init_supercell(pts)
-neighbor_list,plane_list = mc.calc_neighbors(supercell)
-H_total,H_mag = mc.eval_supercell(supercell_list,neighbor_list,plane_list,BEG_rules,Cluster_rules,J_rules,Js)
-print(H_total,H_mag)
-
-# for i in range(1000):
-#     supercell_list,supercell = mc.init_supercell(pts)
-#     neighbors,neighbor_plain = mc.calc_neighbors(supercell)
-#     ham,mag_ham = mc.eval_supercell(supercell_list,neighbors,neighbor_plain,BEG_rules,Cluster_rules,J_rules,Js)
-#     plt.plot(i,ham/pts**3,lw=3,marker='o',color='b')
-# plt.show()
-
-plt.figure(1)
-plt.plot(0,H_total/(pts**3),lw=3,marker='o',color='b')
-inc = 0
-for passes in range(1,1500):
-    m = 0
-    m2 = 0
-    for i in range(len(supercell_list)):
-        home_site = supercell_list[i]
-        H_new = 0
-        H_old = 0
-        H_old,H_mag_old = mc.eval_site(supercell_list[i],supercell_list,neighbor_list[i],plane_list[i],BEG_rules,Cluster_rules,J_rules,Js)
-        old_home_site = mc.flip_phase(i,supercell_list)
-        H_new,H_mag_old = mc.eval_site(supercell_list[i],supercell_list,neighbor_list[i],plane_list[i],BEG_rules,Cluster_rules,J_rules,Js)
-        if H_new > H_old:
-            rand = np.random.random()
-            prob = np.exp(-1/(Kb*T)*(H_new-H_old))
-            if rand > prob:
-                supercell_list[i] = old_home_site
-            else:
-                #H_total += H_new-H_old
-                x = 0
-        else:
-            #H_total += H_new-H_old
-            x = 0
-        H_new = 0
-        H_old = 0
-        H_old,H_mag_old = mc.eval_site(supercell_list[i],supercell_list,neighbor_list[i],plane_list[i],BEG_rules,Cluster_rules,J_rules,Js)
-        old_home_site = mc.flip_spin(i,supercell_list)
-        H_new,H_mag_old = mc.eval_site(supercell_list[i],supercell_list,neighbor_list[i],plane_list[i],BEG_rules,Cluster_rules,J_rules,Js)
-        if H_new > H_old:
-            rand = np.random.random()
-            prob = np.exp(-1/(Kb*T)*(H_new-H_old))
-            if rand > prob:
-                supercell_list[i] = old_home_site
-            else:
-                #H_total += H_new-H_old
-                x = 0
-        else:
-            #H_total += H_new-H_old
-            x = 0
-        m2 += home_site[5]**2/pts**3
-        m += home_site[5]/pts**3
-    H_total,H_mag = mc.eval_supercell(supercell_list,neighbor_list,plane_list,BEG_rules,Cluster_rules,J_rules,Js)
-    inc +=1
-    if inc >= 100:
-        T -= 100
-        inc = 0
-        if T <= 0:
-            T = 1
-        print(passes)
-        print(T)
-    plt.figure(1)
-    plt.plot(passes,H_total/(pts**3),lw=3,marker='o',color='b')
-    plt.figure(2)
-    plt.plot(passes,m/pts**3,lw=3,marker='o',color='b')
-    plt.figure(3)
-    plt.plot(passes,m2/pts**3,lw=3,marker='o',color='b')
-plt.show()
-
+temp_data = open('Temp_data','w')
+temp_data.write('Temp  H_avg  mag_avg  mag2_avg  phase_avg  phase2_avg\n')
+temp_data.close()
+x_pts = 2
+y_pts = 2
+z_pts = 4
+#lattice = ms.mc_supercellObj((x_pts,y_pts,z_pts),(0,1,2),(64,64,0))#(64,48,16))
+lattice = ms.mc_supercellObj((x_pts,y_pts,z_pts),(0,1,2),(8,8,0))#(64,48,16))
+lattice.find_neighbors()
+mc.run_montecarlo(lattice,500,1,BEG_rules,Cluster_rules,J_rules,Js,do_figs=True)
+for i in range(1,100,10):
+    mc.run_montecarlo(lattice,500,i,BEG_rules,Cluster_rules,J_rules,Js,do_figs=False)

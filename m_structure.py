@@ -17,7 +17,7 @@ class MStructureObj:
         self.mag_phase = data[itter + 2]
         self.name = data[itter + 3]
         self.u = float(data[itter + 4])
-        self.enrg = float(data[itter + 5]) / 4.0
+        self.enrg = float(data[itter + 5])
         a = float(data[itter + 6])
         b = float(data[itter + 7])
         c = float(data[itter + 8])
@@ -28,9 +28,9 @@ class MStructureObj:
         self.LCs[self.Cindex] = self.LCs[2]
         self.LCs[2] = self.C
         self.weight = 1.0
-        self.BEG_sums = [0] * num_beg_rules
-        self.Cluster_sums = [0] * num_cluster_rules
-        self.J_sums = [0] * num_j_rules
+        self.BEG_sums = [0.0] * num_beg_rules
+        self.Cluster_sums = [0.0] * num_cluster_rules
+        self.J_sums = [0.0] * num_j_rules
         self.basis = []
         self.distances = np.ones([self.num_Atoms, self.num_Atoms * 27]) * 100
         self.mins = np.ones([self.num_Atoms, 10]) * 100
