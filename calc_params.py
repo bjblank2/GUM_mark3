@@ -284,11 +284,11 @@ def find_weights(m_structure_list, compositions, tk):
     for i in range(len(compositions)):
         enrgs = []
         for j in range(len(m_structure_list)):
-            if compositions[i] == m_structure_list[j].species[1]:
+            if compositions[i] == m_structure_list[j].composition[1]:
                 enrgs.append(m_structure_list[j].enrg)
         minimum = min(enrgs)
         for j in range(len(m_structure_list)):
-            if compositions[i] == m_structure_list[j].species[1]:
+            if compositions[i] == m_structure_list[j].composition[1]:
                 m_structure_list[j].weight = np.exp(-1.0 * abs(minimum - m_structure_list[j].enrg) / tk) ** (0.5)
 
 
@@ -350,7 +350,7 @@ def write_output(structures, beg_list, clusters_list, j_list, Js, limit):
     for i in range(len(structures)):
         mat = structures[i]
         if mat.mag_phase != "pera" and mat.phase_name != "pm" and mat.enrg <= limit:
-            file.write(str(mat.species[1]) + "    " + str(mat.enrg).ljust(16) + "    ")
+            file.write(str(mat.composition[1]) + "    " + str(mat.enrg).ljust(16) + "    ")
             new_enrg = 0
             for j in range(len(beg_list)):
                 new_enrg += Js[j] * structures[i].BEG_sums[j]
@@ -487,7 +487,7 @@ def linearize(M_structures):
     e_comp50 = []
     for i in range(len(M_structures)):
         structure = M_structures[i]
-        comp = structure.species[2]/structure.species[0]
+        comp = structure.composition[2]/structure.composition[0]
         if comp == 0:
             e_comp0.append(structure.enrg)
         if comp == .5:
@@ -496,7 +496,7 @@ def linearize(M_structures):
     comp50_min = min(e_comp50)
     offset = (comp50_min-comp0_min)/.5
     for i in range(len(M_structures)):
-        comp = M_structures[i].species[2]/M_structures[i].species[0]
+        comp = M_structures[i].composition[2]/M_structures[i].composition[0]
         M_structures[i].enrg -= offset*comp + comp0_min
 
 

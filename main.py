@@ -60,5 +60,5 @@ z_pts = 4
 lattice = ms.mc_supercellObj((x_pts,y_pts,z_pts),(0,1,2),(8,8,0))#(64,48,16))
 lattice.find_neighbors()
 mc.run_montecarlo(lattice,500,1,BEG_rules,Cluster_rules,J_rules,Js,do_figs=True)
-for i in range(1,100,10):
-    mc.run_montecarlo(lattice,500,i,BEG_rules,Cluster_rules,J_rules,Js,do_figs=False)
+#for i in range(1,100,10):
+#    mc.run_montecarlo(lattice,500,i,BEG_rules,Cluster_rules,J_rules,Js,do_figs=False)
