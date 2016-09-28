@@ -1,6 +1,5 @@
 __author__ = 'brian'
 
-# jijfidsja
 class AtomObj:
     def __init__(self, index, species_list, mag, pos, c_index=None):
         self.atom_index = index
