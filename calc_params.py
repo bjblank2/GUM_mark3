@@ -131,6 +131,7 @@ def read_beg_rules(rule_file):
             BEG_rule.set_neighbor_atom_list(lines[i + 4].split())
             BEG_rule.set_phase(lines[i + 5].strip())
             BEG_rule.set_plane(lines[i + 6].strip())
+            BEG_rule.set_composition(lines[i + 7].split())
             BEG_rule_list.append(BEG_rule)
     input_file.close()
     return BEG_rule_list
@@ -149,6 +150,7 @@ def write_cluster_rules(rule_file):
         output.write(str(Cluster_rule.neighbor_atom_list) + '\n')
         output.write(str(Cluster_rule.phase) + '\n')
         output.write(str(Cluster_rule.plane) + '\n')
+        output.write(str(Cluster_rule.composition) + '\n')
         if input('Add another rule? (Y/N):  ') == 'N':
             new_rule = False
     output.close()
@@ -241,7 +243,8 @@ def calculate_sums(m_structure_list, beg_rule_list, cluster_rule_list, j_rule_li
                             if m_structure_list[i].distances[j, k] == m_structure_list[i].mins[
                             j, beg_rule_list[l].neighbor_order - 1]:
                                 if m_structure_list[i].phase_name == beg_rule_list[l].phase:
-                                    m_structure_list[i].BEG_sums[l] += 1/6
+                                    if m_structure_list[i].composition == beg_rule_list[l].composition:
+                                        m_structure_list[i].BEG_sums[l] += 1/6
                 # Calc Cluster sums
                 for l in range(len(cluster_rule_list)):
                     if m_structure_list[i].basis[j].species in cluster_rule_list[l].home_atom_list:
@@ -477,8 +480,12 @@ def ransacom(M_structures,error_cutoff,good_fit_cutoff,iterations):
                 best_error = new_error
                 best_model = new_candidate_model
                 modle_change_count += 1
+    for i in range(len(M_structures)):
+        M_structures[i].weight = 1
     for i in range(len(best_outliers)):
         best_outliers[i].weight = .4
+    best_model = do_weighted_ls(M_structures,500)
+    print(modle_change_count)
     return best_model
 
 

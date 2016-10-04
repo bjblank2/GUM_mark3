@@ -36,7 +36,7 @@ Cp.calculate_sums(M_structures, BEG_rules, Cluster_rules, J_rules)
 Cp.find_weights(M_structures, [8, 6, 4], 1)
 Js_w = Cp.do_weighted_ls(M_structures, 200)
 #Js_r = Cp.do_robust_ls(M_structures)
-#Js_rancom = Cp.ransacom(M_structures,1,50,1000)
+#Js_rancom = Cp.ransacom(M_structures,1,30,3000)
 #Js_ran = Cp.ransac(M_structures,1,50,1000)
 #Js = Js_r
 Js = Js_w
@@ -57,8 +57,9 @@ x_pts = 2
 y_pts = 2
 z_pts = 4
 #lattice = ms.mc_supercellObj((x_pts,y_pts,z_pts),(0,1,2),(64,64,0))#(64,48,16))
-lattice = ms.mc_supercellObj((x_pts,y_pts,z_pts),(0,1,2),(8,8,0))#(64,48,16))
+lattice = ms.mc_supercellObj((x_pts,y_pts,z_pts),(0,1,2),(8,6,2))#(64,48,16))
 lattice.find_neighbors()
 mc.run_montecarlo(lattice,500,1,BEG_rules,Cluster_rules,J_rules,Js,do_figs=True)
-#for i in range(1,100,10):
-#    mc.run_montecarlo(lattice,500,i,BEG_rules,Cluster_rules,J_rules,Js,do_figs=False)
+for i in range(1,100,10):
+   mc.run_montecarlo(lattice,500,i,BEG_rules,Cluster_rules,J_rules,Js,do_figs=False)
+   print(i)
