@@ -294,6 +294,20 @@ def find_weights(m_structure_list, compositions, tk):
             if compositions[i] == m_structure_list[j].composition[1]:
                 m_structure_list[j].weight = np.exp(-1.0 * abs(minimum - m_structure_list[j].enrg) / tk) ** (0.5)
 
+def find_weights_2(m_structure_list, compositions,limit):
+    for i in range(len(compositions)):
+        enrgs = []
+        for j in range(len(m_structure_list)):
+            if compositions[i] == m_structure_list[j].composition[1]:
+                if m_structure_list[j].mag_phase != "pera" and m_structure_list[j].phase_name != "pm" and m_structure_list[j].enrg <= limit:
+                    enrgs.append(m_structure_list[j].enrg)
+        minimum = min(enrgs)
+        maximum = max(enrgs)
+        cutoff = (maximum-minimum)*.25
+        for j in range(len(m_structure_list)):
+            if compositions[i] == m_structure_list[j].composition[1]:
+                if m_structure_list[j].enrg > minimum+cutoff:
+                    m_structure_list[j].weight = .7
 
 def do_weighted_ls(m_structure_list, limit):
     a = []
@@ -572,9 +586,9 @@ def plot_data2():
             if dat[3] == "NA":
                 m = 'x'
             y = float(dat[1])
-            plt.plot([x + x_itter, x + x_itter], [y/16, float(dat[2])/16], lw=1, color="k")
-            plt.plot(x + x_itter, y/16, lw=0, markersize=8, marker=m, color=c)
-            plt.plot(x + x_itter, float(dat[2])/16, lw=0, markersize=8, marker=".", color="r")
+            plt.plot([x + x_itter, x + x_itter], [y, float(dat[2])], lw=1, color="k")
+            plt.plot(x + x_itter, y, lw=0, markersize=8, marker=m, color=c)
+            plt.plot(x + x_itter, float(dat[2]), lw=0, markersize=8, marker=".", color="r")
         if 'Original Enrg' in data[i]:
             flag = 1
     file.close()
