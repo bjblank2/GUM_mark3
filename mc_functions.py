@@ -172,7 +172,7 @@ def run_montecarlo(lattice,PASSES,start_temp,BEG_rules,Cluster_rules,J_rules,Js,
     p_avg = 0
     p2_avg = 0
     H_total,mag,mag2,p,p2 = eval_supercell(lattice,BEG_rules,Cluster_rules,J_rules,Js)
-    plt.figure(1)
+    plt.figure(2)
     plt.plot(0,H_total/np.size(lattice.supercell),lw=3,marker='o',color='b')
     inc = 0
     for passes in range(1,PASSES):
@@ -251,24 +251,24 @@ def run_montecarlo(lattice,PASSES,start_temp,BEG_rules,Cluster_rules,J_rules,Js,
             p_avg += p/(PASSES*.1)
             p2_avg += p2/(PASSES*.1)
 
-        plt.figure(1)
-        plt.plot(passes,H_total/np.size(lattice.supercell),lw=3,marker='o',color='b')
         plt.figure(2)
-        plt.subplot(211)
-        plt.plot(passes,mag,lw=3,marker='o',color='g')
-        plt.subplot(212)
-        plt.plot(passes,mag2,lw=3,marker='o',color='g')
+        plt.plot(passes,H_total/np.size(lattice.supercell),lw=3,marker='o',color='b')
         plt.figure(3)
         plt.subplot(311)
-        plt.plot(passes,p,lw=3,marker='o',color='r')
+        plt.plot(passes,mag,lw=3,marker='o',color='g')
         plt.subplot(312)
+        plt.plot(passes,mag2,lw=3,marker='o',color='g')
+        plt.figure(4)
+        plt.subplot(411)
+        plt.plot(passes,p,lw=3,marker='o',color='r')
+        plt.subplot(412)
         plt.plot(passes,p2,lw=3,marker='o',color='r')
     if do_figs is True:
-        plt.figure(1)
-        plt.savefig('Enrg.png')
         plt.figure(2)
-        plt.savefig('Mag.png')
+        plt.savefig('Enrg.png')
         plt.figure(3)
+        plt.savefig('Mag.png')
+        plt.figure(4)
         plt.savefig('Phase.png')
     temp_output = open('Temp_data','a')
     temp_output.write(str(T)+'  '+str(H_avg)+'  '+str(mag_avg)+'  '+str(mag2_avg)+'  '+str(p_avg)+'  '+str(p2_avg)+'\n')
