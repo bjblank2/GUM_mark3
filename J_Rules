@@ -17,48 +17,48 @@ OUT
 # J1b0
 2
 COMB
-1
-1
+1 2
+1 2
 aust
 ALL
 
 # J1bU
 2
 COMB
-1
-1
+1 2
+1 2
 mart
 IN
 
 # J2bU
 2
 COMB
-1
-1
+1 2
+1 2
 mart
 OUT
 
 # J1c0
 3
 COMB
-1
-1
+1 2
+1 2
 aust
 ALL
 
 # J1cU
 3
 COMB
-1
-1
+1 2
+1 2
 mart
 IN
 
 # J2cU
 3
 COMB
-1
-1
+1 2
+1 2
 mart
 OUT
 
