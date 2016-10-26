@@ -6,7 +6,7 @@ import js
 import m_structure
 import os
 import matplotlib.pyplot as plt
-#from scipy.optimize import least_squares
+from scipy.optimize import least_squares
 
 
 def import_data(number_of_species, root_dir, output_dir):
@@ -238,49 +238,37 @@ def calculate_sums(m_structure_list, beg_rule_list, cluster_rule_list, j_rule_li
                 # Calc BEG sums
                 for l in range(len(beg_rule_list)):
                     if m_structure_list[i].basis[j].species in beg_rule_list[l].home_atom_list:
-                        if m_structure_list[i].basis[k].species in beg_rule_list[
-                        l].neighbor_atom_list:
-                            if m_structure_list[i].distances[j, k] == m_structure_list[i].mins[
-                            j, beg_rule_list[l].neighbor_order - 1]:
+                        if m_structure_list[i].basis[k].species in beg_rule_list[l].neighbor_atom_list:
+                            if m_structure_list[i].distances[j, k] == m_structure_list[i].mins[j, beg_rule_list[l].neighbor_order - 1]:
                                 if m_structure_list[i].phase_name == beg_rule_list[l].phase:
                                     if m_structure_list[i].composition == beg_rule_list[l].composition:
-                                        m_structure_list[i].BEG_sums[l] += 1/6
+                                        m_structure_list[i].BEG_sums[l] += -1
                 # Calc Cluster sums
                 for l in range(len(cluster_rule_list)):
                     if m_structure_list[i].basis[j].species in cluster_rule_list[l].home_atom_list:
-                        if m_structure_list[i].distances[j, k] == m_structure_list[i].mins[
-                            j, cluster_rule_list[l].neighbor_order - 1]:
-                            if m_structure_list[i].check_plane(j, k) == cluster_rule_list[l].plane or m_structure_list[
-                                i].check_plane(j, k) == 'ALL':
+                        if m_structure_list[i].distances[j, k] == m_structure_list[i].mins[j, cluster_rule_list[l].neighbor_order - 1]:
+                            if m_structure_list[i].check_plane(j, k) == cluster_rule_list[l].plane or m_structure_list[i].check_plane(j, k) == 'ALL':
                                 if m_structure_list[i].phase_name == cluster_rule_list[l].phase:
                                     if cluster_rule_list[l].neighbor_arrangement == 'COMB':
-                                        if m_structure_list[i].basis[k].species in cluster_rule_list[
-                                            l].neighbor_atom_list:
+                                        if m_structure_list[i].basis[k].species in cluster_rule_list[l].neighbor_atom_list:
                                             m_structure_list[i].Cluster_sums[l] += 1
                                     if cluster_rule_list[l].neighbor_arrangement == 'PERM':
-                                        if m_structure_list[i].basis[k].species in cluster_rule_list[
-                                            l].neighbor_atom_list:
-                                            if m_structure_list[i].basis[k].species != m_structure_list[i].basis[
-                                                j].species:
+                                        if m_structure_list[i].basis[k].species in cluster_rule_list[l].neighbor_atom_list:
+                                            if m_structure_list[i].basis[k].species != m_structure_list[i].basis[j].species:
                                                 m_structure_list[i].Cluster_sums[l] += 1
                 # Calc J sums
                 for l in range(len(j_rule_list)):
                     if m_structure_list[i].basis[j].species in j_rule_list[l].home_atom_list:
-                        if m_structure_list[i].distances[j, k] == m_structure_list[i].mins[
-                            j, j_rule_list[l].neighbor_order - 1]:
-                            if m_structure_list[i].check_plane(j, k) == j_rule_list[l].plane or m_structure_list[
-                                i].check_plane(j, k) == 'ALL':
+                        if m_structure_list[i].distances[j, k] == m_structure_list[i].mins[j, j_rule_list[l].neighbor_order - 1]:
+                            if m_structure_list[i].check_plane(j, k) == j_rule_list[l].plane or m_structure_list[i].check_plane(j, k) == 'ALL':
                                 if m_structure_list[i].phase_name == j_rule_list[l].phase:
                                     if j_rule_list[l].neighbor_arrangement == 'COMB':
                                         if m_structure_list[i].basis[k].species in j_rule_list[l].neighbor_atom_list:
-                                            m_structure_list[i].J_sums[l] += m_structure_list[i].basis[j].spin * \
-                                                                             m_structure_list[i].basis[k].spin
+                                            m_structure_list[i].J_sums[l] += m_structure_list[i].basis[j].spin * m_structure_list[i].basis[k].spin
                                     if j_rule_list[l].neighbor_arrangement == 'PERM':
                                         if m_structure_list[i].basis[k].species in j_rule_list[l].neighbor_atom_list:
-                                            if m_structure_list[i].basis[k].species != m_structure_list[i].basis[
-                                                j].species:
-                                                m_structure_list[i].J_sums[l] += m_structure_list[i].basis[j].spin * \
-                                                                                 m_structure_list[i].basis[k].spin
+                                            if m_structure_list[i].basis[k].species != m_structure_list[i].basis[j].species:
+                                                m_structure_list[i].J_sums[l] += m_structure_list[i].basis[j].spin * m_structure_list[i].basis[k].spin
 
 
 def find_weights(m_structure_list, compositions, tk):
@@ -293,6 +281,7 @@ def find_weights(m_structure_list, compositions, tk):
         for j in range(len(m_structure_list)):
             if compositions[i] == m_structure_list[j].composition[1]:
                 m_structure_list[j].weight = np.exp(-1.0 * abs(minimum - m_structure_list[j].enrg) / tk) ** (0.5)
+
 
 def find_weights_2(m_structure_list, compositions,limit):
     for i in range(len(compositions)):
@@ -308,6 +297,7 @@ def find_weights_2(m_structure_list, compositions,limit):
             if compositions[i] == m_structure_list[j].composition[1]:
                 if m_structure_list[j].enrg > minimum+cutoff:
                     m_structure_list[j].weight = .7
+
 
 def do_weighted_ls(m_structure_list, limit):
     a = []
@@ -333,7 +323,7 @@ def write_data(structures, limit, Js):
     file.write("NAME".ljust(15) + "PHASE".ljust(7) + "MAG".ljust(6) + "ENERG".ljust(17) + "SUMS->\n")
     for i in range(len(structures)):
         mat = structures[i]
-        if mat.mag_phase != "pera" and mat.phase_name != "pm" and mat.enrg <= limit:
+        if mat.phase_name != "pm":
             out = [mat.enrg, mat.BEG_sums, mat.Cluster_sums, mat.J_sums]
             file.write(mat.name.ljust(15) + mat.phase_name.ljust(7) + mat.mag_phase.ljust(7))
             for j in range(len(out)):
@@ -366,15 +356,15 @@ def write_output(structures, beg_list, clusters_list, j_list, Js, limit):
     file.write("Original Enrg\tNew Enrg\n")
     for i in range(len(structures)):
         mat = structures[i]
-        if mat.mag_phase != "pera" and mat.phase_name != "pm" and mat.enrg <= limit:
+        if mat.phase_name != "pm":
             file.write(str(mat.composition[1]) + "    " + str(mat.enrg).ljust(16) + "    ")
             new_enrg = 0
             for j in range(len(beg_list)):
                 new_enrg += Js[j] * structures[i].BEG_sums[j]
-            for k in range(len(clusters_list)):
-                new_enrg += Js[len(beg_list)+k] * structures[i].Cluster_sums[k]
-            for l in range(len(j_list)):
-                new_enrg += Js[len(beg_list) + len(clusters_list) + l] * structures[i].J_sums[l]
+            #for k in range(len(clusters_list)):
+            #    new_enrg += Js[len(beg_list)+k] * structures[i].Cluster_sums[k]
+            #for l in range(len(j_list)):
+            #    new_enrg += Js[len(beg_list) + len(clusters_list) + l] * structures[i].J_sums[l]
             line = str(new_enrg)
             line = line.replace("[", "")
             line = line.replace("]", "")
@@ -394,18 +384,18 @@ def r_function(x,t,y):
     return r
 
 
-# def do_robust_ls(M_structures):
-#     t_train = []
-#     y_train = []
-#     for i in range(len(M_structures)):
-#         line = list(M_structures[i].BEG_sums+M_structures[i].Cluster_sums+M_structures[i].J_sums)
-#         for j in range(len(line)):
-#             line[j] *= M_structures[i].weight
-#         t_train.append(line)
-#         y_train.append(M_structures[i].enrg * M_structures[i].weight)
-#     x0 = np.ones((len(line)))*1
-#     res_lsq = least_squares(r_function, x0, loss='soft_l1', f_scale=0.05, args=(t_train, y_train))
-#     return res_lsq.x
+def do_robust_ls(M_structures):
+    t_train = []
+    y_train = []
+    for i in range(len(M_structures)):
+        line = list(M_structures[i].BEG_sums+M_structures[i].Cluster_sums+M_structures[i].J_sums)
+        for j in range(len(line)):
+            line[j] *= M_structures[i].weight
+        t_train.append(line)
+        y_train.append(M_structures[i].enrg * M_structures[i].weight)
+    x0 = np.ones((len(line)))*1
+    res_lsq = least_squares(r_function, x0, loss='soft_l1', f_scale=0.05, args=(t_train, y_train))
+    return res_lsq.x
 
 
 def ransac(M_structures,error_cutoff,good_fit_cutoff,iterations):

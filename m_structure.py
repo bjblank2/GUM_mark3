@@ -48,7 +48,7 @@ class MStructureObj:
                     if abs(i) + abs(j) + abs(k) != 0:
                         for l in range(self.num_Atoms):
                             atom_copy = self.basis[l]
-                            mag = atom_copy.spin
+                            mag = atom_copy.mag
                             pos = [atom_copy.a_pos + i, atom_copy.b_pos + j, atom_copy.c_pos + k]
                             self.basis.append(atom.AtomObj(l, self.composition, mag, pos))
 
