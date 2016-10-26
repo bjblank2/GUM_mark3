@@ -5,7 +5,7 @@ import mc_supercell as ms
 #--------------------------------------------------------------#
 root_dir = '/Volumes/TOURO/Ni-Fe-Ga/Data_Pts'
 data_file = './NiMnIn_Data'
-beg_file = './BEG_Rules'
+beg_file = './BEG_rules'
 cluster_file = './Cluster_Rules'
 j_file = './J_Rules'
 num_comps = 3
@@ -33,8 +33,8 @@ Cp.linearize(M_structures)
 Cp.calculate_sums(M_structures, BEG_rules, Cluster_rules, J_rules)
 
 # Do weighted least squares
-#Cp.find_weights(M_structures, [8, 6, 4], 1)
-Cp.find_weights_2(M_structures, [8,6,4], 5)
+Cp.find_weights(M_structures, [8, 6, 4], 1)
+#Cp.find_weights_2(M_structures, [8,6,4], 5)
 Js_w = Cp.do_weighted_ls(M_structures, 5.00)
 #Js_r = Cp.do_robust_ls(M_structures)
 #Js_rancom = Cp.ransacom(M_structures,1,30,3000)
@@ -54,13 +54,13 @@ Cp.plot_data2()
 temp_data = open('Temp_data','w')
 temp_data.write('Temp  H_avg  mag_avg  mag2_avg  phase_avg  phase2_avg\n')
 temp_data.close()
-x_pts = 2
-y_pts = 2
-z_pts = 4
-lattice = ms.mc_supercellObj((x_pts,y_pts,z_pts),(0,1,2),(8,6,2))#(64,48,16))
+x_pts = 4
+y_pts = 4
+z_pts = 8
+lattice = ms.mc_supercellObj((x_pts,y_pts,z_pts),(0,1,2),[64,64,0])#(64,48,16))
 #lattice = ms.mc_supercellObj((x_pts,y_pts,z_pts),(0,1,2),(8,6,2))#(64,48,16))
-#lattice.find_neighbors()
+lattice.find_neighbors()
 mc.run_montecarlo(lattice,500,1,BEG_rules,Cluster_rules,J_rules,Js,do_figs=True)
-# for i in range(1,100,10):
-#    mc.run_montecarlo(lattice,500,i,BEG_rules,Cluster_rules,J_rules,Js,do_figs=False)
+#for i in range(150,1700,50):
+#    mc.run_montecarlo(lattice,900,i,BEG_rules,Cluster_rules,J_rules,Js,do_figs=False)
 #    print(i)

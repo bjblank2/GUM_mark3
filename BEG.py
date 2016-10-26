@@ -51,4 +51,4 @@ class BEGObj:
     def set_composition(self,composition):
         self.composition = composition
         for i in range(len(composition)):
-            self.composition[i] = float(self.composition[i])
+            self.composition[i] = int(self.composition[i])
