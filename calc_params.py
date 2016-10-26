@@ -243,6 +243,18 @@ def calculate_sums(m_structure_list, beg_rule_list, cluster_rule_list, j_rule_li
                                 if m_structure_list[i].phase_name == beg_rule_list[l].phase:
                                     if m_structure_list[i].composition == beg_rule_list[l].composition:
                                         m_structure_list[i].BEG_sums[l] += -1
+        ##########################BEG V2#########################
+        # for j in range(m_structure_list[i].num_Atoms):
+        #     for k in range(len(m_structure_list[i].basis)):
+        #         # Calc BEG sums
+        #         for l in range(len(beg_rule_list)):
+        #             if m_structure_list[i].basis[j].species in beg_rule_list[l].home_atom_list:
+        #                 if m_structure_list[i].basis[k].species in beg_rule_list[l].neighbor_atom_list:
+        #                     if m_structure_list[i].distances[j, k] == m_structure_list[i].mins[j, beg_rule_list[l].neighbor_order - 1]:
+        #                         if m_structure_list[i].phase_name == beg_rule_list[l].phase:
+        #                             if m_structure_list[i].composition == beg_rule_list[l].composition:
+        #                                 m_structure_list[i].BEG_sums[l] += -1
+        #########################################################
                 # Calc Cluster sums
                 for l in range(len(cluster_rule_list)):
                     if m_structure_list[i].basis[j].species in cluster_rule_list[l].home_atom_list:
@@ -593,3 +605,5 @@ def plot_data2():
     #    plt.legend(loc='center left', bbox_to_anchor=(1, 0.5),fontsize=12)
     #    plt.xticks([2,4,6],actual_labels, rotation='horizontal',fontsize=18)
     plt.savefig('Fit.png')
+
+
