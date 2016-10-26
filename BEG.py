@@ -21,6 +21,7 @@ class BEGObj:
         self.neighbor_atom_list = r_list.split()
         self.phase = input('Input phase (aust / mart):  ')
         self.plane = input('In-plane (IN) or Out-of-plane (OUT):  ')
+        self.composition = input('Input composition (num A  num B  num C...):  ')
 
     def set_name(self, name):
         self.name = name
@@ -46,4 +47,8 @@ class BEGObj:
 
     def set_plane(self, plane):
         self.plane = plane
-__author__ = 'brian'
+
+    def set_composition(self,composition):
+        self.composition = composition
+        for i in range(len(composition)):
+            self.composition[i] = int(self.composition[i])

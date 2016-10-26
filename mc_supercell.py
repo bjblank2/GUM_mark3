@@ -1,6 +1,5 @@
 __author__ = 'brian'
 import numpy as np
-from copy import deepcopy
 
 class mc_siteObj:
     def __init__(self, index, pos, species, spin, phase):
@@ -50,6 +49,27 @@ class mc_neighborObj:
         self.order = neighbor_order
         self.plain = plain
 
+    def get_index(self):
+        return self.index
+
+    def get_pos(self):
+        return self.pos
+
+    def get_i_pos(self):
+        return self.i_pos
+
+    def get_j_pos(self):
+        return self.j_pos
+
+    def get_k_pos(self):
+        return self.k_pos
+
+    def get_order(self):
+        return self.order
+
+    def get_plain(self):
+        return self.plain
+
 
 class mc_supercellObj:
     def __init__(self, size, species, composition):
@@ -59,42 +79,51 @@ class mc_supercellObj:
         self.composition = composition
         self.num_sites = size[0]*size[1]*size[2]
         self.supercell = np.empty((self.i_length,self.j_length,self.k_length),dtype=mc_siteObj)
-        self.supercell_list = []
         index = 0
         for i in range(self.i_length):
             for j in range(self.j_length):
                 for k in range(self.k_length):
                     spin_rand = np.random.random()
                     phase_rand = np.random.random()
-                    if spin_rand <= 1/3:
-                        spin = -1
-                    elif spin_rand <= 2/3:
+                    # if spin_rand <= 1/3:
+                    #     spin = -1
+                    # elif spin_rand <= 2/3:
+                    #     spin = 0
+                    # else:
+                    #     spin = 1
+                    if np.mod(k,2) == 0:
+                        if np.mod(i+j,2) == 0:
+                            spin = 1
+                        else:
+                            spin = -1
+                    else:
                         spin = 0
-                    else:
-                        spin = 1
                     if phase_rand <= 1/3:
-                        phase = -1
+                        phase = 1 #####################################################################################
                     elif phase_rand <= 2/3:
-                        phase = 0
+                        phase = 1 #####################################################################################
                     else:
-                        phase = 1
+                        phase = 1 #####################################################################################
                     if np.mod(k,2) == 0:
                         site_species = species[1]
                     else:
                         site_species = species[0]
                     self.supercell[i,j,k] = mc_siteObj(index,(i,j,k),site_species,spin,phase)
-                    self.supercell_list.append(self.supercell[i,j,k])
                     index += 1
-        for i in range(composition[2]):
+        species_count = 0
+        rand_index_list = []
+        while species_count < composition[2]:
             species_not_0 = False
-            rand_index_list = []
             while species_not_0 == False:
                 rand_index = [np.random.randint(0,size[0]),np.random.randint(0,size[1]),np.random.randint(0,size[2])]
                 if self.supercell[rand_index[0],rand_index[1],rand_index[2]].species != species[0]:
                     species_not_0 = True
-                    if self.supercell[rand_index[0],rand_index[1],rand_index[2]] not in rand_index_list:
+                    if rand_index not in rand_index_list:
                         self.supercell[rand_index[0],rand_index[1],rand_index[2]].species = species[2]
+                        self.supercell[rand_index[0],rand_index[1],rand_index[2]].spin = 0
                         rand_index_list.append(rand_index)
+                        species_count += 1
+        self.find_neighbors()
 
     def apply_bc(self,i,inc,limit):
         if i + inc >= limit:
@@ -241,3 +270,62 @@ class mc_supercellObj:
                     site_index = neighbor_site.get_index()
                     site_pos = neighbor_site.get_pos()
                     self.supercell[i,j,k].add_neighbor(mc_neighborObj(site_index,site_pos,3,'IN'))
+
+    def get_composition(self):
+        return self.composition
+
+    def get_site_index(self,site):
+        return self.supercell[site[0],site[1],site[2]].get_index()
+
+    def get_site_pos(self,site):
+        return self.supercell[site[0],site[1],site[2]].get_pos()
+
+    def get_site_species(self,site):
+        return self.supercell[site[0],site[1],site[2]].get_species()
+
+    def get_site_spin(self,site):
+        return self.supercell[site[0],site[1],site[2]].get_spin()
+
+    def get_site_phase(self,site):
+        return self.supercell[site[0],site[1],site[2]].get_phase()
+
+    def set_site_species(self,site,species):
+        self.supercell[site[0],site[1],site[2]].set_species(species)
+
+    def set_site_spin(self,site,spin):
+        self.supercell[site[0],site[1],site[2]].set_spin(spin)
+
+    def set_site_phase(self,site,phase):
+        self.supercell[site[0],site[1],site[2]].set_phase(phase)
+
+    def get_number_of_neighbors(self,site):
+        return len(self.supercell[site[0],site[1],site[2]].neighbors)
+
+    def get_neighbor_pos(self,site,neighbor):
+        return self.supercell[site[0],site[1],site[2]].neighbors[neighbor].get_pos()
+
+    def get_neighbor_order(self,site,neighbor):
+        return self.supercell[site[0],site[1],site[2]].neighbors[neighbor].get_order()
+
+    def get_neighbor_plain(self,site,neighbor):
+        return self.supercell[site[0],site[1],site[2]].neighbors[neighbor].get_plain()
+
+    def get_neighbor_phase(self,site,neighbor):
+        neighbor_pos = self.supercell[site[0],site[1],site[2]].neighbors[neighbor].get_pos()
+        return self.supercell[neighbor_pos[0],neighbor_pos[1],neighbor_pos[2]].get_phase()
+
+    def get_neighbor_species(self,site,neighbor):
+        neighbor_pos = self.supercell[site[0],site[1],site[2]].neighbors[neighbor].get_pos()
+        return self.supercell[neighbor_pos[0],neighbor_pos[1],neighbor_pos[2]].get_species()
+
+    def get_neighbor_spin(self,site,neighbor):
+        neighbor_pos = self.supercell[site[0],site[1],site[2]].neighbors[neighbor].get_pos()
+        return self.supercell[neighbor_pos[0],neighbor_pos[1],neighbor_pos[2]].get_spin()
+
+    def check_site_phase(self,site):
+        phase = self.supercell[site[0],site[1],site[2]].get_phase()
+        if abs(phase) == 1:
+            phase_string = 'mart'
+        if phase == 0:
+            phase_string = 'aust'
+        return phase_string

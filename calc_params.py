@@ -6,7 +6,7 @@ import js
 import m_structure
 import os
 import matplotlib.pyplot as plt
-#from scipy.optimize import least_squares
+from scipy.optimize import least_squares
 
 
 def import_data(number_of_species, root_dir, output_dir):
@@ -131,6 +131,7 @@ def read_beg_rules(rule_file):
             BEG_rule.set_neighbor_atom_list(lines[i + 4].split())
             BEG_rule.set_phase(lines[i + 5].strip())
             BEG_rule.set_plane(lines[i + 6].strip())
+            BEG_rule.set_composition(lines[i + 7].split())
             BEG_rule_list.append(BEG_rule)
     input_file.close()
     return BEG_rule_list
@@ -149,6 +150,7 @@ def write_cluster_rules(rule_file):
         output.write(str(Cluster_rule.neighbor_atom_list) + '\n')
         output.write(str(Cluster_rule.phase) + '\n')
         output.write(str(Cluster_rule.plane) + '\n')
+        output.write(str(Cluster_rule.composition) + '\n')
         if input('Add another rule? (Y/N):  ') == 'N':
             new_rule = False
     output.close()
@@ -236,60 +238,77 @@ def calculate_sums(m_structure_list, beg_rule_list, cluster_rule_list, j_rule_li
                 # Calc BEG sums
                 for l in range(len(beg_rule_list)):
                     if m_structure_list[i].basis[j].species in beg_rule_list[l].home_atom_list:
-                        if m_structure_list[i].basis[k].species in beg_rule_list[
-                        l].neighbor_atom_list:
-                            if m_structure_list[i].distances[j, k] == m_structure_list[i].mins[
-                            j, beg_rule_list[l].neighbor_order - 1]:
+                        if m_structure_list[i].basis[k].species in beg_rule_list[l].neighbor_atom_list:
+                            if m_structure_list[i].distances[j, k] == m_structure_list[i].mins[j, beg_rule_list[l].neighbor_order - 1]:
                                 if m_structure_list[i].phase_name == beg_rule_list[l].phase:
-                                    m_structure_list[i].BEG_sums[l] += 1/6
+                                    if m_structure_list[i].composition == beg_rule_list[l].composition:
+                                        m_structure_list[i].BEG_sums[l] += -1
+        ##########################BEG V2#########################
+        # for j in range(m_structure_list[i].num_Atoms):
+        #     for k in range(len(m_structure_list[i].basis)):
+        #         # Calc BEG sums
+        #         for l in range(len(beg_rule_list)):
+        #             if m_structure_list[i].basis[j].species in beg_rule_list[l].home_atom_list:
+        #                 if m_structure_list[i].basis[k].species in beg_rule_list[l].neighbor_atom_list:
+        #                     if m_structure_list[i].distances[j, k] == m_structure_list[i].mins[j, beg_rule_list[l].neighbor_order - 1]:
+        #                         if m_structure_list[i].phase_name == beg_rule_list[l].phase:
+        #                             if m_structure_list[i].composition == beg_rule_list[l].composition:
+        #                                 m_structure_list[i].BEG_sums[l] += -1
+        #########################################################
                 # Calc Cluster sums
                 for l in range(len(cluster_rule_list)):
                     if m_structure_list[i].basis[j].species in cluster_rule_list[l].home_atom_list:
-                        if m_structure_list[i].distances[j, k] == m_structure_list[i].mins[
-                            j, cluster_rule_list[l].neighbor_order - 1]:
-                            if m_structure_list[i].check_plane(j, k) == cluster_rule_list[l].plane or m_structure_list[
-                                i].check_plane(j, k) == 'ALL':
+                        if m_structure_list[i].distances[j, k] == m_structure_list[i].mins[j, cluster_rule_list[l].neighbor_order - 1]:
+                            if m_structure_list[i].check_plane(j, k) == cluster_rule_list[l].plane or m_structure_list[i].check_plane(j, k) == 'ALL':
                                 if m_structure_list[i].phase_name == cluster_rule_list[l].phase:
                                     if cluster_rule_list[l].neighbor_arrangement == 'COMB':
-                                        if m_structure_list[i].basis[k].species in cluster_rule_list[
-                                            l].neighbor_atom_list:
+                                        if m_structure_list[i].basis[k].species in cluster_rule_list[l].neighbor_atom_list:
                                             m_structure_list[i].Cluster_sums[l] += 1
                                     if cluster_rule_list[l].neighbor_arrangement == 'PERM':
-                                        if m_structure_list[i].basis[k].species in cluster_rule_list[
-                                            l].neighbor_atom_list:
-                                            if m_structure_list[i].basis[k].species != m_structure_list[i].basis[
-                                                j].species:
+                                        if m_structure_list[i].basis[k].species in cluster_rule_list[l].neighbor_atom_list:
+                                            if m_structure_list[i].basis[k].species != m_structure_list[i].basis[j].species:
                                                 m_structure_list[i].Cluster_sums[l] += 1
                 # Calc J sums
                 for l in range(len(j_rule_list)):
                     if m_structure_list[i].basis[j].species in j_rule_list[l].home_atom_list:
-                        if m_structure_list[i].distances[j, k] == m_structure_list[i].mins[
-                            j, j_rule_list[l].neighbor_order - 1]:
-                            if m_structure_list[i].check_plane(j, k) == j_rule_list[l].plane or m_structure_list[
-                                i].check_plane(j, k) == 'ALL':
+                        if m_structure_list[i].distances[j, k] == m_structure_list[i].mins[j, j_rule_list[l].neighbor_order - 1]:
+                            if m_structure_list[i].check_plane(j, k) == j_rule_list[l].plane or m_structure_list[i].check_plane(j, k) == 'ALL':
                                 if m_structure_list[i].phase_name == j_rule_list[l].phase:
                                     if j_rule_list[l].neighbor_arrangement == 'COMB':
                                         if m_structure_list[i].basis[k].species in j_rule_list[l].neighbor_atom_list:
-                                            m_structure_list[i].J_sums[l] += m_structure_list[i].basis[j].spin * \
-                                                                             m_structure_list[i].basis[k].spin
+                                            m_structure_list[i].J_sums[l] += m_structure_list[i].basis[j].spin * m_structure_list[i].basis[k].spin
                                     if j_rule_list[l].neighbor_arrangement == 'PERM':
                                         if m_structure_list[i].basis[k].species in j_rule_list[l].neighbor_atom_list:
-                                            if m_structure_list[i].basis[k].species != m_structure_list[i].basis[
-                                                j].species:
-                                                m_structure_list[i].J_sums[l] += m_structure_list[i].basis[j].spin * \
-                                                                                 m_structure_list[i].basis[k].spin
+                                            if m_structure_list[i].basis[k].species != m_structure_list[i].basis[j].species:
+                                                m_structure_list[i].J_sums[l] += m_structure_list[i].basis[j].spin * m_structure_list[i].basis[k].spin
 
 
 def find_weights(m_structure_list, compositions, tk):
     for i in range(len(compositions)):
         enrgs = []
         for j in range(len(m_structure_list)):
-            if compositions[i] == m_structure_list[j].species[1]:
+            if compositions[i] == m_structure_list[j].composition[1]:
                 enrgs.append(m_structure_list[j].enrg)
         minimum = min(enrgs)
         for j in range(len(m_structure_list)):
-            if compositions[i] == m_structure_list[j].species[1]:
+            if compositions[i] == m_structure_list[j].composition[1]:
                 m_structure_list[j].weight = np.exp(-1.0 * abs(minimum - m_structure_list[j].enrg) / tk) ** (0.5)
+
+
+def find_weights_2(m_structure_list, compositions,limit):
+    for i in range(len(compositions)):
+        enrgs = []
+        for j in range(len(m_structure_list)):
+            if compositions[i] == m_structure_list[j].composition[1]:
+                if m_structure_list[j].mag_phase != "pera" and m_structure_list[j].phase_name != "pm" and m_structure_list[j].enrg <= limit:
+                    enrgs.append(m_structure_list[j].enrg)
+        minimum = min(enrgs)
+        maximum = max(enrgs)
+        cutoff = (maximum-minimum)*.25
+        for j in range(len(m_structure_list)):
+            if compositions[i] == m_structure_list[j].composition[1]:
+                if m_structure_list[j].enrg > minimum+cutoff:
+                    m_structure_list[j].weight = .7
 
 
 def do_weighted_ls(m_structure_list, limit):
@@ -316,7 +335,7 @@ def write_data(structures, limit, Js):
     file.write("NAME".ljust(15) + "PHASE".ljust(7) + "MAG".ljust(6) + "ENERG".ljust(17) + "SUMS->\n")
     for i in range(len(structures)):
         mat = structures[i]
-        if mat.mag_phase != "pera" and mat.phase_name != "pm" and mat.enrg <= limit:
+        if mat.phase_name != "pm":
             out = [mat.enrg, mat.BEG_sums, mat.Cluster_sums, mat.J_sums]
             file.write(mat.name.ljust(15) + mat.phase_name.ljust(7) + mat.mag_phase.ljust(7))
             for j in range(len(out)):
@@ -349,15 +368,15 @@ def write_output(structures, beg_list, clusters_list, j_list, Js, limit):
     file.write("Original Enrg\tNew Enrg\n")
     for i in range(len(structures)):
         mat = structures[i]
-        if mat.mag_phase != "pera" and mat.phase_name != "pm" and mat.enrg <= limit:
-            file.write(str(mat.species[1]) + "    " + str(mat.enrg).ljust(16) + "    ")
+        if mat.phase_name != "pm":
+            file.write(str(mat.composition[1]) + "    " + str(mat.enrg).ljust(16) + "    ")
             new_enrg = 0
             for j in range(len(beg_list)):
                 new_enrg += Js[j] * structures[i].BEG_sums[j]
-            for k in range(len(clusters_list)):
-                new_enrg += Js[len(beg_list)+k] * structures[i].Cluster_sums[k]
-            for l in range(len(j_list)):
-                new_enrg += Js[len(beg_list) + len(clusters_list) + l] * structures[i].J_sums[l]
+            #for k in range(len(clusters_list)):
+            #    new_enrg += Js[len(beg_list)+k] * structures[i].Cluster_sums[k]
+            #for l in range(len(j_list)):
+            #    new_enrg += Js[len(beg_list) + len(clusters_list) + l] * structures[i].J_sums[l]
             line = str(new_enrg)
             line = line.replace("[", "")
             line = line.replace("]", "")
@@ -377,18 +396,18 @@ def r_function(x,t,y):
     return r
 
 
-# def do_robust_ls(M_structures):
-#     t_train = []
-#     y_train = []
-#     for i in range(len(M_structures)):
-#         line = list(M_structures[i].BEG_sums+M_structures[i].Cluster_sums+M_structures[i].J_sums)
-#         for j in range(len(line)):
-#             line[j] *= M_structures[i].weight
-#         t_train.append(line)
-#         y_train.append(M_structures[i].enrg * M_structures[i].weight)
-#     x0 = np.ones((len(line)))*1
-#     res_lsq = least_squares(r_function, x0, loss='soft_l1', f_scale=0.05, args=(t_train, y_train))
-#     return res_lsq.x
+def do_robust_ls(M_structures):
+    t_train = []
+    y_train = []
+    for i in range(len(M_structures)):
+        line = list(M_structures[i].BEG_sums+M_structures[i].Cluster_sums+M_structures[i].J_sums)
+        for j in range(len(line)):
+            line[j] *= M_structures[i].weight
+        t_train.append(line)
+        y_train.append(M_structures[i].enrg * M_structures[i].weight)
+    x0 = np.ones((len(line)))*1
+    res_lsq = least_squares(r_function, x0, loss='soft_l1', f_scale=0.05, args=(t_train, y_train))
+    return res_lsq.x
 
 
 def ransac(M_structures,error_cutoff,good_fit_cutoff,iterations):
@@ -477,8 +496,12 @@ def ransacom(M_structures,error_cutoff,good_fit_cutoff,iterations):
                 best_error = new_error
                 best_model = new_candidate_model
                 modle_change_count += 1
+    for i in range(len(M_structures)):
+        M_structures[i].weight = 1
     for i in range(len(best_outliers)):
         best_outliers[i].weight = .4
+    best_model = do_weighted_ls(M_structures,500)
+    print(modle_change_count)
     return best_model
 
 
@@ -487,7 +510,7 @@ def linearize(M_structures):
     e_comp50 = []
     for i in range(len(M_structures)):
         structure = M_structures[i]
-        comp = structure.species[2]/structure.species[0]
+        comp = structure.composition[2]/structure.composition[0]
         if comp == 0:
             e_comp0.append(structure.enrg)
         if comp == .5:
@@ -496,7 +519,7 @@ def linearize(M_structures):
     comp50_min = min(e_comp50)
     offset = (comp50_min-comp0_min)/.5
     for i in range(len(M_structures)):
-        comp = M_structures[i].species[2]/M_structures[i].species[0]
+        comp = M_structures[i].composition[2]/M_structures[i].composition[0]
         M_structures[i].enrg -= offset*comp + comp0_min
 
 
@@ -565,9 +588,9 @@ def plot_data2():
             if dat[3] == "NA":
                 m = 'x'
             y = float(dat[1])
-            plt.plot([x + x_itter, x + x_itter], [y/16, float(dat[2])/16], lw=1, color="k")
-            plt.plot(x + x_itter, y/16, lw=0, markersize=8, marker=m, color=c)
-            plt.plot(x + x_itter, float(dat[2])/16, lw=0, markersize=8, marker=".", color="r")
+            plt.plot([x + x_itter, x + x_itter], [y, float(dat[2])], lw=1, color="k")
+            plt.plot(x + x_itter, y, lw=0, markersize=8, marker=m, color=c)
+            plt.plot(x + x_itter, float(dat[2]), lw=0, markersize=8, marker=".", color="r")
         if 'Original Enrg' in data[i]:
             flag = 1
     file.close()
@@ -582,3 +605,5 @@ def plot_data2():
     #    plt.legend(loc='center left', bbox_to_anchor=(1, 0.5),fontsize=12)
     #    plt.xticks([2,4,6],actual_labels, rotation='horizontal',fontsize=18)
     plt.savefig('Fit.png')
+
+

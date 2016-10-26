@@ -7,11 +7,11 @@ class MStructureObj:
     def __init__(self, data, num_species,num_beg_rules, num_cluster_rules, num_j_rules):
         data = data.split()
         itter = 0
-        self.species = [0] * num_species
+        self.composition = [0] * num_species
         self.num_Atoms = 0
         for i in range(num_species):
             self.num_Atoms += int(data[itter + 1])
-            self.species[i] = int(data[itter + 1])
+            self.composition[i] = int(data[itter + 1])
             itter += 1
         self.phase_name = data[itter + 1]
         self.mag_phase = data[itter + 2]
@@ -39,7 +39,7 @@ class MStructureObj:
         atom_data = atom_data.split()
         mag = float(atom_data[1])
         pos = [round(float(atom_data[2]), 5), round(float(atom_data[3]), 5), round(float(atom_data[4]), 5)]
-        self.basis.append(atom.AtomObj(index, self.species, mag, pos, self.Cindex))
+        self.basis.append(atom.AtomObj(index, self.composition, mag, pos, self.Cindex))
 
     def create_super_cell(self):
         for i in range(-1, 2):
@@ -48,9 +48,9 @@ class MStructureObj:
                     if abs(i) + abs(j) + abs(k) != 0:
                         for l in range(self.num_Atoms):
                             atom_copy = self.basis[l]
-                            mag = atom_copy.spin
+                            mag = atom_copy.mag
                             pos = [atom_copy.a_pos + i, atom_copy.b_pos + j, atom_copy.c_pos + k]
-                            self.basis.append(atom.AtomObj(l, self.species, mag, pos))
+                            self.basis.append(atom.AtomObj(l, self.composition, mag, pos))
 
     def calculate_distances(self):
         for i in range(self.num_Atoms):

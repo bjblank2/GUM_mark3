@@ -5,6 +5,8 @@ class AtomObj:
         self.atom_index = index
         self.species = 0
         self.set_species(index, species_list)
+        self.mag = mag
+        self.spin = 0
         self.set_spin(mag)
         self.set_pos(pos[0], pos[1], pos[2])
         if c_index is not None:
@@ -12,12 +14,13 @@ class AtomObj:
 
     def set_spin(self, mag):
         if self.species == 0:
-            if abs(round(mag, 2)) >= .02:
+            if abs(round(mag, 2)) >= .1:
                 self.spin = round(abs(mag) / mag, 5)
             else:
                 self.spin = 0
         if self.species == 1:
-            if abs(round(mag, 2)) >= .7:
+            #if abs(round(mag, 2)) >= 2:
+            if abs(mag) >= 2:
                 self.spin = round(abs(mag) / mag, 5)
             else:
                 self.spin = 0
