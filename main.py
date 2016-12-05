@@ -54,9 +54,10 @@ x_pts = 2
 y_pts = 2
 z_pts = 4
 lattice = ms.mc_supercellObj((x_pts,y_pts,z_pts),(0,1,2),[8,8,0])#(216,48,16))
-H,p,p2,m,m2 = mc.eval_lattice(lattice,BEG_rules,Cluster_rules,J_rules,Js,do_figs=True)
-print(H)
-mc.run_montecarlo(lattice,50,20,BEG_rules,Cluster_rules,J_rules,Js,do_figs=True)
+#H,p,p2,m,m2 = mc.eval_lattice(lattice,BEG_rules,Cluster_rules,J_rules,Js,do_figs=True)
+#print(H)
+#mc.run_montecarlo(lattice,500,1,BEG_rules,Cluster_rules,J_rules,Js,do_figs=True)
+mc.run_simple_cluster_MC(lattice,200,100,BEG_rules,Cluster_rules,J_rules,Js,do_figs=True)
 # #for i in range(150,1700,50):
 # #    mc.run_montecarlo(lattice,900,i,BEG_rules,Cluster_rules,J_rules,Js,do_figs=False)
 # #    print(i)

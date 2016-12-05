@@ -7,7 +7,7 @@ import m_structure
 import os
 import matplotlib.pyplot as plt
 from scipy.optimize import least_squares
-
+from sklearn.linear_model import Ridge
 
 def import_data(number_of_species, root_dir, output_dir):
     output = open(output_dir, 'w')
@@ -242,7 +242,11 @@ def calculate_sums(m_structure_list, beg_rule_list, cluster_rule_list, j_rule_li
                             if m_structure_list[i].distances[j, k] == m_structure_list[i].mins[j, beg_rule_list[l].neighbor_order - 1]:
                                 if m_structure_list[i].phase_name == beg_rule_list[l].phase:
                                     if m_structure_list[i].composition == beg_rule_list[l].composition:
-                                        m_structure_list[i].BEG_sums[l] += -1
+                                        if beg_rule_list[l].neighbor_arrangement == 'COMB':
+                                            m_structure_list[i].BEG_sums[l] += -1
+                                        if beg_rule_list[l].neighbor_arrangement == 'PERM':
+                                            if m_structure_list[i].basis[k].species != m_structure_list[i].basis[j].species:
+                                                m_structure_list[i].BEG_sums[l] += -1
         ##########################BEG V2#########################
         # for j in range(m_structure_list[i].num_Atoms):
         #     for k in range(len(m_structure_list[i].basis)):
