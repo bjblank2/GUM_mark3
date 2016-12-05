@@ -7,7 +7,7 @@ import m_structure
 import os
 import matplotlib.pyplot as plt
 from scipy.optimize import least_squares
-
+from sklearn.linear_model import Ridge
 
 def import_data(number_of_species, root_dir, output_dir):
     output = open(output_dir, 'w')
