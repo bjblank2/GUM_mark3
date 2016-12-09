@@ -28,15 +28,16 @@ BEG_rules = Cp.read_beg_rules(beg_file)
 Cluster_rules = Cp.read_cluster_rules(cluster_file)
 J_rules = Cp.read_j_rules(j_file)
 M_structures = Cp.read_m_structure_data(data_file, num_species, len(BEG_rules), len(Cluster_rules), len(J_rules))
-Cp.linearize(M_structures)
+#Cp.linearize(M_structures)
 # Calculate all sums
 Cp.calculate_sums(M_structures, BEG_rules, Cluster_rules, J_rules)
 
 # Do weighted least squares
-Cp.find_weights(M_structures, [8, 6, 4], 1)
+#Cp.find_weights(M_structures, [8, 6, 4], 1)
 #Cp.find_weights_2(M_structures, [8,6,4], 5)
 #Js = Cp.do_weighted_ls(M_structures, 5)
-Js = Cp.do_robust_ls(M_structures)
+#Js = Cp.do_robust_ls(M_structures)
+Js  = Cp.ridge_simple(M_structures,1)
 #Js = Cp.ransacom(M_structures,1,30,3000)
 #Js = Cp.ransac(M_structures,1,50,1000)
 # Display data
@@ -44,6 +45,10 @@ Cp.write_data(M_structures, 200, Js)
 Cp.write_output(M_structures, BEG_rules, Cluster_rules, J_rules, Js, 200)
 #Cp.plot_data()
 Cp.plot_data2()
+print('#######################\n')
+#print(Cp.CV_score(Js,M_structures))
+#print(Cp.CV_score2(M_structures))
+print('#######################\n')
 #--------------------------------------------------------------#
 
 #--------------------------------------------------------------#

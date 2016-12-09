@@ -37,41 +37,41 @@ def eval_site(site,supercell_obj,BEG_rules,Cluster_rules,J_rules,Js,T):
             home_phase = supercell_obj.get_site_phase(site)
             neighbor_phase = supercell_obj.get_neighbor_phase(site,i)
             #Ham += -BEG_J*home_phase*neighbor_phase-BEG_K*(home_phase**2)*(neighbor_phase**2)+6*BEG_K*home_phase**2-6*supercell_obj.num_sites*BEG_K/2
-            Ham += -(BEG_J*home_phase*neighbor_phase+BEG_K*(1-home_phase**2)*(1-neighbor_phase**2)) #- Kb*T*np.log(2)*(1-supercell_obj.get_site_spin(site)**2)
-            Ham_BEG += -(BEG_J*home_phase*neighbor_phase+BEG_K*(1-home_phase**2)*(1-neighbor_phase**2)) - Kb*T*np.log(2)*(1-supercell_obj.get_site_spin(site)**2)
+            Ham += (BEG_J*home_phase*neighbor_phase+BEG_K*(1-home_phase**2)*(1-neighbor_phase**2)) #- Kb*T*np.log(2)*(1-supercell_obj.get_site_spin(site)**2)
+            Ham_BEG += (BEG_J*home_phase*neighbor_phase+BEG_K*(1-home_phase**2)*(1-neighbor_phase**2)) + Kb*T*np.log(2)*(1-supercell_obj.get_site_spin(site)**2)
 
-            # for j in range(len(Cluster_rules)):
-            #     if supercell_obj.get_neighbor_order(site,i) == Cluster_rules[j].neighbor_order:
-            #         if supercell_obj.get_neighbor_plain(site,i) == Cluster_rules[j].plane or Cluster_rules[j].plane == 'ALL':
-            #             if supercell_obj.check_site_phase(site) == Cluster_rules[j].phase:
-            #                 if supercell_obj.get_site_species(site) in Cluster_rules[j].home_atom_list:
-            #                     if supercell_obj.get_neighbor_species(site,i) in Cluster_rules[j].neighbor_atom_list:
-            #                         if Cluster_rules[j].neighbor_arrangement == 'PERM':
-            #                             if supercell_obj.get_site_species(site) != supercell_obj.get_neighbor_species(site,i):
-            #                                 Ham += float(Js[j+len(BEG_rules)])
-            #                                 Ham_Clust += float(Js[j+len(BEG_rules)])
-            #                         if Cluster_rules[j].neighbor_arrangement == 'COMB':
-            #                             Ham += float(Js[j+len(BEG_rules)])
-            #                             Ham_Clust += float(Js[j+len(BEG_rules)])
-            #
-            #
-            # for j in range(len(J_rules)):
-            #     if supercell_obj.get_neighbor_order(site,i) == J_rules[j].neighbor_order:
-            #         if supercell_obj.get_neighbor_plain(site,i) == J_rules[j].plane or J_rules[j].plane == 'ALL':
-            #             if supercell_obj.check_site_phase(site) == J_rules[j].phase:
-            #                 if supercell_obj.get_site_species(site) in J_rules[j].home_atom_list:
-            #                     if supercell_obj.get_neighbor_species(site,i) in J_rules[j].neighbor_atom_list:
-            #                         if J_rules[j].neighbor_arrangement == 'PERM':
-            #                             if supercell_obj.get_site_species(site) != supercell_obj.get_neighbor_species(site,i):
-            #                                 home_spin = supercell_obj.get_site_spin(site)
-            #                                 neighbor_spin = supercell_obj.get_neighbor_spin(site,i)
-            #                                 Ham += float(Js[j+len(BEG_rules)+len(Cluster_rules)])*home_spin*neighbor_spin
-            #                                 Ham_Spin += float(Js[j+len(BEG_rules)+len(Cluster_rules)])*home_spin*neighbor_spin
-            #                         if J_rules[j].neighbor_arrangement == 'COMB':
-            #                             home_spin = supercell_obj.get_site_spin(site)
-            #                             neighbor_spin = supercell_obj.get_neighbor_spin(site,i)
-            #                             Ham += float(Js[j+len(BEG_rules)+len(Cluster_rules)])*home_spin*neighbor_spin
-            #                             Ham_Spin += float(Js[j+len(BEG_rules)+len(Cluster_rules)])*home_spin*neighbor_spin
+            for j in range(len(Cluster_rules)):
+                if supercell_obj.get_neighbor_order(site,i) == Cluster_rules[j].neighbor_order:
+                    if supercell_obj.get_neighbor_plain(site,i) == Cluster_rules[j].plane or Cluster_rules[j].plane == 'ALL':
+                        if supercell_obj.check_site_phase(site) == Cluster_rules[j].phase:
+                            if supercell_obj.get_site_species(site) in Cluster_rules[j].home_atom_list:
+                                if supercell_obj.get_neighbor_species(site,i) in Cluster_rules[j].neighbor_atom_list:
+                                    if Cluster_rules[j].neighbor_arrangement == 'PERM':
+                                        if supercell_obj.get_site_species(site) != supercell_obj.get_neighbor_species(site,i):
+                                            Ham += float(Js[j+len(BEG_rules)])
+                                            Ham_Clust += float(Js[j+len(BEG_rules)])
+                                    if Cluster_rules[j].neighbor_arrangement == 'COMB':
+                                        Ham += float(Js[j+len(BEG_rules)])
+                                        Ham_Clust += float(Js[j+len(BEG_rules)])
+
+
+            for j in range(len(J_rules)):
+                if supercell_obj.get_neighbor_order(site,i) == J_rules[j].neighbor_order:
+                    if supercell_obj.get_neighbor_plain(site,i) == J_rules[j].plane or J_rules[j].plane == 'ALL':
+                        if supercell_obj.check_site_phase(site) == J_rules[j].phase:
+                            if supercell_obj.get_site_species(site) in J_rules[j].home_atom_list:
+                                if supercell_obj.get_neighbor_species(site,i) in J_rules[j].neighbor_atom_list:
+                                    if J_rules[j].neighbor_arrangement == 'PERM':
+                                        if supercell_obj.get_site_species(site) != supercell_obj.get_neighbor_species(site,i):
+                                            home_spin = supercell_obj.get_site_spin(site)
+                                            neighbor_spin = supercell_obj.get_neighbor_spin(site,i)
+                                            Ham += float(Js[j+len(BEG_rules)+len(Cluster_rules)])*home_spin*neighbor_spin
+                                            Ham_Spin += float(Js[j+len(BEG_rules)+len(Cluster_rules)])*home_spin*neighbor_spin
+                                    if J_rules[j].neighbor_arrangement == 'COMB':
+                                        home_spin = supercell_obj.get_site_spin(site)
+                                        neighbor_spin = supercell_obj.get_neighbor_spin(site,i)
+                                        Ham += float(Js[j+len(BEG_rules)+len(Cluster_rules)])*home_spin*neighbor_spin
+                                        Ham_Spin += float(Js[j+len(BEG_rules)+len(Cluster_rules)])*home_spin*neighbor_spin
         #print([Ham_BEG,Ham_Clust,Ham_Spin])
         #print(Ham)
         return Ham
@@ -502,7 +502,7 @@ def run_simple_cluster_MC(supercell_obj,numb_passes,temp,BEG_rules,Cluster_rules
                 zs.append(pos[2]*.5)
                 us.append(0)
                 vs.append(0)
-                ws.append(supercell_obj.get_site_phase(site))
+                ws.append(supercell_obj.get_site_spin(site))
                 if supercell_obj.get_site_species(site) == 0:
                     cs.append('g')
                 if supercell_obj.get_site_species(site) == 1:

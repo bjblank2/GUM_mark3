@@ -8,6 +8,7 @@ import os
 import matplotlib.pyplot as plt
 from scipy.optimize import least_squares
 from sklearn.linear_model import Ridge
+from sklearn import linear_model
 
 def import_data(number_of_species, root_dir, output_dir):
     output = open(output_dir, 'w')
@@ -243,10 +244,10 @@ def calculate_sums(m_structure_list, beg_rule_list, cluster_rule_list, j_rule_li
                                 if m_structure_list[i].phase_name == beg_rule_list[l].phase:
                                     if m_structure_list[i].composition == beg_rule_list[l].composition:
                                         if beg_rule_list[l].neighbor_arrangement == 'COMB':
-                                            m_structure_list[i].BEG_sums[l] += -1
+                                            m_structure_list[i].BEG_sums[l] += 1
                                         if beg_rule_list[l].neighbor_arrangement == 'PERM':
                                             if m_structure_list[i].basis[k].species != m_structure_list[i].basis[j].species:
-                                                m_structure_list[i].BEG_sums[l] += -1
+                                                m_structure_list[i].BEG_sums[l] += 1
         ##########################BEG V2#########################
         # for j in range(m_structure_list[i].num_Atoms):
         #     for k in range(len(m_structure_list[i].basis)):
@@ -333,6 +334,166 @@ def do_weighted_ls(m_structure_list, limit):
     return Js
 
 
+def CV_score(Js,m_structure_list):
+    CV2 = 0
+    energies = []
+    for i in range(len(m_structure_list)):
+        mat = m_structure_list[i]
+        if mat.mag_phase != "pera" and mat.phase_name != "pm":
+            energies.append(m_structure_list[i].enrg)
+    x_rows = len(energies)
+    x_colm = m_structure_list[0].num_beg_rules+m_structure_list[0].num_cluster_rules+m_structure_list[0].num_j_rules
+    x_matrix = np.zeros((x_rows,x_colm))
+    x_matrix = np.matrix(x_matrix)
+    i = 0
+    for itter in range(len(m_structure_list)):
+        mat = m_structure_list[itter]
+        if mat.mag_phase != "pera" and mat.phase_name != "pm":
+            for j in range(m_structure_list[0].num_beg_rules):
+                x_matrix[i,j] = m_structure_list[i].BEG_sums[j]
+            for k in range(m_structure_list[0].num_cluster_rules):
+                x_matrix[i,j+k] = m_structure_list[i].Cluster_sums[k]
+            for l in range(m_structure_list[0].num_j_rules):
+                x_matrix[i,j+k+l] = m_structure_list[i].J_sums[l]
+            i += 1
+    en_calc = np.zeros(len(energies))
+    for i in range(x_rows):
+        for j in range(x_colm):
+            en_calc[i] += x_matrix[i,j]*Js[j]
+    for i in range(len(energies)):
+        x_i = np.matrix(x_matrix[i,:])
+        x_trans = x_matrix.getT()
+        x_it = x_i.getT()
+        CV2 += ((energies[i]-en_calc[i])/(1-x_i*np.linalg.inv(x_trans*x_matrix+np.matrix(np.eye(26,26)*.05))*x_it))**2
+    CV2 *= 1/len(m_structure_list)
+    return CV2
+
+def CV_score2(m_structure_list):
+    energies = []
+    for i in range(len(m_structure_list)):
+        mat = m_structure_list[i]
+        if mat.mag_phase != "pera" and mat.phase_name != "pm":
+            energies.append(m_structure_list[i].enrg)
+    x_rows = len(energies)
+    x_colm = m_structure_list[0].num_beg_rules+m_structure_list[0].num_cluster_rules+m_structure_list[0].num_j_rules
+    x_matrix = np.zeros((x_rows,x_colm))
+    x_matrix = np.matrix(x_matrix)
+    i = 0
+    for itter in range(len(m_structure_list)):
+        mat = m_structure_list[itter]
+        if mat.mag_phase != "pera" and mat.phase_name != "pm":
+            for j in range(m_structure_list[0].num_beg_rules):
+                x_matrix[i,j] = m_structure_list[i].BEG_sums[j]
+            for k in range(m_structure_list[0].num_cluster_rules):
+                x_matrix[i,j+k] = m_structure_list[i].Cluster_sums[k]
+            for l in range(m_structure_list[0].num_j_rules):
+                x_matrix[i,j+k+l] = m_structure_list[i].J_sums[l]
+            i += 1
+    x_cross = np.zeros((x_rows-1,x_colm))
+    CV2 = 0
+    for i in range(len(energies)):
+        inc = 0
+        eng_cross = []
+        for j in range(len(energies)):
+            if i != j:
+                eng_cross.append(energies[j])
+                x_cross[inc,:] = x_matrix[j,:]
+                inc += 1
+        b = np.transpose(np.matrix(eng_cross))
+        a = np.matrix(x_cross)
+        Js = np.linalg.lstsq(a, b)[0]
+        Ei = 0
+        for j in range(len(Js)):
+            Ei += x_matrix[i,j]*Js[j]
+        CV2 += (energies[i]-Ei)**2
+    CV2 *= 1/len(m_structure_list)
+    return CV2
+
+
+def ridge_simple(m_structure_list,alpha):
+    a = []
+    b = []
+    for i in range(len(m_structure_list)):
+        mat = m_structure_list[i]
+        if mat.mag_phase != "pera" and mat.phase_name != "pm":
+            # if mat.phase_name != "pm" and mat.enrg <= limit:
+            row = mat.BEG_sums + mat.Cluster_sums + mat.J_sums
+            for j in range(len(row)):
+                row[j] *= mat.weight
+            a.append(row)
+            b.append(mat.enrg * mat.weight)
+    a = np.matrix(a)
+    b = np.transpose(np.matrix(b))
+    ridge_fit = linear_model.RidgeCV(alphas=[.01,.05,.1,.15,.2,.25,.3,1,2,3,4,5,10],fit_intercept=False, )
+    ridge_fit.fit(a,b)
+    Js = ridge_fit.coef_
+    JS_list = []
+    Js_0 = Js[0]
+    for i in range(len(Js_0)):
+        Js_0
+        JS_list.append(Js_0[i])
+    #print(Js)
+    #print(ridge_fit.predict(a))
+    print(ridge_fit.intercept_)
+    return JS_list
+
+
+def ridge_optimized_fit(m_structure_list,a_min,a_max,step):
+    alpha = a_min
+    old_CV2_min = 10000000
+    alpha_opt = 0
+    while alpha < a_max:
+        energies = []
+        for i in range(len(m_structure_list)):
+            mat = m_structure_list[i]
+            if mat.mag_phase != "pera" and mat.phase_name != "pm":
+                energies.append(m_structure_list[i].enrg)
+        x_rows = len(energies)
+        x_colm = m_structure_list[0].num_beg_rules+m_structure_list[0].num_cluster_rules+m_structure_list[0].num_j_rules
+        x_matrix = np.zeros((x_rows,x_colm))
+        x_matrix = np.matrix(x_matrix)
+        i = 0
+        for itter in range(len(m_structure_list)):
+            mat = m_structure_list[itter]
+            if mat.mag_phase != "pera" and mat.phase_name != "pm":
+                for j in range(m_structure_list[0].num_beg_rules):
+                    x_matrix[i,j] = m_structure_list[i].BEG_sums[j]
+                for k in range(m_structure_list[0].num_cluster_rules):
+                    x_matrix[i,j+k] = m_structure_list[i].Cluster_sums[k]
+                for l in range(m_structure_list[0].num_j_rules):
+                    x_matrix[i,j+k+l] = m_structure_list[i].J_sums[l]
+                i += 1
+        x_cross = np.zeros((x_rows-1,x_colm))
+        CV2 = 0
+        for i in range(len(energies)):
+            inc = 0
+            eng_cross = []
+            for j in range(len(energies)):
+                if i != j:
+                    eng_cross.append(energies[j])
+                    x_cross[inc,:] = x_matrix[j,:]
+                    inc += 1
+            b = np.transpose(np.matrix(eng_cross))
+            a = np.matrix(x_cross)
+            r_fit = Ridge(alpha=alpha)
+            r_fit.fit(a,b)
+            Js = r_fit.get_params()
+            Ei = 0
+            for j in range(len(Js)):
+                Ei += x_matrix[i,j]*Js[j]
+            CV2 += (energies[i]-Ei)**2
+        CV2 *= 1/len(m_structure_list)
+        if CV2 < old_CV2_min:
+            old_CV2_min = CV2
+            alpha_opt = alpha
+    r_fit = Ridge(alpha=alpha_opt)
+    r_fit.fit(a,b)
+    Js = r_fit.get_params()
+    print(alpha_opt)
+    print(CV2)
+    return Js
+
+
 def write_data(structures, limit, Js):
     path = 'data'
     file = open(path, 'w')
@@ -377,10 +538,10 @@ def write_output(structures, beg_list, clusters_list, j_list, Js, limit):
             new_enrg = 0
             for j in range(len(beg_list)):
                 new_enrg += Js[j] * structures[i].BEG_sums[j]
-            #for k in range(len(clusters_list)):
-            #    new_enrg += Js[len(beg_list)+k] * structures[i].Cluster_sums[k]
-            #for l in range(len(j_list)):
-            #    new_enrg += Js[len(beg_list) + len(clusters_list) + l] * structures[i].J_sums[l]
+            for k in range(len(clusters_list)):
+                new_enrg += Js[len(beg_list)+k] * structures[i].Cluster_sums[k]
+            for l in range(len(j_list)):
+                new_enrg += Js[len(beg_list) + len(clusters_list) + l] * structures[i].J_sums[l]
             line = str(new_enrg)
             line = line.replace("[", "")
             line = line.replace("]", "")
@@ -609,5 +770,6 @@ def plot_data2():
     #    plt.legend(loc='center left', bbox_to_anchor=(1, 0.5),fontsize=12)
     #    plt.xticks([2,4,6],actual_labels, rotation='horizontal',fontsize=18)
     plt.savefig('Fit.png')
+
 
 
