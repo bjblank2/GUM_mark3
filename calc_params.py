@@ -500,7 +500,7 @@ def write_data(structures, limit, Js):
     file.write("NAME".ljust(15) + "PHASE".ljust(7) + "MAG".ljust(6) + "ENERG".ljust(17) + "SUMS->\n")
     for i in range(len(structures)):
         mat = structures[i]
-        if mat.phase_name != "pm":
+        if mat.phase_name != "pmmmm":
             out = [mat.enrg, mat.BEG_sums, mat.Cluster_sums, mat.J_sums]
             file.write(mat.name.ljust(15) + mat.phase_name.ljust(7) + mat.mag_phase.ljust(7))
             for j in range(len(out)):
@@ -533,7 +533,7 @@ def write_output(structures, beg_list, clusters_list, j_list, Js, limit):
     file.write("Original Enrg\tNew Enrg\n")
     for i in range(len(structures)):
         mat = structures[i]
-        if mat.phase_name != "pm":
+        if mat.phase_name != "pmmmm":
             file.write(str(mat.composition[1]) + "    " + str(mat.enrg).ljust(16) + "    ")
             new_enrg = 0
             for j in range(len(beg_list)):
@@ -688,6 +688,17 @@ def linearize(M_structures):
         M_structures[i].enrg -= offset*comp + comp0_min
 
 
+def scale(M_structures):
+    min = 1000
+    for i in range(len(M_structures)):
+        structure = M_structures[i]
+        if structure.enrg < min:
+            min = structure.enrg
+    for i in range(len(M_structures)):
+        structure = M_structures[i]
+        structure.enrg /= abs(min)
+
+
 def plot_data():
     plt.rc('lines', linewidth=1)
     path = 'output'
@@ -772,4 +783,90 @@ def plot_data2():
     plt.savefig('Fit.png')
 
 
-
+def plot_data3(M_structures, beg_list, clusters_list, j_list, Js, limit):
+    colors = {'mart': 'g', 'aus': 'b', 'pre-mart': 'r'}
+    markers = {'FM': 'o', 'AFM': 's', 'none': '^', 'FM/AFM': 'D'}
+    labels = ['NiMn', 'Ni4Mn3In1', 'Ni2MnIn']
+    actual_labels = ['Ni$_8$Mn$_8$', 'Ni$_4$Mn$_3$In$_1$', 'Ni$_4$Mn$_2$In$_2$']
+    e_comp0 = []
+    e_comp50 = []
+    for i in range(len(M_structures)):
+        if M_structures[i].phase_name != "pmmmm":
+            structure = M_structures[i]
+            comp = structure.composition[2]/structure.composition[0]
+            if comp == 0:
+                e_comp0.append(structure.enrg)
+            if comp == .5:
+                e_comp50.append(structure.enrg)
+    comp0_min = min(e_comp0)
+    comp50_min = min(e_comp50)
+    offset = (comp50_min-comp0_min)/.5
+    enrg_list = []
+    for i in range(len(M_structures)):
+        if M_structures[i].phase_name != "pmmmm":
+            comp = M_structures[i].composition[2]/M_structures[i].composition[0]
+            enrg_list.append(M_structures[i].enrg-(offset*comp + comp0_min))
+    new_enrg_list = []
+    for i in range(len(M_structures)):
+        mat = M_structures[i]
+        comp = mat.composition[2]/mat.composition[0]
+        if mat.phase_name != "pmmmm":
+            new_enrg = 0
+            for j in range(len(beg_list)):
+                new_enrg += Js[j] * M_structures[i].BEG_sums[j]
+            for k in range(len(clusters_list)):
+                new_enrg += Js[len(beg_list)+k] * M_structures[i].Cluster_sums[k]
+            for l in range(len(j_list)):
+                new_enrg += Js[len(beg_list) + len(clusters_list) + l] * M_structures[i].J_sums[l]
+            new_enrg -= offset*comp + comp0_min
+            new_enrg_list.append(new_enrg)
+    x = 0
+    x2_itter = -.5
+    x4_itter = -.5
+    x6_itter = -.5
+    for i in range(len(enrg_list)):
+       if M_structures[i].phase_name != "pmmmm":
+            if int(M_structures[i].composition[1]) == 8:
+                x = 1.5
+                x2_itter += .08
+                x_itter = x2_itter
+            if int(M_structures[i].composition[1]) == 6:
+                x = 4.5
+                x4_itter += .08
+                x_itter = x4_itter
+            if int(M_structures[i].composition[1]) == 4:
+                x = 9.5
+                x6_itter += .08
+                x_itter = x6_itter
+            if M_structures[i].phase_name == "aust":
+                c = 'b'
+            if M_structures[i].phase_name == "mart":
+                c = 'g'
+            if M_structures[i].phase_name == "pm":
+                c = 'r'
+            if M_structures[i].mag_phase == "fm":
+                m = 'o'
+            if M_structures[i].mag_phase == "afm":
+                m = 's'
+            if M_structures[i].mag_phase == "pera":
+                m = '^'
+            if M_structures[i].mag_phase == "fi":
+                m = 'D'
+            if M_structures[i].mag_phase == "NA":
+                m = 'x'
+            y = float(enrg_list[i])
+            if M_structures[i].phase_name != 'pm':
+                plt.plot([x + x_itter, x + x_itter], [y, float(new_enrg_list[i])], lw=1, color="k")
+                plt.plot(x + x_itter, y, lw=0, markersize=8, marker=m, color=c)
+                plt.plot(x + x_itter, float(new_enrg_list[i]), lw=0, markersize=8, marker=".", color="r")
+    #plt.xlim(0,8)
+    #plt.ylim(-1,9)
+    plt.rc('lines', linewidth=1)
+    plt.title("NiMn -- Ni$_2$MnIn Composition Energies", fontsize=24)
+    plt.xlabel("Composition", fontsize=24)
+    plt.ylabel("Energy above Hull (eV/fu)", fontsize=24)
+    #plt.xticks(fontsize=14)
+    plt.yticks(fontsize=14)
+    #plt.legend(loc='center left', bbox_to_anchor=(1, 0.5),fontsize=12)
+    #lt.xticks([2,5.5,10],actual_labels, rotation='horizontal',fontsize=18)
+    plt.savefig('Fit.png')
