@@ -133,12 +133,12 @@ def simple_cluster_flip_phase(site,neighbors,supercell_obj):
 def flip_species(site_1,site_2,supercell_obj):
     old_species_1 = supercell_obj.get_site_species(site_1)
     old_phase_1 = supercell_obj.get_site_phase(site_1)
-    old_spin_1 = supercell_obj.ge_site_spin(site_1)
+    old_spin_1 = supercell_obj.get_site_spin(site_1)
     old_state_1 = [old_species_1,old_phase_1,old_spin_1]
 
     old_species_2 = supercell_obj.get_site_species(site_2)
     old_phase_2 = supercell_obj.get_site_phase(site_2)
-    old_spin_2 = supercell_obj.ge_site_spin(site_2)
+    old_spin_2 = supercell_obj.get_site_spin(site_2)
     old_state_2 = [old_species_2,old_phase_2,old_spin_2]
 
     supercell_obj.set_site_species(site_1,old_species_2)
@@ -176,6 +176,7 @@ def run_montecarlo(supercell_obj,numb_passes,temp,BEG_rules,Cluster_rules,J_rule
     inc = 0
     inc_not = 0
     H_total,p,p2,mag,mag2 = eval_lattice(supercell_obj,BEG_rules,Cluster_rules,J_rules,Js,T)
+    print(H_total)
     for passes in range(numb_passes):
         for i in range(supercell_obj.i_length):
             for j in range(supercell_obj.j_length):
@@ -192,65 +193,65 @@ def run_montecarlo(supercell_obj,numb_passes,temp,BEG_rules,Cluster_rules,J_rule
                             supercell_obj.set_site_phase(site,old_phase)
                             inc_not += 1
                         else:
+                            H_total += (new_Ham-old_Ham)
+                            inc += 1
+                    else:
+                        H_total += (new_Ham-old_Ham)
+                        inc += 1
+
+                    if supercell_obj.get_site_species(site) != 0:
+                        composition = supercell_obj.get_composition()
+                        if composition[2] != 0:
+                            site_found = False
+                            while site_found == False:
+                                site_2 = [np.random.randint(0,supercell_obj.i_length),np.random.randint(0,supercell_obj.j_length),np.random.randint(0,supercell_obj.k_length)]
+                                if supercell_obj.get_site_species(site_2) != supercell_obj.get_site_species(site):
+                                    if supercell_obj.get_site_species(site_2) != 0:
+                                        site_found = True
+                            old_Ham = eval_site(site,supercell_obj,BEG_rules,Cluster_rules,J_rules,Js,T)
+                            old_Ham += eval_site(site_2,supercell_obj,BEG_rules,Cluster_rules,J_rules,Js,T)
+                            old_site_state,old_site_2_state = flip_species(site,site_2,supercell_obj)
+                            new_Ham = eval_site(site,supercell_obj,BEG_rules,Cluster_rules,J_rules,Js,T)
+                            new_Ham += eval_site(site_2,supercell_obj,BEG_rules,Cluster_rules,J_rules,Js,T)
+                            if new_Ham > old_Ham:
+                                rand = np.random.random()
+                                prob = np.exp(-1/(Kb*T)*(new_Ham-old_Ham))
+                                if rand > prob:
+                                    _old_species = old_site_state[0]
+                                    _old_phase = old_site_state[1]
+                                    _old_spin = old_site_state[2]
+                                    supercell_obj.set_site_species(site,_old_species)
+                                    supercell_obj.set_site_phase(site,_old_phase)
+                                    supercell_obj.set_site_spin(site,_old_spin)
+                                    _old_species2 = old_site_2_state[0]
+                                    _old_phase2 = old_site_2_state[1]
+                                    _old_spin2 = old_site_2_state[2]
+                                    supercell_obj.set_site_species(site_2,_old_species2)
+                                    supercell_obj.set_site_phase(site_2,_old_phase2)
+                                    supercell_obj.set_site_spin(site_2,_old_spin2)
+                                    inc_not += 1
+                                else:
+                                    H_total += new_Ham-old_Ham
+                                    inc += 1
+                            else:
+                                H_total += new_Ham-old_Ham
+                                inc += 1
+
+                    old_Ham = eval_site(site,supercell_obj,BEG_rules,Cluster_rules,J_rules,Js,T)
+                    old_spin = flip_spin(site,supercell_obj)
+                    new_Ham = eval_site(site,supercell_obj,BEG_rules,Cluster_rules,J_rules,Js,T)
+                    if new_Ham > old_Ham:
+                        rand = np.random.random()
+                        prob = np.exp(-1/(Kb*T)*(new_Ham-old_Ham))
+                        if rand > prob:
+                            supercell_obj.set_site_spin(site,old_spin)
+                            inc_not += 1
+                        else:
                             H_total += new_Ham-old_Ham
                             inc += 1
                     else:
                         H_total += new_Ham-old_Ham
                         inc += 1
-    #
-    #                 if supercell_obj.get_site_species(site) != 0:
-    #                     composition = supercell_obj.get_composition()
-    #                     if composition[2] != 0:
-    #                         site_found = False
-    #                         while site_found == False:
-    #                             site_2 = [np.random.randint(0,supercell_obj.i_length),np.random.randint(0,supercell_obj.j_length),np.random.randint(0,supercell_obj.k_length)]
-    #                             if supercell_obj.get_site_species(site_2) != supercell_obj.get_site_species(site):
-    #                                 if supercell_obj.get_site_species(site_2) != 0:
-    #                                     site_found = True
-    #                         old_Ham = eval_site(site,supercell_obj,BEG_rules,Cluster_rules,J_rules,Js)
-    #                         old_Ham += eval_site(site_2,supercell_obj,BEG_rules,Cluster_rules,J_rules,Js)
-    #                         old_site_state,old_site_2_state = flip_species(site,site_2,supercell_obj)
-    #                         new_Ham = eval_site(site,supercell_obj,BEG_rules,Cluster_rules,J_rules,Js)
-    #                         new_Ham += eval_site(site_2,supercell_obj,BEG_rules,Cluster_rules,J_rules,Js)
-    #                         if new_Ham > old_Ham:
-    #                             rand = np.random.random()
-    #                             prob = np.exp(-1/(Kb*T)*(new_Ham-old_Ham))
-    #                             if rand > prob:
-    #                                 _old_species = old_site_state[0]
-    #                                 _old_phase = old_site_state[1]
-    #                                 _old_spin = old_site_state[2]
-    #                                 supercell_obj.set_site_species(site,_old_species)
-    #                                 supercell_obj.set_site_phase(site,_old_phase)
-    #                                 supercell_obj.set_site_spin(site,_old_spin)
-    #                                 _old_species2 = old_site_2_state[0]
-    #                                 _old_phase2 = old_site_2_state[1]
-    #                                 _old_spin2 = old_site_2_state[2]
-    #                                 supercell_obj.set_site_species(site_2,_old_species2)
-    #                                 supercell_obj.set_site_phase(site_2,_old_phase2)
-    #                                 supercell_obj.set_site_spin(site_2,_old_spin2)
-    #                                 inc_not += 1
-    #                             else:
-    #                                 H_total += new_Ham-old_Ham
-    #                                 inc += 1
-    #                         else:
-    #                             H_total += new_Ham-old_Ham
-    #                             inc += 1
-    #
-    #                 old_Ham = eval_site(site,supercell_obj,BEG_rules,Cluster_rules,J_rules,Js)
-    #                 old_spin = flip_spin(site,supercell_obj)
-    #                 new_Ham = eval_site(site,supercell_obj,BEG_rules,Cluster_rules,J_rules,Js)
-    #                 if new_Ham > old_Ham:
-    #                     rand = np.random.random()
-    #                     prob = np.exp(-1/(Kb*T)*(new_Ham-old_Ham))
-    #                     if rand > prob:
-    #                         supercell_obj.set_site_spin(site,old_spin)
-    #                         inc_not += 1
-    #                     else:
-    #                         H_total += new_Ham-old_Ham
-    #                         inc += 1
-    #                 else:
-    #                     H_total += new_Ham-old_Ham
-    #                     inc += 1
 
         H_total2,p,p2,mag,mag2 = eval_lattice(supercell_obj,BEG_rules,Cluster_rules,J_rules,Js,T)
         print([H_total,H_total2])
@@ -260,16 +261,16 @@ def run_montecarlo(supercell_obj,numb_passes,temp,BEG_rules,Cluster_rules,J_rule
         #     inc = 0
         #     if T <= 0:
         #         T = 1
-        #T -= 1
-        #if T <= 0:
-        #    T = 1
-        #print(T)
+        T += 1
+        if T <= 0:
+           T = 1
+        print(T)
         # inc += 1
         # if inc >= 100:
         #     inc = 0
 
         if passes >= numb_passes*.9:
-            H_avg += H_total/(numb_passes*.1)
+            H_avg += H_total2/(numb_passes*.1)
             mag_avg += mag/(numb_passes*.1)
             mag2_avg += mag2/(numb_passes*.1)
             p_avg += p/(numb_passes*.1)
@@ -278,6 +279,7 @@ def run_montecarlo(supercell_obj,numb_passes,temp,BEG_rules,Cluster_rules,J_rule
         plt.figure(2)
         #plt.plot(passes,H_total/supercell_obj.num_sites,lw=3,marker='o',color='b')
         plt.plot(passes,H_total,lw=3,marker='o',color='b')
+        plt.plot(passes,H_total2,lw=3,marker='o',color='r')
         plt.figure(3)
         plt.subplot(311)
         plt.plot(passes,mag,lw=3,marker='o',color='g')

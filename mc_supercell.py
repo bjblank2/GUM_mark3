@@ -70,8 +70,12 @@ class mc_neighborObj:
     def get_plain(self):
         return self.plain
 
-
+# mc_supercellObj is the class that holds all the information on the MC simulation as well as the array of atoms.
+# Each atom is a mc_siteObj (lattice site) and holds information like spin,position,phase ect...
 class mc_supercellObj:
+    # The most important function in this class is the initialization function. This is the one I modify to
+    # change the starting phase and magnetic structure for each simulation.
+    # The lines to modify are followed by #############
     def __init__(self, size, species, composition):
         self.i_length = size[0]
         self.j_length = size[1]
@@ -85,26 +89,26 @@ class mc_supercellObj:
                 for k in range(self.k_length):
                     spin_rand = np.random.random()
                     phase_rand = np.random.random()
-                    # if spin_rand <= 1/3:
-                    #     spin = -1
-                    # elif spin_rand <= 2/3:
-                    #     spin = 0
+                    if spin_rand <= 1/3: ##########
+                        spin = -1 #################
+                    elif spin_rand <= 2/3: ########
+                        spin = 0 ##################
+                    else: #########################
+                        spin = 1 ##################
+                    # if np.mod(k,2) == 0:
+                    #     if np.mod(i+j,2) == 0:
+                    #         spin = 1
+                    #     else:
+                    #         spin = -1
                     # else:
-                    #     spin = 1
-                    if np.mod(k,2) == 0:
-                        if np.mod(i+j,2) == 0:
-                            spin = 1
-                        else:
-                            spin = -1
-                    else:
-                        spin = 0
-                    if phase_rand <= 1/3:
-                        phase = -1 #####################################################################################
-                    elif phase_rand <= 2/3:
-                        phase = 0 #####################################################################################
-                    else:
-                        phase = 1 #####################################################################################
-                    if np.mod(k,2) == 0:
+                    #     spin = 0
+                    if phase_rand <= 1/3: ##########
+                        phase = -1 #################
+                    elif phase_rand <= 2/3: ########
+                        phase = 0 ##################
+                    else: ##########################
+                        phase = 1 ##################
+                    if np.mod(k,2) == 0: ###########
                         site_species = species[1]
                     else:
                         site_species = species[0]
