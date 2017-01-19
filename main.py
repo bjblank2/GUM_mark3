@@ -50,7 +50,7 @@ Js  = Cp.ridge_simple(M_structures,1)
 Cp.write_data(M_structures, 200, Js)
 Cp.write_output(M_structures, BEG_rules, Cluster_rules, J_rules, Js, 200)
 #Cp.plot_data()
-Cp.plot_data2()
+#Cp.plot_data2()
 #Cp.plot_data3(M_structures,BEG_rules,Cluster_rules,J_rules,Js,200)
 print('#######################\n')
 #print(Cp.CV_score(Js,M_structures))
@@ -71,7 +71,7 @@ z_pts = 4
 # Initialize an array of atoms with ms.mc_supercellObj(size,species,composition)
 # size is (x,y,z)dimensions, species is types of atoms allowed (0=Ni,1=Mn,2=In)
 # composition is number of each atom (#Ni,#Mn,#In)
-lattice = ms.mc_supercellObj((x_pts,y_pts,z_pts),(0,1,2),[8,6,2])#(64,48,16))
+lattice = ms.mc_supercellObj((x_pts,y_pts,z_pts),(0,1,2),[8,8,0])#(64,48,16))
 #H,p,p2,m,m2 = mc.eval_lattice(lattice,BEG_rules,Cluster_rules,J_rules,Js,do_figs=True)
 
 # To actually run the simulation use

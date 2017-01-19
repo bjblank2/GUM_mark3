@@ -1,5 +1,6 @@
 __author__ = 'brian'
 import numpy as np
+import mpmath as math
 import matplotlib.pyplot as plt
 import mc_supercell as mcs
 from copy import deepcopy
@@ -173,16 +174,30 @@ def run_montecarlo(supercell_obj,numb_passes,temp,BEG_rules,Cluster_rules,J_rule
     mag2_avg = 0
     p_avg = 0
     p2_avg = 0
-    inc = 0
+    inc_down = 0
+    inc_up = 0
     inc_not = 0
+    inc_T = 0
+    H_down = 0
+    H_up = 0
+    H = 0
     H_total,p,p2,mag,mag2 = eval_lattice(supercell_obj,BEG_rules,Cluster_rules,J_rules,Js,T)
+    plt.figure(2)
+    plt.plot(-1,H_total,lw=3,marker='o',color='b')
+    plt.plot(-1,H_total,lw=3,marker='o',color='r')
     print(H_total)
     for passes in range(numb_passes):
+        H_total = 0
+        p = 0
+        p2 = 0
+        mag = 0
+        mag2 = 0
         for i in range(supercell_obj.i_length):
             for j in range(supercell_obj.j_length):
                 for k in range(supercell_obj.k_length):
                     site = [i,j,k]
-
+                    old_Ham = 0
+                    new_Ham = 0
                     old_Ham = eval_site(site,supercell_obj,BEG_rules,Cluster_rules,J_rules,Js,T)
                     old_phase = flip_phase(site,supercell_obj)
                     new_Ham = eval_site(site,supercell_obj,BEG_rules,Cluster_rules,J_rules,Js,T)
@@ -193,11 +208,11 @@ def run_montecarlo(supercell_obj,numb_passes,temp,BEG_rules,Cluster_rules,J_rule
                             supercell_obj.set_site_phase(site,old_phase)
                             inc_not += 1
                         else:
-                            H_total += (new_Ham-old_Ham)
-                            inc += 1
+                            #H_total += (new_Ham-old_Ham)
+                            inc_up += 1
                     else:
-                        H_total += (new_Ham-old_Ham)
-                        inc += 1
+                        #H_total += (new_Ham-old_Ham)
+                        inc_down += 1
 
                     if supercell_obj.get_site_species(site) != 0:
                         composition = supercell_obj.get_composition()
@@ -231,30 +246,40 @@ def run_montecarlo(supercell_obj,numb_passes,temp,BEG_rules,Cluster_rules,J_rule
                                     supercell_obj.set_site_spin(site_2,_old_spin2)
                                     inc_not += 1
                                 else:
-                                    H_total += new_Ham-old_Ham
-                                    inc += 1
+                                    #H_total += new_Ham-old_Ham
+                                    inc_up += 1
                             else:
-                                H_total += new_Ham-old_Ham
-                                inc += 1
+                                #H_total += new_Ham-old_Ham
+                                inc_down += 1
 
                     old_Ham = eval_site(site,supercell_obj,BEG_rules,Cluster_rules,J_rules,Js,T)
                     old_spin = flip_spin(site,supercell_obj)
                     new_Ham = eval_site(site,supercell_obj,BEG_rules,Cluster_rules,J_rules,Js,T)
-                    if new_Ham > old_Ham:
+                    if new_Ham < old_Ham:
+                        H_total -= abs(new_Ham-old_Ham)
+                        inc_down += 1
+                        H_down += (new_Ham-old_Ham)
+                    else:
                         rand = np.random.random()
-                        prob = np.exp(-1/(Kb*T)*(new_Ham-old_Ham))
-                        if rand > prob:
+                        prob = math.exp(-1/(Kb*T)*(new_Ham-old_Ham))
+                        if rand < prob:
+                            H_total += abs(new_Ham-old_Ham)
+                            inc_up += 1
+                            H_up += (new_Ham-old_Ham)
+                        else:
                             supercell_obj.set_site_spin(site,old_spin)
                             inc_not += 1
-                        else:
-                            H_total += new_Ham-old_Ham
-                            inc += 1
-                    else:
-                        H_total += new_Ham-old_Ham
-                        inc += 1
+                    H_total += eval_site(site,supercell_obj,BEG_rules,Cluster_rules,J_rules,Js,T)
 
-        H_total2,p,p2,mag,mag2 = eval_lattice(supercell_obj,BEG_rules,Cluster_rules,J_rules,Js,T)
-        print([H_total,H_total2])
+                    #plt.figure(2)
+                    #plt.plot(-1+(inc_T)/(supercell_obj.i_length*supercell_obj.j_length*supercell_obj.k_length),H_total,lw=2,marker='o',color='b')
+                    p += supercell_obj.get_site_phase(site)/supercell_obj.num_sites
+                    p2 += supercell_obj.get_site_phase(site)**2/supercell_obj.num_sites
+                    mag += supercell_obj.get_site_spin(site)/supercell_obj.num_sites
+                    mag2 += supercell_obj.get_site_spin(site)**2/supercell_obj.num_sites
+                    inc_T += 1
+        #H_total2,p,p2,mag,mag2 = eval_lattice(supercell_obj,BEG_rules,Cluster_rules,J_rules,Js,T)
+        print([H_total,H_total])
         # inc +=1
         # if inc >= 100:
         #     T -= 100
@@ -265,12 +290,12 @@ def run_montecarlo(supercell_obj,numb_passes,temp,BEG_rules,Cluster_rules,J_rule
         if T <= 0:
            T = 1
         print(T)
-        # inc += 1
+        #inc += 1
         # if inc >= 100:
         #     inc = 0
 
         if passes >= numb_passes*.9:
-            H_avg += H_total2/(numb_passes*.1)
+            H_avg += H_total/(numb_passes*.1)
             mag_avg += mag/(numb_passes*.1)
             mag2_avg += mag2/(numb_passes*.1)
             p_avg += p/(numb_passes*.1)
@@ -279,7 +304,7 @@ def run_montecarlo(supercell_obj,numb_passes,temp,BEG_rules,Cluster_rules,J_rule
         plt.figure(2)
         #plt.plot(passes,H_total/supercell_obj.num_sites,lw=3,marker='o',color='b')
         plt.plot(passes,H_total,lw=3,marker='o',color='b')
-        plt.plot(passes,H_total2,lw=3,marker='o',color='r')
+        #plt.plot(passes,H_total,lw=3,marker='o',color='r')
         plt.figure(3)
         plt.subplot(311)
         plt.plot(passes,mag,lw=3,marker='o',color='g')
@@ -300,8 +325,14 @@ def run_montecarlo(supercell_obj,numb_passes,temp,BEG_rules,Cluster_rules,J_rule
     temp_output = open('Temp_data','a')
     temp_output.write(str(T)+'  '+str(H_avg/supercell_obj.num_sites)+'  '+str(mag_avg)+'  '+str(mag2_avg)+'  '+str(p_avg)+'  '+str(p2_avg)+'\n')
     temp_output.close()
-    print(inc)
+    print("\n")
+    print(inc_down)
+    print(inc_up)
     print(inc_not)
+    print(inc_T)
+    print("\n")
+    print(H_down)
+    print(H_up)
 
     fig = plt.figure(5)
     ax = fig.add_subplot(111, projection='3d')
