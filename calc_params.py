@@ -373,10 +373,10 @@ def write_output(structures, beg_list, clusters_list, j_list, Js, limit):
             new_enrg = 0
             for j in range(len(beg_list)):
                 new_enrg += Js[j] * structures[i].BEG_sums[j]
-            #for k in range(len(clusters_list)):
-            #    new_enrg += Js[len(beg_list)+k] * structures[i].Cluster_sums[k]
-            #for l in range(len(j_list)):
-            #    new_enrg += Js[len(beg_list) + len(clusters_list) + l] * structures[i].J_sums[l]
+            for k in range(len(clusters_list)):
+                new_enrg += Js[len(beg_list)+k] * structures[i].Cluster_sums[k]
+            for l in range(len(j_list)):
+                new_enrg += Js[len(beg_list) + len(clusters_list) + l] * structures[i].J_sums[l]
             line = str(new_enrg)
             line = line.replace("[", "")
             line = line.replace("]", "")
