@@ -6,6 +6,9 @@ import numpy as np
 class MStructureObj:
     def __init__(self, data, num_species,num_beg_rules, num_cluster_rules, num_j_rules):
         data = data.split()
+        self.num_beg_rules = num_beg_rules
+        self.num_cluster_rules = num_cluster_rules
+        self.num_j_rules = num_j_rules
         itter = 0
         self.composition = [0] * num_species
         self.num_Atoms = 0
