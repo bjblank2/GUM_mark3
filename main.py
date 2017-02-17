@@ -2,6 +2,9 @@ __author__ = 'brian'
 import calc_params as Cp
 import mc_functions as mc
 import mc_supercell as ms
+import Post_process as pc
+
+#pc.testfunc()
 #--------------------------------------------------------------#
 # Code for finding the fitting parameters.
 # First read in the DFT data, generate the appropriate data
@@ -43,9 +46,17 @@ Cp.calculate_sums(M_structures, BEG_rules, Cluster_rules, J_rules)
 #Cp.find_weights_2(M_structures, [8,6,4], 5)
 #Js = Cp.do_weighted_ls(M_structures, 5)
 #Js = Cp.do_robust_ls(M_structures)
+<<<<<<< HEAD
 Js = Cp.ridge_simple(M_structures,1)
 #Js = Cp.ransacom(M_structures,1,30,3000)
 #Js = Cp.ransac(M_structures,1,50,1000)
+=======
+
+Js  = Cp.ridge_simple(M_structures,1)
+
+
+print(Js)
+>>>>>>> master
 # Display data
 Cp.write_data(M_structures, 200, Js)
 Cp.write_output(M_structures, BEG_rules, Cluster_rules, J_rules, Js, 200)
@@ -59,6 +70,7 @@ print('#######################\n')
 #--------------------------------------------------------------#
 
 #--------------------------------------------------------------#
+
 # Code for running the actual MonteCarlo simulation.
 # First create and initialize an array of atom objects for the simulation
 # then run MonteCarlo.
