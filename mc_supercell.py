@@ -103,9 +103,9 @@ class mc_supercellObj:
                     # else:
                     #     spin = 0
                     if phase_rand <= 1/3: ##########
-                        phase = -1 #################
+                        phase = 1 #################
                     elif phase_rand <= 2/3: ########
-                        phase = 0 ##################
+                        phase = 1 ##################
                     else: ##########################
                         phase = 1 ##################
                     if np.mod(k,2) == 0: ###########
@@ -301,6 +301,10 @@ class mc_supercellObj:
 
     def set_site_phase(self,site,phase):
         self.supercell[site[0],site[1],site[2]].set_phase(phase)
+
+    def set_neighbor_phase(self,site,neighbor,phase):
+        neighbor_site = self.get_neighbor_pos(site,neighbor)
+        self.set_site_phase(neighbor_site,phase)
 
     def get_number_of_neighbors(self,site):
         return len(self.supercell[site[0],site[1],site[2]].neighbors)
