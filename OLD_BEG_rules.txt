@@ -1,6 +1,6 @@
 # BEG_J0
-2
-COMB
+1
+PERM
 0 1 2
 0 1 2
 mart
@@ -8,8 +8,8 @@ ALL
 8 8 0
 
 # BEG_K0
-2
-COMB
+1
+PERM
 0 1 2
 0 1 2
 aust
@@ -17,8 +17,8 @@ ALL
 8 8 0
 
 # BEG_J2
-2
-COMB
+1
+PERM
 0 1 2
 0 1 2
 mart
@@ -26,8 +26,8 @@ ALL
 8 6 2
 
 # BEG_K2
-2
-COMB
+1
+PERM
 0 1 2
 0 1 2
 aust
@@ -35,8 +35,8 @@ ALL
 8 6 2
 
 # BEG_J4
-2
-COMB
+1
+PERM
 0 1 2
 0 1 2
 mart
@@ -44,8 +44,8 @@ ALL
 8 4 4
 
 # BEG_K4
-2
-COMB
+1
+PERM
 0 1 2
 0 1 2
 aust
