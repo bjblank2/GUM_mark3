@@ -4,7 +4,8 @@ __author__ = 'brian'
 # information about the supercell as well as an array of mc_siteObj objects
 # that represent the individual atomic sites and all the properties
 # they can have (position,spin,species,phase,neighbors).
-#
+# These classes are defined in mc_structure.py
+
 # The functions that I am currently using for the MonteCarlo have a #-#
 # in front of their comment.
 
