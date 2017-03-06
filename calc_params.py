@@ -1,4 +1,8 @@
 __author__ = 'brian'
+# This file handles taking the input from vasp and calculating the fit.
+# The functions that are important for the actual calculating the fit
+# have comments
+
 import numpy as np
 import BEG
 import clusters
@@ -228,7 +232,8 @@ def read_m_structure_data(data_file, num_species, num_BEG_rules, num_Cluster_rul
             m_struct_list.append(m_struct)
     return m_struct_list
 
-
+# This function sweeps through the VASP data and determines active interactions and clusters
+# for each atom site and group of sites
 def calculate_sums(m_structure_list, beg_rule_list, cluster_rule_list, j_rule_list):
     for i in range(len(m_structure_list)):
         m_structure_list[i].create_super_cell()
@@ -368,6 +373,7 @@ def CV_score(Js,m_structure_list):
     CV2 *= 1/len(m_structure_list)
     return CV2
 
+
 def CV_score2(m_structure_list):
     energies = []
     for i in range(len(m_structure_list)):
@@ -409,7 +415,7 @@ def CV_score2(m_structure_list):
     CV2 *= 1/len(m_structure_list)
     return CV2
 
-
+# Calculates the fitting paramiters using a ridge regression with autocorrelation
 def ridge_simple(m_structure_list,alpha):
     a = []
     b = []
