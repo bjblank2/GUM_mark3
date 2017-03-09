@@ -782,6 +782,7 @@ def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,Cluster_rules,J_rul
         seed_phase = supercell_obj.get_site_phase(seed)
         new_phase = get_new_phase(seed,supercell_obj)
         grow_cluster(seed,supercell_obj,seed_phase,new_phase,cluster,Cluster_rules,J_rules,Js,T)
+        ### Track size here (print(len(cluster))
         if seed_phase*new_phase == -1:
             flip_cluster(supercell_obj,seed_phase,new_phase,cluster)
         else:
