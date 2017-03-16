@@ -96,8 +96,9 @@ def eval_site(site,supercell_obj,BEG_rules,Cluster_rules,J_rules,Js,T):
         return Ham
 
 def calc_BEG_params(site,supercell_obj,Cluster_rules,J_rules,Js,T):
-    BEG_J = 0
-    BEG_K = 0
+    H_BEG_J = 0
+    H_BEG_K = 0
+    Kb = .000086173324
     for neighbor in range(supercell_obj.get_number_of_neighbors(site)):
         for Cluster_rule in range(len(Cluster_rules)):
             if supercell_obj.get_neighbor_order(site,neighbor) == Cluster_rules[Cluster_rule].neighbor_order:
@@ -107,14 +108,14 @@ def calc_BEG_params(site,supercell_obj,Cluster_rules,J_rules,Js,T):
                                 if Cluster_rules[Cluster_rule].neighbor_arrangement == 'PERM':
                                     if supercell_obj.get_site_species(site) != supercell_obj.get_neighbor_species(site,neighbor):
                                         if Cluster_rules[Cluster_rule].phase == "mart":
-                                            BEG_J += float(Js[Cluster_rule])
+                                            H_BEG_J += float(Js[Cluster_rule])
                                         if Cluster_rules[Cluster_rule].phase == "aust":
-                                            BEG_K += float(Js[Cluster_rule])
+                                            H_BEG_K += float(Js[Cluster_rule])
                                 if Cluster_rules[Cluster_rule].neighbor_arrangement == 'COMB':
                                     if Cluster_rules[Cluster_rule].phase == "mart":
-                                        BEG_J += float(Js[Cluster_rule])
+                                        H_BEG_J += float(Js[Cluster_rule])
                                     if Cluster_rules[Cluster_rule].phase == "aust":
-                                        BEG_K += float(Js[Cluster_rule])
+                                        H_BEG_K += float(Js[Cluster_rule])
         for J_rule in range(len(J_rules)):
             if supercell_obj.get_neighbor_order(site,neighbor) == J_rules[J_rule].neighbor_order:
                 if supercell_obj.get_neighbor_plain(site,neighbor) == J_rules[J_rule].plane or J_rules[J_rule].plane == 'ALL':
@@ -125,17 +126,20 @@ def calc_BEG_params(site,supercell_obj,Cluster_rules,J_rules,Js,T):
                                     home_spin = supercell_obj.get_site_spin(site)
                                     neighbor_spin = supercell_obj.get_neighbor_spin(site,neighbor)
                                     if J_rules[J_rule].phase == "mart":
-                                        BEG_J += float(Js[J_rule+len(Cluster_rules)])*home_spin*neighbor_spin
+                                        H_BEG_J += float(Js[J_rule+len(Cluster_rules)])*home_spin*neighbor_spin
                                     if J_rules[J_rule].phase == "aust":
-                                        BEG_K += float(Js[J_rule+len(Cluster_rules)])*home_spin*neighbor_spin
+                                        H_BEG_K += float(Js[J_rule+len(Cluster_rules)])*home_spin*neighbor_spin
                             if J_rules[J_rule].neighbor_arrangement == 'COMB':
                                 home_spin = supercell_obj.get_site_spin(site)
                                 neighbor_spin = supercell_obj.get_neighbor_spin(site,neighbor)
                                 if J_rules[J_rule].phase == "mart":
-                                    BEG_J += float(Js[J_rule+len(Cluster_rules)])*home_spin*neighbor_spin
+                                    H_BEG_J += float(Js[J_rule+len(Cluster_rules)])*home_spin*neighbor_spin
                                 if J_rules[J_rule].phase == "aust":
-                                    BEG_K += float(Js[J_rule+len(Cluster_rules)])*home_spin*neighbor_spin
-    return BEG_J/16,BEG_K/16
+                                    H_BEG_K += float(Js[J_rule+len(Cluster_rules)])*home_spin*neighbor_spin
+    K = -1*(H_BEG_K/(-1*8)-Kb*T*np.log(2)/8)
+    delta = 8*K+Kb*T*np.log(2)
+    J = -1*((H_BEG_J-delta)/(-1*8)-K)
+    return J,K
 
 #-# Determine the total energy of the entire lattice and return that energy
 def eval_site_new(site,supercell_obj,Cluster_rules,J_ruels,Js,T):
@@ -783,9 +787,13 @@ def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,Cluster_rules,J_rul
         new_phase = get_new_phase(seed,supercell_obj)
         grow_cluster(seed,supercell_obj,seed_phase,new_phase,cluster,Cluster_rules,J_rules,Js,T)
         ### Track size here (print(len(cluster))
+        print([seed_phase,new_phase])
+        print(len(cluster))
         if seed_phase*new_phase == -1:
+            print('W')
             flip_cluster(supercell_obj,seed_phase,new_phase,cluster)
         else:
+            print('MC')
             H_cluster_old = eval_cluster(supercell_obj,seed_phase,new_phase,cluster,Cluster_rules,J_rules,Js,T)
             flip_cluster(supercell_obj,seed_phase,new_phase,cluster)
             H_cluster_new = eval_cluster(supercell_obj,seed_phase,new_phase,cluster,Cluster_rules,J_rules,Js,T)
@@ -802,7 +810,7 @@ def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,Cluster_rules,J_rul
                 else:
                     flip_cluster(supercell_obj,seed_phase,new_phase,cluster)
                     inc_not += 1
-        X_axis = passes
+        X_axis = T
         H_total,total_phase,total_phase2,total_spin,total_spin2 = eval_lattice_new(supercell_obj,Cluster_rules,J_rules,Js,T)
         plt.figure(2)
         plt.plot(X_axis,H_total,lw=3,marker='o',color='b')
@@ -826,7 +834,7 @@ def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,Cluster_rules,J_rul
         plt.plot(X_axis,total_phase2,lw=3,marker='o',color='r')
         print([H_total,H_total])
 
-        #T += 10
+        T += 10
         print(T)
 
     if do_figs is True:
@@ -884,8 +892,11 @@ def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,Cluster_rules,J_rul
 #-# Grows the clusters
 def grow_cluster(site,supercell_obj,seed_phase,new_phase,links,Cluster_rules,J_rules,Js,T): # Recursive function
     Kb = .000086173324
+    B = 1/(Kb*T)
     site_phase = supercell_obj.get_site_phase(site)
-    BEG_J,BEG_K = calc_BEG_params(site,supercell_obj,Cluster_rules,J_rules,Js,T)
+    J,K = calc_BEG_params(site,supercell_obj,Cluster_rules,J_rules,Js,T)
+    BEG_J = 2*B*J
+    BEG_K = 2*B*K
     links.append(site)
     # Wolf Algorithm
     if new_phase*seed_phase == -1:
@@ -894,7 +905,7 @@ def grow_cluster(site,supercell_obj,seed_phase,new_phase,links,Cluster_rules,J_r
                 if supercell_obj.get_neighbor_phase(site,neighbor) == seed_phase:
                     if supercell_obj.get_neighbor_pos(site,neighbor) not in links:
                         rand = np.random.random()
-                        prob = 1-np.exp(-2*BEG_J/(Kb*T))
+                        prob = 1-np.exp(2*BEG_J)
                         if rand <= prob:
                             new_site = supercell_obj.get_neighbor_pos(site,neighbor)
                             grow_cluster(new_site,supercell_obj,seed_phase,new_phase,links,Cluster_rules,J_rules,Js,T)
