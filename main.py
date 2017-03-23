@@ -59,10 +59,12 @@ temp_data.close()
 x_pts = 4
 y_pts = 4
 z_pts = 8
+phase_init = 'mart'
+spin_init = 'AFM'
 # Initialize an array of atoms with ms.mc_supercellObj(size,species,composition)
 # size is (x,y,z)dimensions, species is types of atoms allowed (0=Ni,1=Mn,2=In)
 # composition is number of each atom (#Ni,#Mn,#In)
-lattice = ms.mc_supercellObj((x_pts,y_pts,z_pts),(0,1,2),[64,64,0])#(64,48,16))
+lattice = ms.mc_supercellObj((x_pts,y_pts,z_pts),(0,1,2),[64,64,0],phase_init,spin_init)#(64,48,16))
 #sys.setrecursionlimit(lattice.num_sites+2)
 # To actually run the simulation use
 # mc.run_montecarlo(reference_to_atom_array,number_of_passes,starting_temp, BEG_rules,Cluster_rules,J_rules,plot_figs=TRUE)

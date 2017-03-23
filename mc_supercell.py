@@ -76,7 +76,7 @@ class mc_supercellObj:
     # The most important function in this class is the initialization function. This is the one I modify to
     # change the starting phase and magnetic structure for each simulation.
     # The lines to modify are followed by #############
-    def __init__(self, size, species, composition):
+    def __init__(self, size, species, composition,phase_init,spin_init):
         self.i_length = size[0]
         self.j_length = size[1]
         self.k_length = size[2]
@@ -89,26 +89,37 @@ class mc_supercellObj:
                 for k in range(self.k_length):
                     spin_rand = np.random.random()
                     phase_rand = np.random.random()
-                    if spin_rand <= 1/3: ##########
-                        spin = -1 #################
-                    elif spin_rand <= 2/3: ########
-                        spin = 0 ##################
-                    else: #########################
-                        spin = 1 ##################
-                    # if np.mod(k,2) == 0:
-                    #     if np.mod(i+j,2) == 0:
-                    #         spin = 1
-                    #     else:
-                    #         spin = -1
-                    # else:
-                    #     spin = 0
-                    if phase_rand <= 1/3: ##########
-                        phase = 1 #################
-                    elif phase_rand <= 2/3: ########
-                        phase = 1 ##################
-                    else: ##########################
-                        phase = 1 ##################
-                    if np.mod(k,2) == 0: ###########
+                    if spin_init == 'FM':
+                        spin = 1
+                    elif spin_rand == 'AFM':
+                        if spin_rand <= 1/3: ##########
+                            spin = -1 #################
+                        elif spin_rand <= 2/3: ########
+                            spin = 0 ##################
+                        else: #########################
+                            spin = 1 ##################
+                    elif spin_rand =='rand':
+                        if np.mod(k,2) == 0:
+                            if np.mod(i+j,2) == 0:
+                                spin = 1
+                            else:
+                                spin = -1
+                        else:
+                            spin = 0
+                    else: spin = 1
+                    if phase_init == 'aust':
+                        phase = 0
+                    elif phase_init =='mart':
+                        phase = 1
+                    elif phase_init == 'rand':
+                        if phase_rand <= 1/3: ##########
+                            phase = 0 #################
+                        elif phase_rand <= 2/3: ########
+                            phase = 1 ##################
+                        else: ##########################
+                            phase = -1 ##################
+                    else: phase = 1
+                    if np.mod(k,2) == 0:
                         site_species = species[1]
                     else:
                         site_species = species[0]
