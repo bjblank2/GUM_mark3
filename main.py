@@ -56,11 +56,17 @@ print('#######################\n')
 temp_data = open('Temp_data','w')
 temp_data.write('Temp  H_avg  mag_avg  mag2_avg  phase_avg  phase2_avg\n')
 temp_data.close()
+
 x_pts = 4
 y_pts = 4
 z_pts = 8
 phase_init = 'mart'
 spin_init = 'AFM'
+num_passes = 200
+num_sub_passes = 5
+Temp0 = 600
+Temp_inc = 10
+
 # Initialize an array of atoms with ms.mc_supercellObj(size,species,composition)
 # size is (x,y,z)dimensions, species is types of atoms allowed (0=Ni,1=Mn,2=In)
 # composition is number of each atom (#Ni,#Mn,#In)
@@ -70,4 +76,4 @@ lattice = ms.mc_supercellObj((x_pts,y_pts,z_pts),(0,1,2),[64,64,0],phase_init,sp
 # mc.run_montecarlo(reference_to_atom_array,number_of_passes,starting_temp, BEG_rules,Cluster_rules,J_rules,plot_figs=TRUE)
 # BEG_rules,Cluster_rules,J_rules are objects that determine when and how the fitted parameters are applied
 print("Beginning MonteCarlo\n")
-mc.run_WA_MCA(lattice,200,5,600,Cluster_rules,J_rules,Js,do_figs=True)
+mc.run_WA_MCA(lattice,num_passes,num_sub_passes,Temp0,Temp_inc,Cluster_rules,J_rules,Js,do_figs=True)

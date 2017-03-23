@@ -2,9 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f0cb30b1-c1a1-45ae-b445-2ac89e7935f6" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Enrg.png" afterPath="$PROJECT_DIR$/Enrg.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Mag.png" afterPath="$PROJECT_DIR$/Mag.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.py" afterPath="$PROJECT_DIR$/main.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mc_supercell.py" afterPath="$PROJECT_DIR$/mc_supercell.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mc_functions.py" afterPath="$PROJECT_DIR$/mc_functions.py" />
     </list>
     <ignored path="GUM_mark3.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -28,21 +29,11 @@
       <file leaf-file-name="main.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.61928934">
-              <caret line="66" column="88" selection-start-line="66" selection-start-column="0" selection-end-line="66" selection-end-column="88" />
+            <state vertical-scroll-proportion="0.39086294">
+              <caret line="68" column="0" selection-start-line="68" selection-start-column="0" selection-end-line="68" selection-end-column="0" />
               <folding>
                 <element signature="e#21#45#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="mc_supercell.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/mc_supercell.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="74" column="21" selection-start-line="74" selection-start-column="6" selection-end-line="74" selection-end-column="21" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -51,7 +42,7 @@
         <entry file="file://$PROJECT_DIR$/mc_functions.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="915" column="29" selection-start-line="915" selection-start-column="29" selection-end-line="915" selection-end-column="29" />
+              <caret line="839" column="21" selection-start-line="839" selection-start-column="21" selection-end-line="839" selection-end-column="21" />
               <folding>
                 <element signature="e#506#524#0" expanded="true" />
                 <element signature="e#846#6411#0" expanded="false" />
@@ -65,9 +56,9 @@
                 <element signature="e#26492#26878#0" expanded="false" />
                 <element signature="e#26923#27233#0" expanded="false" />
                 <element signature="e#27339#38039#0" expanded="false" />
-                <element signature="e#48160#48861#0" expanded="false" />
-                <element signature="e#48949#49814#0" expanded="false" />
-                <element signature="e#49927#55866#0" expanded="false" />
+                <element signature="e#48175#48876#0" expanded="false" />
+                <element signature="e#48964#49829#0" expanded="false" />
+                <element signature="e#49942#55881#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -91,34 +82,6 @@
         <entry file="file://$PROJECT_DIR$/Phase.png">
           <provider selected="true" editor-type-id="images">
             <state />
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="calc_params.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/calc_params.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="233" column="0" selection-start-line="233" selection-start-column="0" selection-end-line="233" selection-end-column="0" />
-              <folding>
-                <element signature="e#14118#14603#0" expanded="false" />
-                <element signature="e#14668#15366#0" expanded="false" />
-                <element signature="e#15418#15972#0" expanded="false" />
-                <element signature="e#16014#17468#0" expanded="false" />
-                <element signature="e#17508#19098#0" expanded="false" />
-                <element signature="e#20143#22240#0" expanded="false" />
-                <element signature="e#22286#22959#0" expanded="false" />
-                <element signature="e#23040#24454#0" expanded="false" />
-                <element signature="e#24484#24699#0" expanded="false" />
-                <element signature="e#24738#25236#0" expanded="false" />
-                <element signature="e#25309#27200#0" expanded="false" />
-                <element signature="e#27275#29750#0" expanded="false" />
-                <element signature="e#29786#30359#0" expanded="false" />
-                <element signature="e#30391#30652#0" expanded="false" />
-                <element signature="e#30676#31100#0" expanded="false" />
-                <element signature="e#31125#33312#0" expanded="false" />
-                <element signature="e#33393#37104#0" expanded="false" />
-              </folding>
-            </state>
           </provider>
         </entry>
       </file>
@@ -152,8 +115,8 @@
         <option value="$PROJECT_DIR$/calc_params.py" />
         <option value="$PROJECT_DIR$/Data" />
         <option value="$PROJECT_DIR$/output" />
-        <option value="$PROJECT_DIR$/mc_functions.py" />
         <option value="$PROJECT_DIR$/mc_supercell.py" />
+        <option value="$PROJECT_DIR$/mc_functions.py" />
         <option value="$PROJECT_DIR$/main.py" />
       </list>
     </option>
@@ -527,9 +490,9 @@
             <element signature="e#26492#26878#0" expanded="false" />
             <element signature="e#26923#27233#0" expanded="false" />
             <element signature="e#27339#38039#0" expanded="false" />
-            <element signature="e#48160#48861#0" expanded="false" />
-            <element signature="e#48949#49814#0" expanded="false" />
-            <element signature="e#49927#55866#0" expanded="false" />
+            <element signature="e#48175#48876#0" expanded="false" />
+            <element signature="e#48964#49829#0" expanded="false" />
+            <element signature="e#49942#55881#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -589,9 +552,9 @@
             <element signature="e#26492#26878#0" expanded="false" />
             <element signature="e#26923#27233#0" expanded="false" />
             <element signature="e#27339#38039#0" expanded="false" />
-            <element signature="e#48160#48861#0" expanded="false" />
-            <element signature="e#48949#49814#0" expanded="false" />
-            <element signature="e#49927#55866#0" expanded="false" />
+            <element signature="e#48175#48876#0" expanded="false" />
+            <element signature="e#48964#49829#0" expanded="false" />
+            <element signature="e#49942#55881#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -665,9 +628,9 @@
             <element signature="e#26492#26878#0" expanded="false" />
             <element signature="e#26923#27233#0" expanded="false" />
             <element signature="e#27339#38039#0" expanded="false" />
-            <element signature="e#48160#48861#0" expanded="false" />
-            <element signature="e#48949#49814#0" expanded="false" />
-            <element signature="e#49927#55866#0" expanded="false" />
+            <element signature="e#48175#48876#0" expanded="false" />
+            <element signature="e#48964#49829#0" expanded="false" />
+            <element signature="e#49942#55881#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -734,9 +697,9 @@
             <element signature="e#26492#26878#0" expanded="false" />
             <element signature="e#26923#27233#0" expanded="false" />
             <element signature="e#27339#38039#0" expanded="false" />
-            <element signature="e#48160#48861#0" expanded="false" />
-            <element signature="e#48949#49814#0" expanded="false" />
-            <element signature="e#49927#55866#0" expanded="false" />
+            <element signature="e#48175#48876#0" expanded="false" />
+            <element signature="e#48964#49829#0" expanded="false" />
+            <element signature="e#49942#55881#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -782,9 +745,9 @@
             <element signature="e#26492#26878#0" expanded="false" />
             <element signature="e#26923#27233#0" expanded="false" />
             <element signature="e#27339#38039#0" expanded="false" />
-            <element signature="e#48160#48861#0" expanded="false" />
-            <element signature="e#48949#49814#0" expanded="false" />
-            <element signature="e#49927#55866#0" expanded="false" />
+            <element signature="e#48175#48876#0" expanded="false" />
+            <element signature="e#48964#49829#0" expanded="false" />
+            <element signature="e#49942#55881#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -932,7 +895,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Mag.png">
+    <entry file="file://$PROJECT_DIR$/Enrg.png">
       <provider selected="true" editor-type-id="images">
         <state />
       </provider>
@@ -942,15 +905,23 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Enrg.png">
+    <entry file="file://$PROJECT_DIR$/Mag.png">
       <provider selected="true" editor-type-id="images">
         <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mc_supercell.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-2.8071065">
+          <caret line="74" column="21" selection-start-line="74" selection-start-column="6" selection-end-line="74" selection-end-column="21" />
+          <folding />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/mc_functions.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="915" column="29" selection-start-line="915" selection-start-column="29" selection-end-line="915" selection-end-column="29" />
+          <caret line="839" column="21" selection-start-line="839" selection-start-column="21" selection-end-line="839" selection-end-column="21" />
           <folding>
             <element signature="e#506#524#0" expanded="true" />
             <element signature="e#846#6411#0" expanded="false" />
@@ -964,25 +935,17 @@
             <element signature="e#26492#26878#0" expanded="false" />
             <element signature="e#26923#27233#0" expanded="false" />
             <element signature="e#27339#38039#0" expanded="false" />
-            <element signature="e#48160#48861#0" expanded="false" />
-            <element signature="e#48949#49814#0" expanded="false" />
-            <element signature="e#49927#55866#0" expanded="false" />
+            <element signature="e#48175#48876#0" expanded="false" />
+            <element signature="e#48964#49829#0" expanded="false" />
+            <element signature="e#49942#55881#0" expanded="false" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/mc_supercell.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="74" column="21" selection-start-line="74" selection-start-column="6" selection-end-line="74" selection-end-column="21" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.61928934">
-          <caret line="66" column="88" selection-start-line="66" selection-start-column="0" selection-end-line="66" selection-end-column="88" />
+        <state vertical-scroll-proportion="0.39086294">
+          <caret line="68" column="0" selection-start-line="68" selection-start-column="0" selection-end-line="68" selection-end-column="0" />
           <folding>
             <element signature="e#21#45#0" expanded="true" />
           </folding>

@@ -744,7 +744,7 @@ def run_montecarlo(supercell_obj,numb_passes,temp,BEG_rules,Cluster_rules,J_rule
     plt.savefig('3D_plt.png')
 
 #-# Runs the Wolf/Mixed Cluster Algorithm
-def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,Cluster_rules,J_rules,Js,do_figs=True):
+def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,temp_inc,Cluster_rules,J_rules,Js,do_figs=True):
     T = temp
     Kb = .000086173324
     B = 1/(Kb*T)
@@ -837,7 +837,7 @@ def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,Cluster_rules,J_rul
         plt.plot(X_axis,total_phase2,lw=3,marker='o',color='r')
         print([H_total,H_total])
 
-        T += 10
+        T += temp_inc
         print(T)
         print('\n')
 
