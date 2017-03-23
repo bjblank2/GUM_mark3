@@ -136,9 +136,8 @@ def calc_BEG_params(site,supercell_obj,Cluster_rules,J_rules,Js,T):
                                     H_BEG_J += float(Js[J_rule+len(Cluster_rules)])*home_spin*neighbor_spin
                                 if J_rules[J_rule].phase == "aust":
                                     H_BEG_K += float(Js[J_rule+len(Cluster_rules)])*home_spin*neighbor_spin
-    K = -1*(H_BEG_K/(-1*8)-Kb*T*np.log(2)/8)
-    delta = 8*K+Kb*T*np.log(2)
-    J = -1*((H_BEG_J-delta)/(-1*8)-K)
+    J = (H_BEG_J+Kb*T*np.log(2))/8
+    K = H_BEG_K/8
     return J,K
 
 #-# Determine the total energy of the entire lattice and return that energy
@@ -150,8 +149,9 @@ def eval_site_new(site,supercell_obj,Cluster_rules,J_ruels,Js,T):
     for neighbor in range(supercell_obj.get_number_of_neighbors(site)):
         if supercell_obj.get_neighbor_order(site,neighbor) == 1:
             neighbor_phase = supercell_obj.get_neighbor_phase(site,neighbor)
-            total_Ham += J*(site_phase*neighbor_phase)+K*(1-site_phase**2)*(1-neighbor_phase**2)
-    total_Ham -= Kb*T*np.log(2)*(1-site_phase**2)
+            #total_Ham += J*(site_phase*neighbor_phase)+K*(1-site_phase**2)*(1-neighbor_phase**2)
+            total_Ham += J*(site_phase*neighbor_phase)+K*(site_phase**2*neighbor_phase**2)
+    total_Ham += (-8*2*K+Kb*np.log(2))*site_phase**2 + 8*K
     return total_Ham
 
 #-# Determine the total energy of the entire lattice and return that energy
@@ -747,6 +747,7 @@ def run_montecarlo(supercell_obj,numb_passes,temp,BEG_rules,Cluster_rules,J_rule
 def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,Cluster_rules,J_rules,Js,do_figs=True):
     T = temp
     Kb = .000086173324
+    B = 1/(Kb*T)
     inc_down = 0
     inc_up = 0
     inc_not = 0
@@ -770,7 +771,7 @@ def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,Cluster_rules,J_rul
                             inc_down += 1
                         else:
                             rand = np.random.random()
-                            prob = math.exp(-1/(Kb*T)*(new_Ham-old_Ham))
+                            prob = math.exp(-1*B*(new_Ham-old_Ham))
                             if rand < prob:
                                 inc_up += 1
                             else:
@@ -801,8 +802,10 @@ def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,Cluster_rules,J_rul
                 inc_down += 1
                 print('yup')
             else:
+                print(H_cluster_new-H_cluster_old)
                 rand = np.random.random()
-                prob = math.exp(-1/(Kb*T)*(H_cluster_new-H_cluster_old))
+                prob = math.exp(-B*(H_cluster_new-H_cluster_old))
+                print(prob)
                 print([H_cluster_new,H_cluster_old])
                 if rand < prob:
                     print('yup')
@@ -836,6 +839,7 @@ def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,Cluster_rules,J_rul
 
         T += 10
         print(T)
+        print('\n')
 
     if do_figs is True:
         plt.figure(2)
@@ -895,8 +899,8 @@ def grow_cluster(site,supercell_obj,seed_phase,new_phase,links,Cluster_rules,J_r
     B = 1/(Kb*T)
     site_phase = supercell_obj.get_site_phase(site)
     J,K = calc_BEG_params(site,supercell_obj,Cluster_rules,J_rules,Js,T)
-    BEG_J = 2*B*J
-    BEG_K = 2*B*K
+    BEG_J = B*J
+    BEG_K = B*K
     links.append(site)
     # Wolf Algorithm
     if new_phase*seed_phase == -1:
@@ -954,13 +958,13 @@ def eval_cluster(supercell_obj,seed_phase,new_phase,links,Cluster_rules,J_ruels,
     for i in range(len(links)):
         site = links[i]
         site_phase = supercell_obj.get_site_phase(site)
-        BEG_J,BEG_K = calc_BEG_params(site,supercell_obj,Cluster_rules,J_ruels,Js,T)
+        J,K = calc_BEG_params(site,supercell_obj,Cluster_rules,J_ruels,Js,T)
         for neighbor in range(supercell_obj.get_number_of_neighbors(site)):
             if supercell_obj.get_neighbor_order(site,neighbor) == 1:
                 if supercell_obj.get_neighbor_pos(site,neighbor) in links:
                     neighbor_phase = supercell_obj.get_neighbor_phase(site,neighbor)
-                    total_H += BEG_J*site_phase*neighbor_phase+BEG_K*(1-site_phase**2)*(1-neighbor_phase**2)
-        total_H += -Kb*T*np.log(2)*(1-site_phase**2)
+                    total_H += J*site_phase*neighbor_phase+K*site_phase**2*neighbor_phase**2
+        total_H += (-8*2*K+Kb*np.log(2))*site_phase**2 + 8*K
     return total_H
 
 #-# flips the cluster

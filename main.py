@@ -68,4 +68,4 @@ lattice = ms.mc_supercellObj((x_pts,y_pts,z_pts),(0,1,2),[64,64,0])#(64,48,16))
 # mc.run_montecarlo(reference_to_atom_array,number_of_passes,starting_temp, BEG_rules,Cluster_rules,J_rules,plot_figs=TRUE)
 # BEG_rules,Cluster_rules,J_rules are objects that determine when and how the fitted parameters are applied
 print("Beginning MonteCarlo\n")
-mc.run_WA_MCA(lattice,500,10 ,500,Cluster_rules,J_rules,Js,do_figs=True)
+mc.run_WA_MCA(lattice,200,5,600,Cluster_rules,J_rules,Js,do_figs=True)
