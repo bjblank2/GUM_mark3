@@ -2,15 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f0cb30b1-c1a1-45ae-b445-2ac89e7935f6" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/mc_functions_2.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/3D_plt.png" afterPath="$PROJECT_DIR$/3D_plt.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Enrg.png" afterPath="$PROJECT_DIR$/Enrg.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Mag.png" afterPath="$PROJECT_DIR$/Mag.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Phase.png" afterPath="$PROJECT_DIR$/Phase.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.py" afterPath="$PROJECT_DIR$/main.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mc_functions.py" afterPath="$PROJECT_DIR$/mc_functions.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mc_supercell.py" afterPath="$PROJECT_DIR$/mc_supercell.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mc_functions_2.py" afterPath="$PROJECT_DIR$/mc_functions_2.py" />
     </list>
     <ignored path="GUM_mark3.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -43,16 +35,16 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="mc_functions_2.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="mc_functions_2.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/mc_functions_2.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-8.259259">
-              <caret line="274" column="32" selection-start-line="274" selection-start-column="32" selection-end-line="274" selection-end-column="32" />
+            <state vertical-scroll-proportion="0.39892185">
+              <caret line="210" column="48" selection-start-line="210" selection-start-column="48" selection-end-line="210" selection-end-column="48" />
               <folding>
                 <element signature="e#506#524#0" expanded="true" />
-                <element signature="e#17871#22713#0" expanded="false" />
-                <element signature="e#23512#25048#0" expanded="false" />
-                <element signature="e#25138#26003#0" expanded="false" />
+                <element signature="e#17480#22322#0" expanded="false" />
+                <element signature="e#23121#24657#0" expanded="false" />
+                <element signature="e#24747#25612#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -65,7 +57,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Mag.png" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Mag.png" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Mag.png">
           <provider selected="true" editor-type-id="images">
             <state />
@@ -118,8 +110,8 @@
         <option value="$PROJECT_DIR$/output" />
         <option value="$PROJECT_DIR$/mc_supercell.py" />
         <option value="$PROJECT_DIR$/mc_functions.py" />
-        <option value="$PROJECT_DIR$/mc_functions_2.py" />
         <option value="$PROJECT_DIR$/main.py" />
+        <option value="$PROJECT_DIR$/mc_functions_2.py" />
       </list>
     </option>
   </component>
@@ -814,20 +806,17 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/mc_functions_2.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-8.259259">
-          <caret line="274" column="32" selection-start-line="274" selection-start-column="32" selection-end-line="274" selection-end-column="32" />
-          <folding>
-            <element signature="e#506#524#0" expanded="true" />
-            <element signature="e#17871#22713#0" expanded="false" />
-            <element signature="e#23512#25048#0" expanded="false" />
-            <element signature="e#25138#26003#0" expanded="false" />
-          </folding>
-        </state>
+    <entry file="file://$PROJECT_DIR$/Enrg.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Enrg.png">
+    <entry file="file://$PROJECT_DIR$/Phase.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Mag.png">
       <provider selected="true" editor-type-id="images">
         <state />
       </provider>
@@ -842,14 +831,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Phase.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Mag.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
+    <entry file="file://$PROJECT_DIR$/mc_functions_2.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.39892185">
+          <caret line="210" column="48" selection-start-line="210" selection-start-column="48" selection-end-line="210" selection-end-column="48" />
+          <folding>
+            <element signature="e#506#524#0" expanded="true" />
+            <element signature="e#17480#22322#0" expanded="false" />
+            <element signature="e#23121#24657#0" expanded="false" />
+            <element signature="e#24747#25612#0" expanded="false" />
+          </folding>
+        </state>
       </provider>
     </entry>
   </component>
