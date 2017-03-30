@@ -266,6 +266,30 @@ def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,temp_inc,Cluster_ru
                     flip_cluster(supercell_obj,seed_phase,new_phase,cluster)
                     inc_not += 1
 
+        for sub_passes in range(num_sub_passes):
+            M = 0
+            for i in range(supercell_obj.i_length):
+                for j in range(supercell_obj.j_length):
+                    for k in range(supercell_obj.k_length):
+                        site = [i,j,k]
+                        old_Ham = eval_site_new(site,supercell_obj,Cluster_rules,J_rules,Js,T)
+                        old_spin = flip_spin(site,supercell_obj)
+                        new_Ham = eval_site_new(site,supercell_obj,Cluster_rules,J_rules,Js,T)
+                        if new_Ham < old_Ham:
+                            inc_down += 1
+                        else:
+                            rand = np.random.random()
+                            prob = math.exp(-1/(Kb*T)*(new_Ham-old_Ham))
+                            if rand < prob:
+                                inc_up += 1
+                            else:
+                                supercell_obj.set_site_spin(site,old_spin)
+                                inc_not += 1
+                        M += calc_avg_spin(site,supercell_obj)
+                        ##############
+                        # FLIP SPECIES
+                        ##############
+
         X_axis = T
         if supercell_obj.get_site_phase([0,0,0]) == 0:
             c = 'r'
@@ -295,6 +319,9 @@ def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,temp_inc,Cluster_ru
 
         T += temp_inc
         print(T)
+        temp_output = open('Temp_data','a')
+        temp_output.write(str(T)+'  '+str(H_total/supercell_obj.num_sites)+'  '+str(M/supercell_obj.num_sites)+'  '+str(total_spin2)+'  '+str(total_phase)+'  '+str(total_phase2)+'\n')
+        temp_output.close()
 
     if do_figs is True:
         plt.figure(2)
@@ -305,9 +332,6 @@ def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,temp_inc,Cluster_ru
         plt.savefig('Mag.png')
         plt.figure(4)
         plt.savefig('Phase.png')
-    #temp_output = open('Temp_data','a')
-    #temp_output.write(str(T)+'  '+str(H_avg/supercell_obj.num_sites)+'  '+str(mag_avg)+'  '+str(mag2_avg)+'  '+str(p_avg)+'  '+str(p2_avg)+'\n')
-    #temp_output.close()
     print("\n")
     print(inc_down)
     print(inc_up)
