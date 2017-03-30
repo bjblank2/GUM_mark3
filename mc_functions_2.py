@@ -206,13 +206,9 @@ def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,temp_inc,Cluster_ru
     inc_not = 0
     M = 0
     H_total,total_phase,total_phase2,total_spin,total_spin2 = eval_lattice_new(supercell_obj,Cluster_rules,J_rules,Js,T)
-#    plt.figure(2)
-#    plt.plot(T,H_total,lw=3,marker='o',color='b')
-#    plt.plot(T,H_total,lw=3,marker='o',color='b')
     for passes in range(numb_passes):
         #Flip spins and Species
         for sub_passes in range(num_sub_passes):
-            #print('sub-pass steps! \n')
             M = 0
             for i in range(supercell_obj.i_length):
                 for j in range(supercell_obj.j_length):
@@ -221,20 +217,16 @@ def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,temp_inc,Cluster_ru
                         old_Ham = eval_site_new(site,supercell_obj,Cluster_rules,J_rules,Js,T)
                         old_spin = flip_spin(site,supercell_obj)
                         new_Ham = eval_site_new(site,supercell_obj,Cluster_rules,J_rules,Js,T)
-                        #print('new = ',new_Ham,' ; old = ',old_Ham)
                         if new_Ham < old_Ham:
-                            #print('keep change')
                             inc_down += 1
                         else:
                             rand = np.random.random()
                             prob = math.exp(-1/(Kb*T)*(new_Ham-old_Ham))
                             if rand < prob:
                                 inc_up += 1
-                                #print('keep change')
                             else:
                                 supercell_obj.set_site_spin(site,old_spin)
                                 inc_not += 1
-                                #print('reject change')
                         M += calc_avg_spin(site,supercell_obj)
                         ##############
                         # FLIP SPECIES
@@ -364,6 +356,7 @@ def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,temp_inc,Cluster_ru
 # for the mixed algorithm when deciding to flip cluster or not.  Since we evaluate the energy chage using eval_lattice within run_MC_WCA above,
 # I think this is taken care of.
 ######### END ELIF COMMENT #############
+
 def grow_cluster(site,supercell_obj,seed_phase,new_phase,links,Cluster_rules,J_rules,Js,T): # Recursive function
     Kb = .000086173324
     B = 1/(Kb*T)
@@ -453,30 +446,20 @@ def grow_cluster(site,supercell_obj,seed_phase,new_phase,links,Cluster_rules,J_r
 # If so, as I understand the cal_BEG_params function, it is not able to do this as implemented.
 # The Wolff paper indicates this is important: "the cluster does not interact with its neighborhood"
 ######### END ELIF COMMENT HERE #############
+
 def eval_cluster(supercell_obj,seed_phase,new_phase,links,Cluster_rules,J_ruels,Js,T):
     Kb = .000086173324
     total_H = 0
     for i in range(len(links)):
         site = links[i]
-        #print('site number is ',i,' and this site has ',supercell_obj.get_number_of_neighbors(site),' number of neighbors.')
         site_phase = supercell_obj.get_site_phase(site)
-######### START ELIF COMMENT HERE #############
-# This line here in particular, I am concerned that we will evaluate the energy including all neighbors of all atoms in the cluster,
-# whether the neighbors are in the cluster or not.  But maybe that is ok.  This is just the site specific J,K calculation
-# which I guess will depend on all neighbors.
         BEG_J,BEG_K = calc_BEG_params(site,supercell_obj,Cluster_rules,J_ruels,Js,T)
-######### END ELIF COMMENT HERE #############
         for neighbor in range(supercell_obj.get_number_of_neighbors(site)):
             if supercell_obj.get_neighbor_order(site,neighbor) == 1:
                 if supercell_obj.get_neighbor_pos(site,neighbor) in links:
                     neighbor_phase = supercell_obj.get_neighbor_phase(site,neighbor)
                     total_H += BEG_J*site_phase*neighbor_phase+BEG_K*(1-site_phase**2)*(1-neighbor_phase**2)
-######### START ELIF MODIFICATIONS #############
-# Notice that I am not including the constant offset here again.
-# But again, if I were it would be divided by two, -Kb*T*np.log(2)/2
-        #total_H += -Kb*T*np.log(2)*(1-site_phase**2)
         total_H += Kb*T*np.log(8)*(site_phase**2)
-######## END ELIF MODIFICATIONS  ##############################
     return total_H
 
 
