@@ -91,14 +91,14 @@ class mc_supercellObj:
                     phase_rand = np.random.random()
                     if spin_init == 'FM':
                         spin = 1
-                    elif spin_rand == 'AFM':
+                    elif spin_init == 'rand':
                         if spin_rand <= 1/3: ##########
                             spin = -1 #################
                         elif spin_rand <= 2/3: ########
                             spin = 0 ##################
                         else: #########################
                             spin = 1 ##################
-                    elif spin_rand =='rand':
+                    elif spin_init =='AFM':
                         if np.mod(k,2) == 0:
                             if np.mod(i+j,2) == 0:
                                 spin = 1

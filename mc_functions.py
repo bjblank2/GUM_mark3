@@ -136,7 +136,7 @@ def calc_BEG_params(site,supercell_obj,Cluster_rules,J_rules,Js,T):
                                     H_BEG_J += float(Js[J_rule+len(Cluster_rules)])*home_spin*neighbor_spin
                                 if J_rules[J_rule].phase == "aust":
                                     H_BEG_K += float(Js[J_rule+len(Cluster_rules)])*home_spin*neighbor_spin
-    J = (H_BEG_J+Kb*T*np.log(2))/8
+    J = H_BEG_J/8  ## No KbT !!!!!
     K = H_BEG_K/8
     return J,K
 
@@ -149,9 +149,8 @@ def eval_site_new(site,supercell_obj,Cluster_rules,J_ruels,Js,T):
     for neighbor in range(supercell_obj.get_number_of_neighbors(site)):
         if supercell_obj.get_neighbor_order(site,neighbor) == 1:
             neighbor_phase = supercell_obj.get_neighbor_phase(site,neighbor)
-            #total_Ham += J*(site_phase*neighbor_phase)+K*(1-site_phase**2)*(1-neighbor_phase**2)
-            total_Ham += J*(site_phase*neighbor_phase)+K*(site_phase**2*neighbor_phase**2)
-    total_Ham += (-8*2*K+Kb*np.log(2))*site_phase**2 + 8*K
+            total_Ham += J*(site_phase*neighbor_phase)+K*(1-site_phase**2)*(1-neighbor_phase**2)
+    total_Ham += Kb*T*np.log(2)*(site_phase**2)
     return total_Ham
 
 #-# Determine the total energy of the entire lattice and return that energy
@@ -758,6 +757,7 @@ def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,temp_inc,Cluster_ru
     plt.plot(-1,H_total,lw=3,marker='o',color='r')
     for passes in range(numb_passes):
         #Flip spins and Species
+        print(T)
         for sub_passes in range(num_sub_passes):
             M = 0
             for i in range(supercell_obj.i_length):
@@ -767,52 +767,58 @@ def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,temp_inc,Cluster_ru
                         old_Ham = eval_site_new(site,supercell_obj,Cluster_rules,J_rules,Js,T)
                         old_spin = flip_spin(site,supercell_obj)
                         new_Ham = eval_site_new(site,supercell_obj,Cluster_rules,J_rules,Js,T)
+                        #print([new_Ham,old_Ham])
                         if new_Ham < old_Ham:
                             inc_down += 1
+                            #print('accept down')
                         else:
                             rand = np.random.random()
                             prob = math.exp(-1*B*(new_Ham-old_Ham))
+                            #print(prob)
                             if rand < prob:
                                 inc_up += 1
+                                #print('accept up')
                             else:
                                 supercell_obj.set_site_spin(site,old_spin)
                                 inc_not += 1
+                                #print('not accepted')
                         M += calc_avg_spin(site,supercell_obj)
                         ##############
                         # FLIP SPECIES
                         ##############
-        #Randdom Seed
-        cluster = []
-        seed =(np.random.randint(0,supercell_obj.i_length),np.random.randint(0,supercell_obj.j_length),np.random.randint(0,supercell_obj.k_length))
-        seed_phase = supercell_obj.get_site_phase(seed)
-        new_phase = get_new_phase(seed,supercell_obj)
-        grow_cluster(seed,supercell_obj,seed_phase,new_phase,cluster,Cluster_rules,J_rules,Js,T)
-        ### Track size here (print(len(cluster))
-        print([seed_phase,new_phase])
-        print(len(cluster))
-        if seed_phase*new_phase == -1:
-            print('W')
-            flip_cluster(supercell_obj,seed_phase,new_phase,cluster)
-        else:
-            print('MC')
-            H_cluster_old = eval_cluster(supercell_obj,seed_phase,new_phase,cluster,Cluster_rules,J_rules,Js,T)
-            flip_cluster(supercell_obj,seed_phase,new_phase,cluster)
-            H_cluster_new = eval_cluster(supercell_obj,seed_phase,new_phase,cluster,Cluster_rules,J_rules,Js,T)
-            if H_cluster_new <= H_cluster_old:
-                inc_down += 1
-                print('yup')
-            else:
-                print(H_cluster_new-H_cluster_old)
-                rand = np.random.random()
-                prob = math.exp(-B*(H_cluster_new-H_cluster_old))
-                print(prob)
-                print([H_cluster_new,H_cluster_old])
-                if rand < prob:
-                    print('yup')
-                    inc_up += 1
-                else:
-                    flip_cluster(supercell_obj,seed_phase,new_phase,cluster)
-                    inc_not += 1
+        # #Randdom Seed
+        # cluster = []
+        # seed =(np.random.randint(0,supercell_obj.i_length),np.random.randint(0,supercell_obj.j_length),np.random.randint(0,supercell_obj.k_length))
+        # seed_phase = supercell_obj.get_site_phase(seed)
+        # new_phase = get_new_phase(seed,supercell_obj)
+        # grow_cluster(seed,supercell_obj,seed_phase,new_phase,cluster,Cluster_rules,J_rules,Js,T)
+        # ### Track size here (print(len(cluster))
+        # print([seed_phase,new_phase])
+        # print(len(cluster))
+        # if seed_phase*new_phase == -1:
+        #     print('W')
+        #     flip_cluster(supercell_obj,seed_phase,new_phase,cluster)
+        # else:
+        #     print('MC')
+        #     H_cluster_old = eval_cluster(supercell_obj,seed_phase,new_phase,cluster,Cluster_rules,J_rules,Js,T)
+        #     flip_cluster(supercell_obj,seed_phase,new_phase,cluster)
+        #     H_cluster_new = eval_cluster(supercell_obj,seed_phase,new_phase,cluster,Cluster_rules,J_rules,Js,T)
+        #     if H_cluster_new <= H_cluster_old:
+        #         inc_down += 1
+        #         print('yup')
+        #     else:
+        #         print(H_cluster_new-H_cluster_old)
+        #         rand = np.random.random()
+        #         prob = math.exp(-B*(H_cluster_new-H_cluster_old))
+        #         print(prob)
+        #         print([H_cluster_new,H_cluster_old])
+        #         if rand < prob:
+        #             print('yup')
+        #             inc_up += 1
+        #         else:
+        #             flip_cluster(supercell_obj,seed_phase,new_phase,cluster)
+        #             inc_not += 1
+
         X_axis = T
         H_total,total_phase,total_phase2,total_spin,total_spin2 = eval_lattice_new(supercell_obj,Cluster_rules,J_rules,Js,T)
         plt.figure(2)
@@ -882,7 +888,7 @@ def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,temp_inc,Cluster_ru
                 zs.append(pos[2]*.5)
                 us.append(0)
                 vs.append(0)
-                ws.append(supercell_obj.get_site_phase(site))
+                ws.append(supercell_obj.get_site_spin(site))
                 if supercell_obj.get_site_species(site) == 0:
                     cs.append('g')
                 if supercell_obj.get_site_species(site) == 1:
@@ -892,6 +898,7 @@ def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,temp_inc,Cluster_ru
     ax.quiver(xs,ys,zs,us,vs,ws,pivot='middle',length=.5)
     ax.scatter(xs,ys,zs,c=cs,marker='o',s=50)
     plt.savefig('3D_plt.png')
+    plt.show()
 
 #-# Grows the clusters
 def grow_cluster(site,supercell_obj,seed_phase,new_phase,links,Cluster_rules,J_rules,Js,T): # Recursive function
@@ -957,14 +964,25 @@ def eval_cluster(supercell_obj,seed_phase,new_phase,links,Cluster_rules,J_ruels,
     total_H = 0
     for i in range(len(links)):
         site = links[i]
+        #print('site number is ',i,' and this site has ',supercell_obj.get_number_of_neighbors(site),' number of neighbors.')
         site_phase = supercell_obj.get_site_phase(site)
-        J,K = calc_BEG_params(site,supercell_obj,Cluster_rules,J_ruels,Js,T)
+######### START ELIF COMMENT HERE #############
+# This line here in particular, I am concerned that we will evaluate the energy including all neighbors of all atoms in the cluster,
+# whether the neighbors are in the cluster or not.  But maybe that is ok.  This is just the site specific J,K calculation
+# which I guess will depend on all neighbors.
+        BEG_J,BEG_K = calc_BEG_params(site,supercell_obj,Cluster_rules,J_ruels,Js,T)
+######### END ELIF COMMENT HERE #############
         for neighbor in range(supercell_obj.get_number_of_neighbors(site)):
             if supercell_obj.get_neighbor_order(site,neighbor) == 1:
                 if supercell_obj.get_neighbor_pos(site,neighbor) in links:
                     neighbor_phase = supercell_obj.get_neighbor_phase(site,neighbor)
-                    total_H += J*site_phase*neighbor_phase+K*site_phase**2*neighbor_phase**2
-        total_H += (-8*2*K+Kb*np.log(2))*site_phase**2 + 8*K
+                    total_H += BEG_J*site_phase*neighbor_phase+BEG_K*(1-site_phase**2)*(1-neighbor_phase**2)
+######### START ELIF MODIFICATIONS #############
+# Notice that I am not including the constant offset here again.
+# But again, if I were it would be divided by two, -Kb*T*np.log(2)/2
+        #total_H += -Kb*T*np.log(2)*(1-site_phase**2)
+        total_H += Kb*T*np.log(2)*(site_phase**2)
+######## END ELIF MODIFICATIONS  ##############################
     return total_H
 
 #-# flips the cluster
