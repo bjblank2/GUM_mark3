@@ -263,7 +263,7 @@ def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,temp_inc,Cluster_ru
                     inc_up += 1
                 else:
                     print('rejecting MC cluster flip: prob is ',prob,' ... rand is ',rand)
-                    flip_cluster(supercell_obj,seed_phase,new_phase,cluster)
+                    flip_cluster(supercell_obj,new_phase,seed_phase,cluster)
                     inc_not += 1
 
         for sub_passes in range(num_sub_passes):
