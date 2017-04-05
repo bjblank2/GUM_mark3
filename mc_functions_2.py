@@ -129,22 +129,10 @@ def flip_phase(site,neighbor,supercell_obj):
 #-# Randomly change the species of a specific element in the lattice and return the value of the original species
 def flip_species(site_1,site_2,supercell_obj):
     old_species_1 = supercell_obj.get_site_species(site_1)
-    old_phase_1 = supercell_obj.get_site_phase(site_1)
-    old_spin_1 = supercell_obj.get_site_spin(site_1)
-    old_state_1 = [old_species_1,old_phase_1,old_spin_1]
-
     old_species_2 = supercell_obj.get_site_species(site_2)
-    old_phase_2 = supercell_obj.get_site_phase(site_2)
-    old_spin_2 = supercell_obj.get_site_spin(site_2)
-    old_state_2 = [old_species_2,old_phase_2,old_spin_2]
-
     supercell_obj.set_site_species(site_1,old_species_2)
-    supercell_obj.set_site_phase(site_1,old_phase_2)
-    supercell_obj.set_site_spin(site_1,old_spin_2)
     supercell_obj.set_site_species(site_2,old_species_1)
-    supercell_obj.set_site_phase(site_2,old_phase_1)
-    supercell_obj.set_site_spin(site_2,old_spin_2)
-    return old_state_1,old_state_2
+    return old_species_1,old_species_2
 
 #-# Randomly change the spin of a specific element in the lattice and return the value of the original spin
 def flip_spin(site,supercell_obj):
@@ -205,6 +193,7 @@ def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,temp_inc,Cluster_ru
     inc_up = 0
     inc_not = 0
     M = 0
+    ghost_Js = apply_diffusion_ghost_field(2,Cluster_rules,J_rules,Js)
     H_total,total_phase,total_phase2,total_spin,total_spin2 = eval_lattice_new(supercell_obj,Cluster_rules,J_rules,Js,T)
     for passes in range(numb_passes):
         #Flip spins and Species
@@ -231,6 +220,35 @@ def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,temp_inc,Cluster_ru
                         ##############
                         # FLIP SPECIES
                         ##############
+                        # if supercell_obj.get_site_species(site) != 0:
+                        #     random_site_not_0 = False
+                        #     species_not_same = False
+                        #     while [species_not_same,random_site_not_0] != [True,True]:
+                        #         random_site_not_0 = False
+                        #         species_not_same = False
+                        #         random_site = [np.random.randint(0,supercell_obj.i_length),np.random.randint(0,supercell_obj.j_length),np.random.randint(0,supercell_obj.k_length)]
+                        #         if supercell_obj.get_site_species(random_site) != 0:
+                        #             random_site_not_0 = True
+                        #         if supercell_obj.get_site_species(random_site) != supercell_obj.get_site_species(site):
+                        #             species_not_same = True
+                        #     old_Ham = eval_site_new(site,supercell_obj,Cluster_rules,J_rules,ghost_Js,T)
+                        #     old_Ham += eval_site_new(random_site,supercell_obj,Cluster_rules,J_rules,ghost_Js,T)
+                        #     old_site_species,old_randsite_species = flip_species(site,random_site,supercell_obj)
+                        #     new_Ham = eval_site_new(site,supercell_obj,Cluster_rules,J_rules,ghost_Js,T)
+                        #     new_Ham += eval_site_new(random_site,supercell_obj,Cluster_rules,J_rules,ghost_Js,T)
+                        #     if new_Ham < old_Ham:
+                        #         inc_down += 1
+                        #     else:
+                        #         rand = np.random.random()
+                        #         prob = math.exp(-1/(Kb*T)*(new_Ham-old_Ham))
+                        #         if rand < prob:
+                        #             inc_up += 1
+                        #         else:
+                        #             supercell_obj.set_site_species(site,old_site_species)
+                        #             supercell_obj.set_site_species(random_site,old_randsite_species)
+                        #             inc_not += 1
+
+
         #Randdom Seed
         print('\nsub-passes done, start cluster growth! \n')
         cluster = []
@@ -286,11 +304,10 @@ def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,temp_inc,Cluster_ru
                                 supercell_obj.set_site_spin(site,old_spin)
                                 inc_not += 1
                         M += calc_avg_spin(site,supercell_obj)
-                        ##############
-                        # FLIP SPECIES
-                        ##############
 
-        X_axis = T
+        if temp_inc == 0:
+            X_axis = passes
+        else: X_axis = T
         if supercell_obj.get_site_phase([0,0,0]) == 0:
             c = 'r'
         else: c = 'b'
@@ -305,7 +322,7 @@ def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,temp_inc,Cluster_ru
         plt.subplot(312)
         plt.xlabel("Sweeps", fontsize=10)
         plt.ylabel("(Average Mag)^2", fontsize=10)
-        plt.plot(X_axis,total_spin2,lw=3,marker='o',color=c)###########
+        plt.plot(X_axis,total_spin,lw=3,marker='o',color=c)###########
         plt.figure(4)
         plt.subplot(411)
         plt.xlabel("Sweeps", fontsize=10)
@@ -371,16 +388,9 @@ def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,temp_inc,Cluster_ru
     ax.quiver(xs,ys,zs,us,vs,ws,pivot='middle',length=.5)
     ax.scatter(xs,ys,zs,c=cs,marker='o',s=50)
     plt.savefig('3D_plt.png')
+    plt.show()
 
 #-# Grows the clusters
-######### START ELIF COMMENT #############
-# I am worried that this probably does not account for energy changes when growing cluster, due to the delta term contributions
-# The delta term contributions to changes in energy appear to be missing?
-# Actually this is not the case. Somehow the algorithm does not involve "delta" except when evaluating the energy change
-# for the mixed algorithm when deciding to flip cluster or not.  Since we evaluate the energy chage using eval_lattice within run_MC_WCA above,
-# I think this is taken care of.
-######### END ELIF COMMENT #############
-
 def grow_cluster(site,supercell_obj,seed_phase,new_phase,links,Cluster_rules,J_rules,Js,T): # Recursive function
     Kb = .000086173324
     B = 1/(Kb*T)
@@ -462,15 +472,6 @@ def grow_cluster(site,supercell_obj,seed_phase,new_phase,links,Cluster_rules,J_r
                                 grow_cluster(new_site,supercell_obj,seed_phase,new_phase,links,Cluster_rules,J_rules,Js,T)
 
 #-# Evaluates the total energy of the cluster
-######### START ELIF COMMENT HERE #############
-# As I understand it, the energy of the cluster should only be evaluated using the atoms present in the cluster.
-# However, a given atom inside the cluster may have neighbors inside the cluster and outside the cluster.
-# Does this mean we should only sum over interactions between atoms entirely in the cluster, and ignore
-# the atom's neighbors neighbors outside of it?
-# If so, as I understand the cal_BEG_params function, it is not able to do this as implemented.
-# The Wolff paper indicates this is important: "the cluster does not interact with its neighborhood"
-######### END ELIF COMMENT HERE #############
-
 def eval_cluster(supercell_obj,seed_phase,new_phase,links,Cluster_rules,J_ruels,Js,T):
     Kb = .000086173324
     total_H = 0
@@ -485,7 +486,6 @@ def eval_cluster(supercell_obj,seed_phase,new_phase,links,Cluster_rules,J_ruels,
                     total_H += BEG_J*site_phase*neighbor_phase+BEG_K*(1-site_phase**2)*(1-neighbor_phase**2)
         total_H += Kb*T*np.log(8)*(site_phase**2)
     return total_H
-
 
 
 #-# flips the cluster
@@ -507,3 +507,15 @@ def flip_cluster(supercell_obj,seed_phase,new_phase,links):
                     supercell_obj.set_site_phase(links[i],0)
                 elif old_phase == 0:
                     supercell_obj.set_site_phase(links[i],1)
+
+
+def apply_diffusion_ghost_field(strength,Cluster_rules,J_ruels,Js):
+    ghost_Js = Js[:]
+    for i in range(len(Cluster_rules)):
+        if Cluster_rules[i].neighbor_arrangement == 'COMB':
+            if 0 not in Cluster_rules[i].home_atom_list:
+                if 0 not in Cluster_rules[i].neighbor_atom_list:
+                    if 1 not in Cluster_rules[i].neighbor_atom_list:
+                        if 1 not in Cluster_rules[i].neighbor_atom_list:
+                            ghost_Js[i] = ghost_Js[i]+strength
+    return ghost_Js
