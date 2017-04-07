@@ -1,4 +1,8 @@
 __author__ = 'brian'
+# This file handles taking the input from vasp and calculating the fit.
+# The functions that are important for the actual calculating the fit
+# have comments
+
 import numpy as np
 import BEG
 import clusters
@@ -7,8 +11,6 @@ import m_structure
 import os
 import matplotlib.pyplot as plt
 from scipy.optimize import least_squares
-from sklearn.linear_model import Ridge
-from sklearn import linear_model
 
 def import_data(number_of_species, root_dir, output_dir):
     output = open(output_dir, 'w')
@@ -215,6 +217,17 @@ def read_j_rules(rule_file):
     return J_rule_list
 
 
+def read_Js(num_Js):
+    js_file = open('../../../../../../../../../../../home/bjblank2/GUM_mark3/output','r')
+    Js = []
+    lines = js_file.readlines()
+    for i in range(num_Js):
+        line = lines[i+1]
+        line = line.split()
+        Js.append(float(line[2]))
+    return Js
+
+
 def read_m_structure_data(data_file, num_species, num_BEG_rules, num_Cluster_rules, num_J_rules):
     m_struct_list = []
     data = open(data_file, 'r')
@@ -228,7 +241,8 @@ def read_m_structure_data(data_file, num_species, num_BEG_rules, num_Cluster_rul
             m_struct_list.append(m_struct)
     return m_struct_list
 
-
+# This function sweeps through the VASP data and determines active interactions and clusters
+# for each atom site and group of sites
 def calculate_sums(m_structure_list, beg_rule_list, cluster_rule_list, j_rule_list):
     for i in range(len(m_structure_list)):
         m_structure_list[i].create_super_cell()
@@ -368,6 +382,7 @@ def CV_score(Js,m_structure_list):
     CV2 *= 1/len(m_structure_list)
     return CV2
 
+
 def CV_score2(m_structure_list):
     energies = []
     for i in range(len(m_structure_list)):
@@ -408,34 +423,6 @@ def CV_score2(m_structure_list):
         CV2 += (energies[i]-Ei)**2
     CV2 *= 1/len(m_structure_list)
     return CV2
-
-
-def ridge_simple(m_structure_list,alpha):
-    a = []
-    b = []
-    for i in range(len(m_structure_list)):
-        mat = m_structure_list[i]
-        if mat.mag_phase != "pera" and mat.phase_name != "pm":
-            # if mat.phase_name != "pm" and mat.enrg <= limit:
-            row = mat.BEG_sums + mat.Cluster_sums + mat.J_sums
-            for j in range(len(row)):
-                row[j] *= mat.weight
-            a.append(row)
-            b.append(mat.enrg * mat.weight)
-    a = np.matrix(a)
-    b = np.transpose(np.matrix(b))
-    ridge_fit = linear_model.RidgeCV(alphas=[.01,.05,.1,.15,.2,.25,.3,1,2,3,4,5,10],fit_intercept=False, )
-    ridge_fit.fit(a,b)
-    Js = ridge_fit.coef_
-    JS_list = []
-    Js_0 = Js[0]
-    for i in range(len(Js_0)):
-        Js_0
-        JS_list.append(Js_0[i])
-    #print(Js)
-    #print(ridge_fit.predict(a))
-    print(ridge_fit.intercept_)
-    return JS_list
 
 
 def ridge_optimized_fit(m_structure_list,a_min,a_max,step):
@@ -525,7 +512,7 @@ def write_output(structures, beg_list, clusters_list, j_list, Js, limit):
     file = open(path, 'w')
     file.write("Fitting Parameters\n")
     for i in range(len(Js)):
-        line = label[i].strip() + " =" + str(Js[i]) + "\n"
+        line = label[i].strip() + " = " + str(Js[i]) + "\n"
         line = line.replace("[", "")
         line = line.replace("]", "")
         file.write(line)
