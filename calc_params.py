@@ -219,6 +219,17 @@ def read_j_rules(rule_file):
     return J_rule_list
 
 
+def read_Js(num_Js):
+    js_file = open('output','r')
+    Js = []
+    lines = js_file.readlines()
+    for i in range(num_Js):
+        line = lines[i+1]
+        line = line.split()
+        Js.append(float(line[2]))
+    return Js
+
+
 def read_m_structure_data(data_file, num_species, num_BEG_rules, num_Cluster_rules, num_J_rules):
     m_struct_list = []
     data = open(data_file, 'r')
@@ -531,7 +542,7 @@ def write_output(structures, beg_list, clusters_list, j_list, Js, limit):
     file = open(path, 'w')
     file.write("Fitting Parameters\n")
     for i in range(len(Js)):
-        line = label[i].strip() + " =" + str(Js[i]) + "\n"
+        line = label[i].strip() + " = " + str(Js[i]) + "\n"
         line = line.replace("[", "")
         line = line.replace("]", "")
         file.write(line)
