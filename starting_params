@@ -1,0 +1,12 @@
+x_pts 4
+y_pts 4
+z_pts 8
+phase_init mart
+spin_init rand
+num_passes 1
+num_sub_passes 1
+Temp0 300
+Temp_inc 0
+comp 64 48 16
+allow_element_flips False
+species_init rand

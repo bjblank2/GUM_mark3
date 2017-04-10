@@ -42,7 +42,7 @@ def read_inputs(file_path):
             Temp0 = float(line[1])
         if "Temp_inc" in line[0]:
             Temp_inc = float(line[1])
-        if "Comp" in line[0]:
+        if "comp" in line[0]:
             comp[0] = int(line[1])
             comp[1] = int(line[2])
             comp[2] = int(line[3])
@@ -65,10 +65,10 @@ def read_inputs(file_path):
 # the "Js" list
 if __name__ in '__main__':
     root_dir = '/Volumes/TOURO/Ni-Fe-Ga/Data_Pts'
-    data_file = '../../../../../../../../../../../home/bjblank2/GUM_mark3/NiMnIn_Data'
-    beg_file = '../../../../../../../../../../../home/bjblank2/GUM_mark3/BEG_rules'
-    cluster_file = '../../../../../../../../../../../home/bjblank2/GUM_mark3/Cluster_Rules'
-    j_file = '../../../../../../../../../../../home/bjblank2/GUM_mark3/J_Rules'
+    data_file = 'NiMnIn_Data'
+    beg_file = 'BEG_rules'
+    cluster_file = 'Cluster_Rules'
+    j_file = 'J_Rules'
     num_comps = 3
     num_species = 3
     # Determine if rules and structure data is defined
@@ -125,7 +125,7 @@ if __name__ in '__main__':
 #    Temp0 = 200 # initial temperature in K
 #    Temp_inc = 10 # temperature increase per pass in K
 
-    x_pts,y_pts,z_pts,phase_init,spin_init,species_init,num_passes,num_sub_passes,Temp0,Temp_inc,comp,species_flips = read_inputs(sys.argv[1])
+    x_pts,y_pts,z_pts,phase_init,spin_init,species_init,num_passes,num_sub_passes,Temp0,Temp_inc,comp,species_flips = read_inputs('.')
 
     # Initialize an array of atoms with ms.mc_supercellObj(size,species,composition)
     # size is (x,y,z)dimensions, species is types of atoms allowed (0=Ni,1=Mn,2=In)

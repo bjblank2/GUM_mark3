@@ -132,10 +132,10 @@ class mc_supercellObj:
                         for k in range(self.k_length):
                             if np.mod(k,2) == 0:
                                 if np.mod(i+j+k*.5,2) == 0:
-                                    site_species = species[2]
-                                else: site_species = species[1]
+                                    self.set_site_species([i,j,k],species[2])
+                                else: self.set_site_species([i,j,k],species[1])
                             else:
-                                site_species = species[0]
+                                self.set_site_species([i,j,k],species[0])
             else:
                 if species_init == "rand":
                     species_count = 0
@@ -156,9 +156,11 @@ class mc_supercellObj:
                         for i in range(self.i_length):
                             for j in range(self.j_length):
                                 for k in range(self.k_length):
-                                    if np.mod(i*.5+(1+j)*.5+k*.5,2) == 0:
-                                        site_species = species[2]
-                                    else: site_species = species[1]
+                                    if np.mod(k,2) == 0:
+                                        if np.mod(i*.5+(j+1)*.5+k*.5,2) == 0:
+                                            self.set_site_species([i,j,k],species[2])
+                                        else: self.set_site_species([i,j,k],species[1])
+                                    else: self.set_site_species([i,j,k],species[0])
         self.find_neighbors()
 
     def apply_bc(self,i,inc,limit):

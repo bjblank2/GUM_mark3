@@ -218,7 +218,7 @@ def read_j_rules(rule_file):
 
 
 def read_Js(num_Js):
-    js_file = open('../../../../../../../../../../../home/bjblank2/GUM_mark3/output','r')
+    js_file = open('output','r')
     Js = []
     lines = js_file.readlines()
     for i in range(num_Js):
