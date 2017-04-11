@@ -36,7 +36,6 @@ if Cluster_rules_exist is False:
 if J_ruels_exist is False:
     Cp.write_j_rules(j_file)
 
-
 # Read the data and calculate the fit
 BEG_rules = Cp.read_beg_rules(beg_file)
 Cluster_rules = Cp.read_cluster_rules(cluster_file)
@@ -60,28 +59,30 @@ print('#######################\n')
 # Code for running the actual MonteCarlo simulation.
 # First create and initialize an array of atom objects for the simulation
 # then run MonteCarlo.
-temp_data = open('Temp_data','w')
-temp_data.write('Temp  H_avg  mag_avg  mag2_avg  phase_avg  phase2_avg\n')
+temp_data = open('Temp_data','a')
+temp_data.write('size,Temp,passes,H_avg,mimj_avg,mag_avg,absmag_avg,phase_avg,absphase_avg\n')
 temp_data.close()
 
 x_pts = 4 #|
 y_pts = 4 #|- Dimensions of the mc_supercellObj (simulation supercell)
 z_pts = 8 #|
 phase_init = 'mart' # initial phase configuration
-spin_init = 'rand' # initial spin configuration
+spin_init = 'FM' # initial spin configuration
+species_init = 'ordered'
+species_flips = False
 num_passes = 10 # number of cluster/wolf moves done
-num_sub_passes = 20 # number of spin/species flips done per cluster/wolf move
-Temp0 = 200 # initial temperature in K
-Temp_inc = 0 # temperature increase per pass in K
+num_sub_passes = 15 # number of spin/species flips done per cluster/wolf move
+Temp0 = 100 # initial temperature in K
+TempF = 100 # final temperature in K
+Temp_inc = 100 # temperature increase per pass in K
 
 # Initialize an array of atoms with ms.mc_supercellObj(size,species,composition)
 # size is (x,y,z)dimensions, species is types of atoms allowed (0=Ni,1=Mn,2=In)
 # composition is number of each atom (#Ni,#Mn,#In)
-lattice = ms.mc_supercellObj((x_pts,y_pts,z_pts),(0,1,2),[64,42,16],phase_init,spin_init)#(64,48,16))
+lattice = ms.mc_supercellObj((x_pts,y_pts,z_pts),(0,1,2),[32,16,16],phase_init,spin_init,species_init)#(64,48,16))
 #sys.setrecursionlimit(lattice.num_sites+2)
 # To actually run the simulation use
 # mc.run_montecarlo(reference_to_atom_array,number_of_passes,starting_temp, BEG_rules,Cluster_rules,J_rules,plot_figs=TRUE)
 # BEG_rules,Cluster_rules,J_rules are objects that determine when and how the fitted parameters are applied
 print("Beginning MonteCarlo\n")
-#mc.run_WA_MCA(lattice,num_passes,num_sub_passes,Temp0,Temp_inc,Cluster_rules,J_rules,Js,do_figs=True)
-mc2.run_WA_MCA(lattice,num_passes,num_sub_passes,Temp0,Temp_inc,Cluster_rules,J_rules,Js,do_figs=True)
+mc2.run_WA_MCA(lattice,num_passes,num_sub_passes,Temp0,Temp_inc,TempF,Cluster_rules,J_rules,Js,species_flips)
