@@ -105,7 +105,9 @@ class mc_supercellObj:
                             else:
                                 spin = -1
                         else:
-                            spin = 0
+                            if np.mod(i+j+(k+1)/2,2) == 0:
+                                spin = 1
+                            else: spin = -1
                     else: spin = 1
                     if phase_init == 'aust':
                         phase = 0

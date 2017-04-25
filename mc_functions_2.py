@@ -11,6 +11,7 @@ __author__ = 'brian'
 
 import numpy as np
 import mpmath as math
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 import mc_supercell as mcs
 from copy import deepcopy
@@ -313,7 +314,7 @@ def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,temp_inc,tempf,Clus
 
         T += temp_inc
 
-#-# Grows the clusters
+
 def grow_cluster(site,supercell_obj,seed_phase,new_phase,links,Cluster_rules,J_rules,Js,T): # Recursive function
     Kb = .000086173324
     B = 1/(Kb*T)
@@ -376,14 +377,7 @@ def eval_cluster(supercell_obj,seed_phase,new_phase,links,Cluster_rules,J_ruels,
     total_H = 0
     for i in range(len(links)):
         site = links[i]
-        site_phase = supercell_obj.get_site_phase(site)
-        BEG_J,BEG_K = calc_BEG_params(site,supercell_obj,Cluster_rules,J_ruels,Js,T)
-        for neighbor in range(supercell_obj.get_number_of_neighbors(site)):
-            if supercell_obj.get_neighbor_order(site,neighbor) == 1:
-                if supercell_obj.get_neighbor_pos(site,neighbor) in links:
-                    neighbor_phase = supercell_obj.get_neighbor_phase(site,neighbor)
-                    total_H += BEG_J*site_phase*neighbor_phase+BEG_K*(1-site_phase**2)*(1-neighbor_phase**2)
-        total_H += Kb*T*np.log(8)*(site_phase**2)
+        total_H += eval_site_new(site,supercell_obj,Cluster_rules,J_ruels,Js,T)
     return total_H
 
 
@@ -418,3 +412,4 @@ def apply_diffusion_ghost_field(strength,Cluster_rules,J_ruels,Js):
                         if 1 not in Cluster_rules[i].neighbor_atom_list:
                             ghost_Js[i] = ghost_Js[i]+strength
     return ghost_Js
+
