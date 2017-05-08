@@ -106,8 +106,6 @@ def eval_lattice_new(supercell_obj,Cluster_rules,J_rules,Js,T):
                 total_spin2 += supercell_obj.get_site_spin(site)**2/supercell_obj.num_sites
     return total_Ham,total_phase,total_phase2,total_spin,total_spin2
 
-
-
 #-# Randomly change the phase of a specific element in the lattice and return the value of the original phase
 def flip_phase(site,neighbor,supercell_obj):
     old_neighbor_phase = supercell_obj.get_neighbor_phase(site,neighbor)
