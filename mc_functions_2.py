@@ -73,8 +73,10 @@ def calc_BEG_params(site,supercell_obj,Cluster_rules,J_rules,Js,T):
 
 #-# Determine the total energy of the entire lattice and return that energy
 ### COMMENT FROM ELIF: IS THIS THE ENTIRE LATTICE OR IS THIS A GIVEN SITE SPECIFIC CONTRIBUTION TO THE ENERGY??????
-def eval_site_new(site,supercell_obj,Cluster_rules,J_ruels,Js,T):
+def eval_site_new(site,supercell_obj,Cluster_rules,J_ruels,Js,T,mag_field):
     Kb = .000086173324
+    g = 2
+    ub = 5.7883818012*10**(-5) # Bohr Mag
     total_Ham = 0
     site_phase = supercell_obj.get_site_phase(site)
     J,K = calc_BEG_params(site,supercell_obj,Cluster_rules,J_ruels,Js,T)
@@ -83,10 +85,11 @@ def eval_site_new(site,supercell_obj,Cluster_rules,J_ruels,Js,T):
             neighbor_phase = supercell_obj.get_neighbor_phase(site,neighbor)
             total_Ham += J*(site_phase*neighbor_phase)+K*(1-site_phase**2)*(1-neighbor_phase**2)
     total_Ham += Kb*T*np.log(8)*(site_phase**2)
+    total_Ham -= g*ub*mag_field*np.sign(mag_field)*supercell_obj.get_site_spin(site)
     return total_Ham
 
 #-# Determine the total energy of the entire lattice and return that energy
-def eval_lattice_new(supercell_obj,Cluster_rules,J_rules,Js,T):
+def eval_lattice_new(supercell_obj,Cluster_rules,J_rules,Js,T,mag_field):
     total_Ham = 0
     total_phase = 0
     total_phase2 = 0
@@ -99,7 +102,7 @@ def eval_lattice_new(supercell_obj,Cluster_rules,J_rules,Js,T):
         for j in range(supercell_obj.j_length):
             for k in range(supercell_obj.k_length):
                 site = [i,j,k]
-                total_Ham += eval_site_new(site,supercell_obj,Cluster_rules,J_rules,Js,T)
+                total_Ham += eval_site_new(site,supercell_obj,Cluster_rules,J_rules,Js,T,mag_field)
                 total_phase += supercell_obj.get_site_phase(site)/supercell_obj.num_sites
                 total_phase2 += supercell_obj.get_site_phase(site)**2/supercell_obj.num_sites
                 total_spin += supercell_obj.get_site_spin(site)/supercell_obj.num_sites
@@ -178,7 +181,7 @@ def calc_avg_spin(site,supercell_obj):
     return M/count
 
 #-# Runs the Wolf/Mixed Cluster Algorithm
-def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,temp_inc,tempf,Cluster_rules,J_rules,Js,species_flips):
+def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,temp_inc,tempf,mag_field,Cluster_rules,J_rules,Js,species_flips):
     T = temp
     Kb = .000086173324
     inc_down = 0
@@ -186,7 +189,7 @@ def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,temp_inc,tempf,Clus
     inc_not = 0
     M = 0
     ghost_Js = apply_diffusion_ghost_field(2,Cluster_rules,J_rules,Js)
-    H_total,total_phase,total_phase2,total_spin,total_spin2 = eval_lattice_new(supercell_obj,Cluster_rules,J_rules,Js,T)
+    H_total,total_phase,total_phase2,total_spin,total_spin2 = eval_lattice_new(supercell_obj,Cluster_rules,J_rules,Js,T,mag_field)
 
     while T<=tempf:
         print('\nCURRENT TEMP = ',T,'\n')
@@ -200,9 +203,9 @@ def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,temp_inc,tempf,Clus
                     for j in range(supercell_obj.j_length):
                         for k in range(supercell_obj.k_length):
                             site = [i,j,k]
-                            old_Ham = eval_site_new(site,supercell_obj,Cluster_rules,J_rules,Js,T)
+                            old_Ham = eval_site_new(site,supercell_obj,Cluster_rules,J_rules,Js,T,mag_field)
                             old_spin = flip_spin(site,supercell_obj)
-                            new_Ham = eval_site_new(site,supercell_obj,Cluster_rules,J_rules,Js,T)
+                            new_Ham = eval_site_new(site,supercell_obj,Cluster_rules,J_rules,Js,T,mag_field)
                             if new_Ham < old_Ham:
                                 inc_down += 1
                             else:
@@ -229,11 +232,11 @@ def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,temp_inc,tempf,Clus
                                             random_site_not_0 = True
                                         if supercell_obj.get_site_species(random_site) != supercell_obj.get_site_species(site):
                                             species_not_same = True
-                                    old_Ham = eval_site_new(site,supercell_obj,Cluster_rules,J_rules,ghost_Js,T)
-                                    old_Ham += eval_site_new(random_site,supercell_obj,Cluster_rules,J_rules,ghost_Js,T)
+                                    old_Ham = eval_site_new(site,supercell_obj,Cluster_rules,J_rules,ghost_Js,T,mag_field)
+                                    old_Ham += eval_site_new(random_site,supercell_obj,Cluster_rules,J_rules,ghost_Js,T,mag_field)
                                     old_site_species,old_randsite_species = flip_species(site,random_site,supercell_obj)
-                                    new_Ham = eval_site_new(site,supercell_obj,Cluster_rules,J_rules,ghost_Js,T)
-                                    new_Ham += eval_site_new(random_site,supercell_obj,Cluster_rules,J_rules,ghost_Js,T)
+                                    new_Ham = eval_site_new(site,supercell_obj,Cluster_rules,J_rules,ghost_Js,T,mag_field)
+                                    new_Ham += eval_site_new(random_site,supercell_obj,Cluster_rules,J_rules,ghost_Js,T,mag_field)
                                     if new_Ham < old_Ham:
                                         inc_down += 1
                                     else:
@@ -253,7 +256,7 @@ def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,temp_inc,tempf,Clus
             seed =(np.random.randint(0,supercell_obj.i_length),np.random.randint(0,supercell_obj.j_length),np.random.randint(0,supercell_obj.k_length))
             seed_phase = supercell_obj.get_site_phase(seed)
             new_phase = get_new_phase(seed,supercell_obj)
-            grow_cluster(seed,supercell_obj,seed_phase,new_phase,cluster,Cluster_rules,J_rules,Js,T)
+            grow_cluster(seed,supercell_obj,seed_phase,new_phase,cluster,Cluster_rules,J_rules,Js,T,mag_field)
             ### Track size here (print(len(cluster))
             #print('[seed_phase, new_phase] = ',[seed_phase,new_phase])
             print('\tcluster length = ',len(cluster))
@@ -263,9 +266,9 @@ def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,temp_inc,tempf,Clus
                 print('\taccepting Wolff cluster flip')
             else:
                 print('\tenter Mixed Cluster')
-                H_cluster_old = eval_cluster(supercell_obj,seed_phase,new_phase,cluster,Cluster_rules,J_rules,Js,T)
+                H_cluster_old = eval_cluster(supercell_obj,seed_phase,new_phase,cluster,Cluster_rules,J_rules,Js,T,mag_field)
                 flip_cluster(supercell_obj,seed_phase,new_phase,cluster)
-                H_cluster_new = eval_cluster(supercell_obj,seed_phase,new_phase,cluster,Cluster_rules,J_rules,Js,T)
+                H_cluster_new = eval_cluster(supercell_obj,seed_phase,new_phase,cluster,Cluster_rules,J_rules,Js,T,mag_field)
                 print('new Ham = ',H_cluster_new,' ; old Ham = ',H_cluster_old)
                 if H_cluster_new <= H_cluster_old:
                     inc_down += 1
@@ -289,9 +292,9 @@ def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,temp_inc,tempf,Clus
                     for j in range(supercell_obj.j_length):
                         for k in range(supercell_obj.k_length):
                             site = [i,j,k]
-                            old_Ham = eval_site_new(site,supercell_obj,Cluster_rules,J_rules,Js,T)
+                            old_Ham = eval_site_new(site,supercell_obj,Cluster_rules,J_rules,Js,T,mag_field)
                             old_spin = flip_spin(site,supercell_obj)
-                            new_Ham = eval_site_new(site,supercell_obj,Cluster_rules,J_rules,Js,T)
+                            new_Ham = eval_site_new(site,supercell_obj,Cluster_rules,J_rules,Js,T,mag_field)
                             if new_Ham < old_Ham:
                                 inc_down += 1
                             else:
@@ -304,7 +307,7 @@ def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,temp_inc,tempf,Clus
                                     inc_not += 1
                             M += calc_avg_spin(site,supercell_obj)
 
-            H_total,total_phase,total_phase2,total_spin,total_spin2 = eval_lattice_new(supercell_obj,Cluster_rules,J_rules,Js,T)
+            H_total,total_phase,total_phase2,total_spin,total_spin2 = eval_lattice_new(supercell_obj,Cluster_rules,J_rules,Js,T,mag_field)
 
             temp_output = open('Temp_data','a')
             temp_output.write(str(supercell_obj.i_length)+','+str(T)+','+str(passes)+','+str(H_total/supercell_obj.num_sites)+','+str(M/supercell_obj.num_sites)+','+str(total_spin)+','+str(total_spin2)+','+str(total_phase)+','+str(total_phase2)+'\n')
@@ -313,7 +316,7 @@ def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,temp_inc,tempf,Clus
         T += temp_inc
 
 
-def grow_cluster(site,supercell_obj,seed_phase,new_phase,links,Cluster_rules,J_rules,Js,T): # Recursive function
+def grow_cluster(site,supercell_obj,seed_phase,new_phase,links,Cluster_rules,J_rules,Js,T,mag_field): # Recursive function
     Kb = .000086173324
     B = 1/(Kb*T)
     site_phase = supercell_obj.get_site_phase(site)
@@ -331,7 +334,7 @@ def grow_cluster(site,supercell_obj,seed_phase,new_phase,links,Cluster_rules,J_r
                         prob = 1-np.exp(-2*BEG_K)
                         if rand <= prob:
                             new_site = supercell_obj.get_neighbor_pos(site,neighbor)
-                            grow_cluster(new_site,supercell_obj,seed_phase,new_phase,links,Cluster_rules,J_rules,Js,T)
+                            grow_cluster(new_site,supercell_obj,seed_phase,new_phase,links,Cluster_rules,J_rules,Js,T,mag_field)
     # Mixed Cluster Algorithm
     if [seed_phase,new_phase] == [1,0] or [seed_phase,new_phase] == [0,-1]:
         for neighbor in range(supercell_obj.get_number_of_neighbors(site)):
@@ -343,13 +346,13 @@ def grow_cluster(site,supercell_obj,seed_phase,new_phase,links,Cluster_rules,J_r
                             prob = 1-np.exp(-BEG_K-BEG_M/3)
                             if rand < prob:
                                 new_site = supercell_obj.get_neighbor_pos(site,neighbor)
-                                grow_cluster(new_site,supercell_obj,seed_phase,new_phase,links,Cluster_rules,J_rules,Js,T)
+                                grow_cluster(new_site,supercell_obj,seed_phase,new_phase,links,Cluster_rules,J_rules,Js,T,mag_field)
                         else:
                             rand = np.random.random()
                             prob = 1-np.exp(-BEG_K+BEG_M/3)
                             if rand < prob:
                                 new_site = supercell_obj.get_neighbor_pos(site,neighbor)
-                                grow_cluster(new_site,supercell_obj,seed_phase,new_phase,links,Cluster_rules,J_rules,Js,T)
+                                grow_cluster(new_site,supercell_obj,seed_phase,new_phase,links,Cluster_rules,J_rules,Js,T,mag_field)
 
     if [seed_phase,new_phase] == [-1,0] or [seed_phase,new_phase] == [0,1]:
         for neighbor in range(supercell_obj.get_number_of_neighbors(site)):
@@ -361,21 +364,21 @@ def grow_cluster(site,supercell_obj,seed_phase,new_phase,links,Cluster_rules,J_r
                             prob = 1-np.exp(-BEG_K-BEG_M/3)
                             if rand < prob:
                                 new_site = supercell_obj.get_neighbor_pos(site,neighbor)
-                                grow_cluster(new_site,supercell_obj,seed_phase,new_phase,links,Cluster_rules,J_rules,Js,T)
+                                grow_cluster(new_site,supercell_obj,seed_phase,new_phase,links,Cluster_rules,J_rules,Js,T,mag_field)
                         else:
                             rand = np.random.random()
                             prob = 1-np.exp(-BEG_K+BEG_M/3)
                             if rand < prob:
                                 new_site = supercell_obj.get_neighbor_pos(site,neighbor)
-                                grow_cluster(new_site,supercell_obj,seed_phase,new_phase,links,Cluster_rules,J_rules,Js,T)
+                                grow_cluster(new_site,supercell_obj,seed_phase,new_phase,links,Cluster_rules,J_rules,Js,T,mag_field)
 
 #-# Evaluates the total energy of the cluster
-def eval_cluster(supercell_obj,seed_phase,new_phase,links,Cluster_rules,J_ruels,Js,T):
+def eval_cluster(supercell_obj,seed_phase,new_phase,links,Cluster_rules,J_ruels,Js,T,mag_field):
     Kb = .000086173324
     total_H = 0
     for i in range(len(links)):
         site = links[i]
-        total_H += eval_site_new(site,supercell_obj,Cluster_rules,J_ruels,Js,T)
+        total_H += eval_site_new(site,supercell_obj,Cluster_rules,J_ruels,Js,T,mag_field)
     return total_H
 
 

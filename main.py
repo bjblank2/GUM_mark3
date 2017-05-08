@@ -76,6 +76,7 @@ num_sub_passes = 10 # number of spin/species flips done per cluster/wolf move
 Temp0 = 600 # initial temperature in K
 TempF = 950 # final temperature in K
 Temp_inc = 10 # temperature increase per pass in K
+Mag_field = 0
 
 # Initialize an array of atoms with ms.mc_supercellObj(size,species,composition)
 # size is (x,y,z)dimensions, species is types of atoms allowed (0=Ni,1=Mn,2=In)
@@ -89,4 +90,4 @@ lattice = ms.mc_supercellObj((x_pts,y_pts,z_pts),(0,1,2),comp,phase_init,spin_in
 # BEG_rules,Cluster_rules,J_rules are objects that determine when and how the fitted parameters are applied
 
 print("Beginning MonteCarlo\n")
-mc2.run_WA_MCA(lattice,num_passes,num_sub_passes,Temp0,Temp_inc,TempF,Cluster_rules,J_rules,Js,species_flips)
+mc2.run_WA_MCA(lattice,num_passes,num_sub_passes,Temp0,Temp_inc,TempF,Mag_field,Cluster_rules,J_rules,Js,species_flips)
