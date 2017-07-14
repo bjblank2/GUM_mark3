@@ -2,14 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f0cb30b1-c1a1-45ae-b445-2ac89e7935f6" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Fit.png" afterPath="$PROJECT_DIR$/Fit.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/NiFeGa_Data" afterPath="$PROJECT_DIR$/NiFeGa_Data" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Temp_data" afterPath="$PROJECT_DIR$/Temp_data" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/calc_params.py" afterPath="$PROJECT_DIR$/calc_params.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.py" afterPath="$PROJECT_DIR$/main.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mc_supercell.py" afterPath="$PROJECT_DIR$/mc_supercell.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mc_functions_2.py" afterPath="$PROJECT_DIR$/mc_functions_2.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/output" afterPath="$PROJECT_DIR$/output" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test.py" afterPath="$PROJECT_DIR$/test.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="GUM_mark3.iws" />
@@ -34,8 +31,8 @@
       <file leaf-file-name="main.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="2.7866971">
-              <caret line="81" column="11" selection-start-line="81" selection-start-column="11" selection-end-line="81" selection-end-column="11" />
+            <state vertical-scroll-proportion="0.41379312">
+              <caret line="82" column="12" selection-start-line="82" selection-start-column="12" selection-end-line="82" selection-end-column="12" />
               <folding>
                 <element signature="e#21#45#0" expanded="true" />
               </folding>
@@ -43,32 +40,38 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="mc_functions_2.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/mc_functions_2.py">
+      <file leaf-file-name="Cluster_Rules" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Cluster_Rules">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="171.51852">
-              <caret line="86" column="30" selection-start-line="86" selection-start-column="30" selection-end-line="86" selection-end-column="30" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="J_Rules" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/J_Rules">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="84" column="1" selection-start-line="84" selection-start-column="1" selection-end-line="84" selection-end-column="1" />
-              <folding />
-            </state>
+      <file leaf-file-name="3D_plt.png" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/3D_plt.png">
+          <provider selected="true" editor-type-id="images">
+            <state />
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Data" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Data">
+      <file leaf-file-name="mc_supercell.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/mc_supercell.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="71" column="111" selection-start-line="71" selection-start-column="111" selection-end-line="71" selection-end-column="111" />
-              <folding />
+              <caret line="74" column="22" selection-start-line="74" selection-start-column="22" selection-end-line="74" selection-end-column="22" />
+              <folding>
+                <element signature="e#63#824#0" expanded="false" />
+                <element signature="e#125#277#0" expanded="false" />
+                <element signature="e#854#1463#0" expanded="false" />
+                <element signature="e#1701#18243#0" expanded="false" />
+                <element signature="e#2031#6773#0" expanded="false" />
+                <element signature="e#6823#6998#0" expanded="false" />
+                <element signature="e#7038#15703#0" expanded="false" />
+                <element signature="e#18037#18243#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -77,9 +80,8 @@
         <entry file="file://$PROJECT_DIR$/calc_params.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="959" column="19" selection-start-line="959" selection-start-column="5" selection-end-line="959" selection-end-column="19" />
+              <caret line="462" column="34" selection-start-line="462" selection-start-column="34" selection-end-line="462" selection-end-column="34" />
               <folding>
-                <element signature="e#180#198#0" expanded="true" />
                 <element signature="e#509#3790#0" expanded="false" />
                 <element signature="e#3829#4467#0" expanded="false" />
                 <element signature="e#4505#5279#0" expanded="false" />
@@ -96,20 +98,40 @@
                 <element signature="e#17669#18278#0" expanded="false" />
                 <element signature="e#18313#18472#0" expanded="false" />
                 <element signature="e#18501#19224#0" expanded="false" />
-                <element signature="e#19302#20968#0" expanded="false" />
                 <element signature="e#21008#21759#0" expanded="false" />
-                <element signature="e#21884#22515#0" expanded="false" />
-                <element signature="e#22582#24679#0" expanded="false" />
-                <element signature="e#24725#25398#0" expanded="false" />
-                <element signature="e#25479#26894#0" expanded="false" />
-                <element signature="e#26924#27139#0" expanded="false" />
-                <element signature="e#27178#27676#0" expanded="false" />
-                <element signature="e#27749#29640#0" expanded="false" />
-                <element signature="e#29715#32190#0" expanded="false" />
-                <element signature="e#32226#32799#0" expanded="false" />
-                <element signature="e#32831#33092#0" expanded="false" />
-                <element signature="e#33116#33540#0" expanded="false" />
-                <element signature="e#33565#35752#0" expanded="false" />
+                <element signature="e#22805#24902#0" expanded="false" />
+                <element signature="e#24948#25621#0" expanded="false" />
+                <element signature="e#25702#27117#0" expanded="false" />
+                <element signature="e#27147#27362#0" expanded="false" />
+                <element signature="e#27401#27899#0" expanded="false" />
+                <element signature="e#27972#29863#0" expanded="false" />
+                <element signature="e#29938#32413#0" expanded="false" />
+                <element signature="e#32449#33022#0" expanded="false" />
+                <element signature="e#33054#33315#0" expanded="false" />
+                <element signature="e#33339#33763#0" expanded="false" />
+                <element signature="e#33788#35975#0" expanded="false" />
+                <element signature="e#36056#39807#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="mc_functions_2.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/mc_functions_2.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="293" column="12" selection-start-line="293" selection-start-column="12" selection-end-line="293" selection-end-column="12" />
+              <folding>
+                <element signature="e#5032#5710#0" expanded="false" />
+                <element signature="e#5866#7281#0" expanded="false" />
+                <element signature="e#7442#8027#0" expanded="false" />
+                <element signature="e#8194#8460#0" expanded="false" />
+                <element signature="e#8609#9030#0" expanded="false" />
+                <element signature="e#9114#9499#0" expanded="false" />
+                <element signature="e#9583#9893#0" expanded="false" />
+                <element signature="e#22034#22233#0" expanded="false" />
+                <element signature="e#22322#23187#0" expanded="false" />
+                <element signature="e#23262#23725#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -119,7 +141,7 @@
         <entry file="file://$PROJECT_DIR$/Temp_data">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="610" column="59" selection-start-line="610" selection-start-column="59" selection-end-line="610" selection-end-column="59" />
+              <caret line="762" column="0" selection-start-line="762" selection-start-column="0" selection-end-line="762" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -152,14 +174,14 @@
         <option value="$PROJECT_DIR$/BEG_rules" />
         <option value="$PROJECT_DIR$/Data" />
         <option value="$PROJECT_DIR$/mc_functions.py" />
+        <option value="$PROJECT_DIR$/test.py" />
+        <option value="$PROJECT_DIR$/NiFeGa_Data" />
+        <option value="$PROJECT_DIR$/output" />
         <option value="$PROJECT_DIR$/J_Rules" />
         <option value="$PROJECT_DIR$/Cluster_Rules" />
-        <option value="$PROJECT_DIR$/mc_supercell.py" />
-        <option value="$PROJECT_DIR$/test.py" />
-        <option value="$PROJECT_DIR$/output" />
-        <option value="$PROJECT_DIR$/NiFeGa_Data" />
-        <option value="$PROJECT_DIR$/calc_params.py" />
         <option value="$PROJECT_DIR$/mc_functions_2.py" />
+        <option value="$PROJECT_DIR$/mc_supercell.py" />
+        <option value="$PROJECT_DIR$/calc_params.py" />
         <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/Temp_data" />
       </list>
@@ -169,10 +191,9 @@
     <order />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="3" />
-    <option name="y" value="23" />
+    <option name="y" value="58" />
     <option name="width" value="1280" />
-    <option name="height" value="714" />
+    <option name="height" value="712" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -197,6 +218,7 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -218,7 +240,6 @@
         </subPane>
       </pane>
       <pane id="Scope" />
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -409,27 +430,27 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="3" y="23" width="1280" height="714" extended-state="6" />
-    <editor active="false" />
+    <frame x="0" y="58" width="1280" height="712" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32678387" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.327818" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2494043" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22160445" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22160445" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33118972" sideWeight="0.49722" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3442623" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2540193" sideWeight="0.8824464" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3451613" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2532258" sideWeight="0.8824464" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39423078" sideWeight="0.50277996" order="8" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32108626" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32096773" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3267974" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -681,11 +702,6 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/3D_plt.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/BEG.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33252427">
@@ -697,13 +713,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33252427">
           <caret line="21" column="47" selection-start-line="21" selection-start-column="46" selection-end-line="21" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33252427">
-          <caret line="16" column="92" selection-start-line="16" selection-start-column="91" selection-end-line="16" selection-end-column="92" />
         </state>
       </provider>
     </entry>
@@ -730,14 +739,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="106" column="42" selection-start-line="106" selection-start-column="28" selection-end-line="106" selection-end-column="42" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/mc_supercell.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33170733">
-          <caret line="72" column="15" selection-start-line="72" selection-start-column="13" selection-end-line="72" selection-end-column="15" />
         </state>
       </provider>
     </entry>
@@ -745,7 +746,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="600" column="8" selection-start-line="600" selection-start-column="8" selection-end-line="600" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -753,23 +753,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="24" column="44" selection-start-line="24" selection-start-column="43" selection-end-line="24" selection-end-column="44" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Data">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="71" column="111" selection-start-line="71" selection-start-column="111" selection-end-line="71" selection-end-column="111" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/output">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="110" column="0" selection-start-line="109" selection-start-column="55" selection-end-line="110" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -777,40 +760,96 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="220" column="74" selection-start-line="220" selection-start-column="74" selection-end-line="220" selection-end-column="74" />
-          <folding />
         </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Data">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="71" column="111" selection-start-line="71" selection-start-column="111" selection-end-line="71" selection-end-column="111" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Fit.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/J_Rules">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="84" column="1" selection-start-line="84" selection-start-column="1" selection-end-line="84" selection-end-column="1" />
-          <folding />
+          <caret line="62" column="0" selection-start-line="62" selection-start-column="0" selection-end-line="62" selection-end-column="0" />
         </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.03440367">
+          <caret line="16" column="92" selection-start-line="16" selection-start-column="91" selection-end-line="16" selection-end-column="92" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/3D_plt.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Cluster_Rules">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="71" column="0" selection-start-line="71" selection-start-column="0" selection-end-line="71" selection-end-column="0" />
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mc_supercell.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="74" column="22" selection-start-line="74" selection-start-column="22" selection-end-line="74" selection-end-column="22" />
+          <folding>
+            <element signature="e#63#824#0" expanded="false" />
+            <element signature="e#125#277#0" expanded="false" />
+            <element signature="e#854#1463#0" expanded="false" />
+            <element signature="e#1701#18243#0" expanded="false" />
+            <element signature="e#2031#6773#0" expanded="false" />
+            <element signature="e#6823#6998#0" expanded="false" />
+            <element signature="e#7038#15703#0" expanded="false" />
+            <element signature="e#18037#18243#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/output">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="107" column="28" selection-start-line="0" selection-start-column="0" selection-end-line="110" selection-end-column="0" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/mc_functions_2.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="171.51852">
-          <caret line="86" column="30" selection-start-line="86" selection-start-column="30" selection-end-line="86" selection-end-column="30" />
-          <folding />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="293" column="12" selection-start-line="293" selection-start-column="12" selection-end-line="293" selection-end-column="12" />
+          <folding>
+            <element signature="e#5032#5710#0" expanded="false" />
+            <element signature="e#5866#7281#0" expanded="false" />
+            <element signature="e#7442#8027#0" expanded="false" />
+            <element signature="e#8194#8460#0" expanded="false" />
+            <element signature="e#8609#9030#0" expanded="false" />
+            <element signature="e#9114#9499#0" expanded="false" />
+            <element signature="e#9583#9893#0" expanded="false" />
+            <element signature="e#22034#22233#0" expanded="false" />
+            <element signature="e#22322#23187#0" expanded="false" />
+            <element signature="e#23262#23725#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/calc_params.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="959" column="19" selection-start-line="959" selection-start-column="5" selection-end-line="959" selection-end-column="19" />
+          <caret line="462" column="34" selection-start-line="462" selection-start-column="34" selection-end-line="462" selection-end-column="34" />
           <folding>
-            <element signature="e#180#198#0" expanded="true" />
             <element signature="e#509#3790#0" expanded="false" />
             <element signature="e#3829#4467#0" expanded="false" />
             <element signature="e#4505#5279#0" expanded="false" />
@@ -827,20 +866,19 @@
             <element signature="e#17669#18278#0" expanded="false" />
             <element signature="e#18313#18472#0" expanded="false" />
             <element signature="e#18501#19224#0" expanded="false" />
-            <element signature="e#19302#20968#0" expanded="false" />
             <element signature="e#21008#21759#0" expanded="false" />
-            <element signature="e#21884#22515#0" expanded="false" />
-            <element signature="e#22582#24679#0" expanded="false" />
-            <element signature="e#24725#25398#0" expanded="false" />
-            <element signature="e#25479#26894#0" expanded="false" />
-            <element signature="e#26924#27139#0" expanded="false" />
-            <element signature="e#27178#27676#0" expanded="false" />
-            <element signature="e#27749#29640#0" expanded="false" />
-            <element signature="e#29715#32190#0" expanded="false" />
-            <element signature="e#32226#32799#0" expanded="false" />
-            <element signature="e#32831#33092#0" expanded="false" />
-            <element signature="e#33116#33540#0" expanded="false" />
-            <element signature="e#33565#35752#0" expanded="false" />
+            <element signature="e#22805#24902#0" expanded="false" />
+            <element signature="e#24948#25621#0" expanded="false" />
+            <element signature="e#25702#27117#0" expanded="false" />
+            <element signature="e#27147#27362#0" expanded="false" />
+            <element signature="e#27401#27899#0" expanded="false" />
+            <element signature="e#27972#29863#0" expanded="false" />
+            <element signature="e#29938#32413#0" expanded="false" />
+            <element signature="e#32449#33022#0" expanded="false" />
+            <element signature="e#33054#33315#0" expanded="false" />
+            <element signature="e#33339#33763#0" expanded="false" />
+            <element signature="e#33788#35975#0" expanded="false" />
+            <element signature="e#36056#39807#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -848,15 +886,15 @@
     <entry file="file://$PROJECT_DIR$/Temp_data">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="610" column="59" selection-start-line="610" selection-start-column="59" selection-end-line="610" selection-end-column="59" />
+          <caret line="762" column="0" selection-start-line="762" selection-start-column="0" selection-end-line="762" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="2.7866971">
-          <caret line="81" column="11" selection-start-line="81" selection-start-column="11" selection-end-line="81" selection-end-column="11" />
+        <state vertical-scroll-proportion="0.41379312">
+          <caret line="82" column="12" selection-start-line="82" selection-start-column="12" selection-end-line="82" selection-end-column="12" />
           <folding>
             <element signature="e#21#45#0" expanded="true" />
           </folding>

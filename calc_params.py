@@ -517,22 +517,32 @@ def CV_score2(m_structure_list):
 
 
 # Calculates the fitting paramiters using a ridge regression with autocorrelation
-def ridge_simple(m_structure_list):
+def ridge_simple(m_structure_list,alpha):
     a = []
     b = []
-    alphas = [.0000000000001,.00000000001,.000000001,.0000001,.00001,.001,.1,1,10,20,30,40,50,60,80,100,1000,10000]
     for i in range(len(m_structure_list)):
         mat = m_structure_list[i]
         if mat.mag_phase != "pera" and mat.phase_name != "pm":
             # if mat.phase_name != "pm" and mat.enrg <= limit:
             row = mat.BEG_sums + mat.Cluster_sums + mat.J_sums
+            for j in range(len(row)):
+                row[j] *= mat.weight
             a.append(row)
-            b.append(mat.enrg)
-    alpha,min_error = calc_alpha(a,b,alphas)
-    ridge_fit = linear_model.Ridge(alpha=alpha,fit_intercept=False)
+            b.append(mat.enrg * mat.weight)
+    a = np.matrix(a)
+    b = np.transpose(np.matrix(b))
+    ridge_fit = linear_model.RidgeCV(alphas=[.01,.05,.1,.15,.2,.25,.3,1,2,3,4,5,10],fit_intercept=False, )
     ridge_fit.fit(a,b)
     Js = ridge_fit.coef_
-    return Js
+    JS_list = []
+    Js_0 = Js[0]
+    for i in range(len(Js_0)):
+        Js_0
+        JS_list.append(Js_0[i])
+    #print(Js)
+    #print(ridge_fit.predict(a))
+    print(ridge_fit.intercept_)
+    return JS_list
 
 
 def ridge_optimized_fit(m_structure_list,a_min,a_max,step):
