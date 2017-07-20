@@ -51,6 +51,7 @@ else:
     Cp.plot_data3(M_structures,BEG_rules,Cluster_rules,J_rules,Js,200)
 print('#######################\n')
 #print(Cp.CV_score(Js,M_structures))
+Cp.CV_score(M_structures,BEG_rules,Cluster_rules,J_rules)
 #print(Cp.CV_score2(M_structures))
 print('#######################\n')
 #print('RMS Error')
@@ -96,4 +97,4 @@ lattice = ms.mc_supercellObj((x_pts,y_pts,z_pts),(0,1,2),comp,phase_init,spin_in
 # BEG_rules,Cluster_rules,J_rules are objects that determine when and how the fitted parameters are applied
 
 print("Beginning MonteCarlo\n")
-mc2.run_WA_MCA(lattice,num_passes,num_sub_passes,Temp0,Temp_inc,TempF,Mag_field,Cluster_rules,J_rules,Js,species_flips)
+#mc2.run_WA_MCA(lattice,num_passes,num_sub_passes,Temp0,Temp_inc,TempF,Mag_field,Cluster_rules,J_rules,Js,species_flips)
