@@ -401,7 +401,7 @@ def calc_RMS_error():
     for i in range(len(lines)):
         line = lines[i]
         line = line.split()
-        if 'pm' in line or "pera" in line or 'aust' in line:
+        if 'pm' in line or "pera" in line:
             flag2 = False
         else:
             flag2 = True
@@ -429,7 +429,7 @@ def calc_alpha(a,b,alphas):
     return alphas[index], np.min(errors)
 
 
-def looCV2(a,b):
+def looCV2(a,b,alphas):
     test_errors = []
     alphas = [0.1]
     for i in range(len(b)):
@@ -444,15 +444,18 @@ def looCV2(a,b):
             else:
                 a_test = a[j]
                 b_test = b[j]
-        ridge_fit = linear_model.RidgeCV(alphas=alphas,fit_intercept=False)
-        ridge_fit.fit(a_loo,b_loo)
-        Js = ridge_fit.coef_
-        print(ridge_fit.alpha_)
+        Js = ridge_cv(a_loo,b_loo,alphas)
         prediction = 0
         for j in range(len(Js)):
             prediction += Js[j]*a_test[j]
         test_errors.append((prediction-b_test)**2)
     rms_test_error = np.average(test_errors)**.5
+    cv_var_list = []
+    mean = np.average(test_errors)**.5
+    for i in range(len(test_errors)):
+        cv_var_list.append((test_errors[i]**.5-mean)**2)
+    cv_var = np.average(cv_var_list)
+    print('variance: '+ str(cv_var))
     return rms_test_error
 
 
@@ -482,17 +485,17 @@ def looCV(a,b,alpha):
     return rms_test_error
 
 
-def CV_score(m_structure_list, BEG_rules, Cluster_rules, J_rules):
+def CV_score(m_structure_list, BEG_rules, Cluster_rules, J_rules,alphas):
     a = []
     b = []
     for i in range(len(m_structure_list)):
         mat = m_structure_list[i]
-        if mat.mag_phase != "pera" and mat.phase_name != "pm" and mat.phase_name != 'aust':
+        if mat.mag_phase != "pera" and mat.phase_name != "pm":
             # if mat.phase_name != "pm" and mat.enrg <= limit:
             row = mat.BEG_sums + mat.Cluster_sums + mat.J_sums
             a.append(row)
             b.append(mat.enrg)
-    CV = looCV2(a,b)
+    CV = looCV2(a,b,alphas)
     rms = calc_RMS_error()
     print([CV,rms])
     return
@@ -526,7 +529,7 @@ def ridge_simple(m_structure_list,alpha):
     b = []
     for i in range(len(m_structure_list)):
         mat = m_structure_list[i]
-        if mat.mag_phase != "pera" and mat.phase_name != "pm" and mat.phase_name != "aust":
+        if mat.mag_phase != "pera" and mat.phase_name != "pm":
             # if mat.phase_name != "pm" and mat.enrg <= limit:
             row = mat.BEG_sums + mat.Cluster_sums + mat.J_sums
             for j in range(len(row)):
@@ -535,18 +538,92 @@ def ridge_simple(m_structure_list,alpha):
             b.append(mat.enrg * mat.weight)
     a = np.matrix(a)
     b = np.transpose(np.matrix(b))
-    ridge_fit = linear_model.RidgeCV(alphas=[0.0000001],fit_intercept=False, )
+    ridge_fit = linear_model.RidgeCV(alphas=[0.0000001],fit_intercept=False)
     ridge_fit.fit(a,b)
     Js = ridge_fit.coef_
     JS_list = []
     Js_0 = Js[0]
     for i in range(len(Js_0)):
-        Js_0
         JS_list.append(Js_0[i])
     #print(Js)
     #print(ridge_fit.predict(a))
     print(ridge_fit.intercept_)
     return JS_list
+
+
+def ridgeFit(m_structure_list,beg_list,clusters_list,j_list,alphas):
+    a = []
+    b = []
+    for i in range(len(m_structure_list)):
+        mat = m_structure_list[i]
+        if mat.mag_phase != "pera" and mat.phase_name != "pm":
+            # if mat.phase_name != "pm" and mat.enrg <= limit:
+            row = mat.BEG_sums + mat.Cluster_sums + mat.J_sums
+            for j in range(len(row)):
+                row[j] *= mat.weight
+            a.append(row)
+            b.append(mat.enrg * mat.weight)
+    a = np.matrix(a)
+    b = np.transpose(np.matrix(b))
+    best_Js = []
+    best_alpha = 0
+    min_rms_error = 100000
+    for i in range(len(alphas)):
+        ridge_fit = linear_model.RidgeCV(alphas = [alphas[i]],fit_intercept=False, )
+        ridge_fit.fit(a,b)
+        Js = ridge_fit.coef_
+        Js_list = Js[0]
+        new_enrg_list = []
+        j_size,k_size = np.shape(a)
+        for j in range(j_size):
+            new_enrg = 0
+            for k in range(k_size):
+                new_enrg += a[j,k]*Js_list[k]
+            new_enrg_list.append(new_enrg)
+        # calc rms error
+        rms_error = 0
+        for j in range(len(b)):
+            rms_error += (b[j]-new_enrg_list[j])**2
+        rms_error = rms_error/len(b)
+        rms_error = float(rms_error)**(.5)
+        if rms_error < min_rms_error:
+            min_rms_error = rms_error
+            best_alpha = alphas[i]
+            best_Js = Js_list
+    print("regularization parameter: "+ str(best_alpha))
+    return best_Js
+
+
+def ridge_cv(a,b,alphas):
+    a = np.matrix(a)
+    b = np.transpose(np.matrix(b))
+    best_Js = []
+    best_alpha = 0
+    min_rms_error = 100000
+    for i in range(len(alphas)):
+        ridge_fit = linear_model.RidgeCV(alphas = [alphas[i]],fit_intercept=False, )
+        ridge_fit.fit(a,b)
+        Js = ridge_fit.coef_
+        Js_list = Js[0]
+        new_enrg_list = []
+        j_size,k_size = np.shape(a)
+        for j in range(j_size):
+            new_enrg = 0
+            for k in range(k_size):
+                new_enrg += a[j,k]*Js_list[k]
+            new_enrg_list.append(new_enrg)
+        # calc rms error
+        rms_error = 0
+        for j in range(len(b)):
+            rms_error += (b[j]-new_enrg_list[j])**2
+        rms_error = rms_error/len(b)
+        rms_error = float(rms_error)**(.5)
+        if rms_error < min_rms_error:
+            min_rms_error = rms_error
+            best_alpha = alphas[i]
+            best_Js = Js_list
+    #print("regularization parameter: "+ str(best_alpha))
+    return best_Js
 
 
 def ridge_optimized_fit(m_structure_list,a_min,a_max,step):

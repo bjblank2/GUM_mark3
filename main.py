@@ -20,6 +20,8 @@ cluster_file = './Cluster_Rules'
 j_file = './J_Rules'
 num_comps = 3
 num_species = 3
+#alphas = [.000001,.00001,.001,.01,.05,.075,.1,.25,.5,1,5,10,100,1000]
+alphas = [.0001,.0005,.0075,.001,.00125,.0025,.00375,.005,.01,.075,.1,.5,1,5,10,100]
 # Determine if rules and structure data is defined
 Data_file_exists = True
 BEG_file_exists = True
@@ -45,13 +47,13 @@ if Js_exist == True:
 else:
     M_structures = Cp.read_m_structure_data(data_file, num_species, len(BEG_rules), len(Cluster_rules), len(J_rules))
     Cp.calculate_sums(M_structures, BEG_rules, Cluster_rules, J_rules)
-    Js = Cp.ridge_simple(M_structures,1)
+    Js = Cp.ridgeFit(M_structures,BEG_rules,Cluster_rules,J_rules,alphas)
     Cp.write_data(M_structures, 200, Js)
     Cp.write_output(M_structures, BEG_rules, Cluster_rules, J_rules, Js, 200)
     Cp.plot_data3(M_structures,BEG_rules,Cluster_rules,J_rules,Js,200)
 print('#######################\n')
 #print(Cp.CV_score(Js,M_structures))
-Cp.CV_score(M_structures,BEG_rules,Cluster_rules,J_rules)
+Cp.CV_score(M_structures,BEG_rules,Cluster_rules,J_rules,alphas)
 #print(Cp.CV_score2(M_structures))
 print('#######################\n')
 #print('RMS Error')

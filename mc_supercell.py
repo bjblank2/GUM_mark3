@@ -140,7 +140,6 @@ class mc_supercellObj:
                             else:
                                 self.set_site_species([i,j,k],species[0])
             else:
-                print("is awesome")
                 if species_init == "rand":
                     species_count = 0
                     rand_index_list = []
