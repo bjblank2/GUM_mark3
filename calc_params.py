@@ -1018,6 +1018,11 @@ def plot_data3(M_structures, beg_list, clusters_list, j_list, Js, limit):
                 x = 1.5
                 x2_itter += .08
                 x_itter = x2_itter
+
+            if int(M_structures[i].composition[1]) == 7:################################################################
+                x = 2.5
+                x4_itter += .08
+                x_itter = x4_itter
             if int(M_structures[i].composition[1]) == 6:
                 x = 4.5
                 x4_itter += .08

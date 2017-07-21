@@ -13,7 +13,7 @@ import sys
 # structures and finally write the final parameters to the
 # the "Js" list
 
-root_dir = '/Users/brian/Downloads/8_4_4_/'
+root_dir = '/Users/brian/Downloads/Mart/'
 data_file = './NiMnIn_Data'
 beg_file = './BEG_rules'
 cluster_file = './Cluster_Rules'
