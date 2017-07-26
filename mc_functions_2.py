@@ -413,3 +413,4 @@ def apply_diffusion_ghost_field(strength,Cluster_rules,J_ruels,Js):
                         if 1 not in Cluster_rules[i].neighbor_atom_list:
                             ghost_Js[i] = ghost_Js[i]+strength
     return ghost_Js
+

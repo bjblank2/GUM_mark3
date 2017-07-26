@@ -1,64 +1,103 @@
-__author__ = 'brian'
+#
+# fig = plt.figure(5)
+#                 ax = fig.add_subplot(111, projection='3d')
+#                 xs = []
+#                 ys = []
+#                 zs = []
+#                 cs = []
+#                 ms = []
+#                 us = []
+#                 vs = []
+#                 ws = []
+#                 ws2 = []
+#                 for i in range(supercell_obj.i_length):
+#                     for j in range(supercell_obj.j_length):
+#                         for k in range(supercell_obj.k_length):
+#                             if np.mod(k,2) == 0:
+#                                 offset = 0
+#                             else:
+#                                 offset = .5
+#                             site = [i,j,k]
+#                             pos = supercell_obj.get_site_pos(site)
+#                             xs.append(pos[0]+offset)
+#                             ys.append(pos[1]+offset)
+#                             zs.append(pos[2]*.5)
+#                             us.append(0)
+#                             vs.append(0)
+#                             ws2.append(supercell_obj.get_site_spin(site))
+#                             ws.append(supercell_obj.get_site_phase(site))
+#                             if supercell_obj.get_site_species(site) == 0:
+#                                 cs.append('g')
+#                             if supercell_obj.get_site_species(site) == 1:
+#                                 cs.append('r')
+#                             if supercell_obj.get_site_species(site) == 2:
+#                                 cs.append('b')
+#                             if supercell_obj.get_site_pos(site) in cluster:
+#                                 ms.append('s')
+#                             else: ms.append('o')
+#                 for i in range(supercell_obj.num_sites):
+#                     ax.quiver(xs[i],ys[i],zs[i],us[i],vs[i],ws[i],pivot='middle',length=.5,color='b')
+#                     ax.quiver(xs[i],ys[i],zs[i],us[i],vs[i],ws2[i],pivot='middle',length=.25,color='c')
+#                     ax.scatter(xs[i],ys[i],zs[i],c=cs[i],marker=ms[i],s = 50)
+#                 plt.show()
 
 
-class AtomObj:
-    def __init__(self, index, species_list, mag, pos, c_index=None):
-        self.atom_index = index
-        self.species = 0
-        self.set_species(index, species_list)
-        self.set_spin(mag)
-        self.set_pos(pos[0], pos[1], pos[2])
-        if c_index is not None:
-            self.rotate(c_index)
 
-    def set_spin(self, mag):
-        if self.species == 0:
-            if abs(round(mag, 2)) >= .02:
-                self.spin = round(abs(mag) / mag, 5)
-            else:
-                self.spin = 0
-        if self.species == 1:
-            if abs(round(mag, 2)) >= .7:
-                self.spin = round(abs(mag) / mag, 5)
-            else:
-                self.spin = 0
-        if self.species == 2:
-            self.spin = 0
 
-    def set_pos(self, a_pos, b_pos, c_pos):
-        if a_pos >= .2 and a_pos <= .3:
-            a_pos = .25
-        if a_pos >= .7 and a_pos <= .8:
-            a_pos = .75
-        if b_pos >= .2 and b_pos <= .3:
-            b_pos = .25
-        if b_pos >= .7 and b_pos <= .8:
-            b_pos = .75
-        if c_pos >= .2 and c_pos <= .3:
-            c_pos = .25
-        if c_pos >= .7 and c_pos <= .8:
-            c_pos = .75
-        self.a_pos = a_pos
-        self.b_pos = b_pos
-        self.c_pos = c_pos
 
-    def rotate(self, cindex):
-        a_pos = self.a_pos
-        b_pos = self.b_pos
-        c_pos = self.c_pos
-        pos = [a_pos, b_pos, c_pos]
-        C = pos[cindex]
-        pos[cindex] = pos[2]
-        pos[2] = C
-        self.a_pos = pos[0]
-        self.b_pos = pos[1]
-        self.c_pos = pos[2]
 
-    def set_species(self, index, species_list):
-        species_index = 0
-        species_index_old = 0
-        for i in range(len(species_list)):
-            species_index += species_list[i]
-            if index < species_index and index >= species_index_old:
-                self.species = i
-            species_index_old = species_index
+# def eval_site_new(site,supercell_obj,Cluster_rules,J_ruels,Js,T,B_ext):
+#     Kb = .000086173324
+#     uB = .000057883818012 #5.7883818012(26)×10−5 eV/Tesla
+#     g = 2
+#     total_Ham = 0
+#     site_phase = supercell_obj.get_site_phase(site)
+#     J,K = calc_BEG_params(site,supercell_obj,Cluster_rules,J_ruels,Js,T)
+#     for neighbor in range(supercell_obj.get_number_of_neighbors(site)):
+#         if supercell_obj.get_neighbor_order(site,neighbor) == 1:
+#             neighbor_phase = supercell_obj.get_neighbor_phase(site,neighbor)
+#             total_Ham += J*(site_phase*neighbor_phase)+K*(1-site_phase**2)*(1-neighbor_phase**2)
+#     total_Ham += Kb*T*np.log(8)*(site_phase**2)
+#     total_Ham += -g*uB*B_ext*supercell_obj.get_site_spin(site)*1
+#     return total_Ham
+
+#
+# def eval_cluster(supercell_obj,seed_phase,new_phase,links,Cluster_rules,J_ruels,Js,T):
+#     Kb = .000086173324
+#     total_H = 0
+#     total_H2 = 0
+#     total_H3 = 0
+#     total_H4 = 0
+#     count = 0
+#     count2 = 0
+#     count3 = 0
+#     for i in range(len(links)):
+#         site = links[i]
+#         site_phase = supercell_obj.get_site_phase(site)
+#         J,K = calc_BEG_params(site,supercell_obj,Cluster_rules,J_ruels,Js,T)
+#         for neighbor in range(supercell_obj.get_number_of_neighbors(site)):
+#             if supercell_obj.get_neighbor_order(site,neighbor) == 1:
+#                 if supercell_obj.get_neighbor_pos(site,neighbor) in links:
+#                     count += 1
+#                     neighbor_phase = supercell_obj.get_neighbor_phase(site,neighbor)
+#                     total_H += J*(site_phase*neighbor_phase)+K*(1-site_phase**2)*(1-neighbor_phase**2)
+#         total_H += Kb*T*np.log(8)*(site_phase**2)
+#
+#         for neighbor in range(supercell_obj.get_number_of_neighbors(site)):
+#             if supercell_obj.get_neighbor_order(site,neighbor) == 1:
+#                 count2 += 1
+#                 neighbor_phase = supercell_obj.get_neighbor_phase(site,neighbor)
+#                 total_H2 += J*(site_phase*neighbor_phase)+K*(1-site_phase**2)*(1-neighbor_phase**2)
+#         total_H2 += Kb*T*np.log(8)*(site_phase**2)
+#
+#         for neighbor in range(supercell_obj.get_number_of_neighbors(site)):
+#             if supercell_obj.get_neighbor_order(site,neighbor) == 1:
+#                 if supercell_obj.get_neighbor_pos(site,neighbor) not in links:
+#                     count3 += 1
+#                     neighbor_phase = supercell_obj.get_neighbor_phase(site,neighbor)
+#                     total_H3 += J*(site_phase*neighbor_phase)+K*(1-site_phase**2)*(1-neighbor_phase**2)
+#
+#         total_H4 += Kb*T*np.log(8)*(site_phase**2)
+#
+#     print([[total_H,total_H2,total_H3],[count,count2,count3],[total_H4]])
+#     return total_H
