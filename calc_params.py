@@ -454,7 +454,7 @@ def looCV2(a,b,alphas):
     for i in range(len(test_errors)):
         cv_var_list.append((test_errors[i]**.5-mean)**2)
     cv_var = np.average(cv_var_list)
-    print('Variance: '+ str(cv_var))
+    print('variance: '+ str(cv_var))
     return rms_test_error
 
 
@@ -496,8 +496,7 @@ def CV_score(m_structure_list, BEG_rules, Cluster_rules, J_rules,alphas):
             b.append(mat.enrg)
     CV = looCV2(a,b,alphas)
     rms = calc_RMS_error()
-    print("Cross Validation: "+ str(CV))
-    print("RMS Error: "+ str(rms))
+    print([CV,rms])
     return
 =======
             energies.append(m_structure_list[i].enrg)
@@ -587,10 +586,14 @@ def ridge_simple(m_structure_list,alpha):
     a = np.matrix(a)
     b = np.transpose(np.matrix(b))
 <<<<<<< HEAD
+<<<<<<< HEAD
     ridge_fit = linear_model.RidgeCV(alphas=[0.001],fit_intercept=False)
 =======
     ridge_fit = linear_model.RidgeCV(alphas=[.01,.05,.1,.15,.2,.25,.3,1,2,3,4,5,10],fit_intercept=False, )
 >>>>>>> parent of 5d63795... added LOO CV
+=======
+    ridge_fit = linear_model.RidgeCV(alphas=[0.0000001],fit_intercept=False)
+>>>>>>> parent of cebda8d... trying to figure out why Tc changed
     ridge_fit.fit(a,b)
     Js = ridge_fit.coef_
     JS_list = []
@@ -604,6 +607,7 @@ def ridge_simple(m_structure_list,alpha):
     return JS_list
 
 
+<<<<<<< HEAD
 def ridge_simple_ORIG(m_structure_list,alpha):
     a = []
     b = []
@@ -635,6 +639,8 @@ def ridge_simple_ORIG(m_structure_list,alpha):
 <<<<<<< HEAD
 
 
+=======
+>>>>>>> parent of cebda8d... trying to figure out why Tc changed
 def ridgeFit(m_structure_list,beg_list,clusters_list,j_list,alphas):
     a = []
     b = []
