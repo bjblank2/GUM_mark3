@@ -455,7 +455,7 @@ def looCV2(a,b,alphas):
     for i in range(len(test_errors)):
         cv_var_list.append((test_errors[i]**.5-mean)**2)
     cv_var = np.average(cv_var_list)
-    print('variance: '+ str(cv_var))
+    print('Variance: '+ str(cv_var))
     return rms_test_error
 
 
@@ -497,7 +497,8 @@ def CV_score(m_structure_list, BEG_rules, Cluster_rules, J_rules,alphas):
             b.append(mat.enrg)
     CV = looCV2(a,b,alphas)
     rms = calc_RMS_error()
-    print([CV,rms])
+    print("Cross Validation: "+ str(CV))
+    print("RMS Error: "+ str(rms))
     return
 
 
@@ -538,12 +539,40 @@ def ridge_simple(m_structure_list,alpha):
             b.append(mat.enrg * mat.weight)
     a = np.matrix(a)
     b = np.transpose(np.matrix(b))
-    ridge_fit = linear_model.RidgeCV(alphas=[0.0000001],fit_intercept=False)
+    ridge_fit = linear_model.RidgeCV(alphas=[0.001],fit_intercept=False)
     ridge_fit.fit(a,b)
     Js = ridge_fit.coef_
     JS_list = []
     Js_0 = Js[0]
     for i in range(len(Js_0)):
+        JS_list.append(Js_0[i])
+    #print(Js)
+    #print(ridge_fit.predict(a))
+    print(ridge_fit.intercept_)
+    return JS_list
+
+
+def ridge_simple_ORIG(m_structure_list,alpha):
+    a = []
+    b = []
+    for i in range(len(m_structure_list)):
+        mat = m_structure_list[i]
+        if mat.mag_phase != "pera" and mat.phase_name != "pm":
+            # if mat.phase_name != "pm" and mat.enrg <= limit:
+            row = mat.BEG_sums + mat.Cluster_sums + mat.J_sums
+            for j in range(len(row)):
+                row[j] *= mat.weight
+            a.append(row)
+            b.append(mat.enrg * mat.weight)
+    a = np.matrix(a)
+    b = np.transpose(np.matrix(b))
+    ridge_fit = linear_model.RidgeCV(alphas=[.01,.05,.1,.15,.2,.25,.3,1,2,3,4,5,10],fit_intercept=False, )
+    ridge_fit.fit(a,b)
+    Js = ridge_fit.coef_
+    JS_list = []
+    Js_0 = Js[0]
+    for i in range(len(Js_0)):
+        Js_0
         JS_list.append(Js_0[i])
     #print(Js)
     #print(ridge_fit.predict(a))

@@ -48,10 +48,12 @@ else:
     M_structures = Cp.read_m_structure_data(data_file, num_species, len(BEG_rules), len(Cluster_rules), len(J_rules))
     Cp.calculate_sums(M_structures, BEG_rules, Cluster_rules, J_rules)
     Js = Cp.ridgeFit(M_structures,BEG_rules,Cluster_rules,J_rules,alphas)
+    #Js = Cp.ridge_simple_ORIG(M_structures,1)
+    #Js = Cp.ridge_simple(M_structures,1)
     Cp.write_data(M_structures, 200, Js)
     Cp.write_output(M_structures, BEG_rules, Cluster_rules, J_rules, Js, 200)
     Cp.plot_data3(M_structures,BEG_rules,Cluster_rules,J_rules,Js,200)
-print('#######################\n')
+print('#######################')
 #print(Cp.CV_score(Js,M_structures))
 Cp.CV_score(M_structures,BEG_rules,Cluster_rules,J_rules,alphas)
 #print(Cp.CV_score2(M_structures))
@@ -72,18 +74,18 @@ temp_data = open('Temp_data','a')
 temp_data.write('size,Temp,passes,H_avg,mimj_avg,mag_avg,absmag_avg,phase_avg,absphase_avg\n')
 temp_data.close()
 
-x_pts = 4 #|
-y_pts = 4 #|- Dimensions of the mc_supercellObj (simulation supercell)
-z_pts = 8 #|
-comp = [64,51,13]
+x_pts = 2 #|
+y_pts = 2 #|- Dimensions of the mc_supercellObj (simulation supercell)
+z_pts = 4 #|
+comp = [8,6,2]
 phase_init = 'rand' # initial phase configuration (aust, mart, rand)
 spin_init = 'rand' # initial spin configuration
 species_init = 'rand'
 species_flips = True
 num_passes = 30 # number of cluster/wolf moves done
 num_sub_passes = 30 # number of spin/species flips done per cluster/wolf move
-Temp0 = 100 # initial temperature in K
-TempF = 1000 # final temperature in K
+Temp0 = 250 # initial temperature in K
+TempF = 450 # final temperature in K
 Temp_inc = 5 # temperature increase per pass in K
 Mag_field = 0
 
@@ -99,4 +101,4 @@ lattice = ms.mc_supercellObj((x_pts,y_pts,z_pts),(0,1,2),comp,phase_init,spin_in
 # BEG_rules,Cluster_rules,J_rules are objects that determine when and how the fitted parameters are applied
 
 print("Beginning MonteCarlo\n")
-#mc2.run_WA_MCA(lattice,num_passes,num_sub_passes,Temp0,Temp_inc,TempF,Mag_field,Cluster_rules,J_rules,Js,species_flips)
+mc2.run_WA_MCA(lattice,num_passes,num_sub_passes,Temp0,Temp_inc,TempF,Mag_field,Cluster_rules,J_rules,Js,species_flips)
