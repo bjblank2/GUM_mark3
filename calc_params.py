@@ -356,149 +356,6 @@ def CV_score(Js,m_structure_list):
     for i in range(len(m_structure_list)):
         mat = m_structure_list[i]
         if mat.mag_phase != "pera" and mat.phase_name != "pm":
-<<<<<<< HEAD
-            # if mat.phase_name != "pm" and mat.enrg <= limit:
-            row = mat.BEG_sums + mat.Cluster_sums + mat.J_sums
-            a.append(row)
-            b.append(mat.enrg)
-    for i in range(len(b)):
-        a_loo = []
-        b_loo = []
-        a_test = []
-        b_test = []
-        alpha_errors = []
-        test_errors = []
-        for j in range(len(b)):
-            if i != j:
-                a_loo.append(a[j])
-                b_loo.append(b[j])
-            else:
-                a_test = a[j]
-                b_test = b[j]
-        alpha,error = calc_alpha(a_loo,b_loo,alphas)
-        alpha_errors.append(error)
-        ridge_fit = linear_model.Ridge(alpha=alpha,fit_intercept=False)
-        ridge_fit.fit(a_loo,b_loo)
-        Js = ridge_fit.coef_
-        prediction = 0
-        for j in range(len(Js)):
-            prediction += Js[j]*a_test[j]
-        test_errors.append((prediction-b_test)**2)
-    test_error = (np.average(test_errors))**.5
-    alpha_error = np.average(alpha_errors)
-    print('Alpha error: '+str(alpha_error)+'   Test error: '+str(test_error))
-
-
-def calc_RMS_error():
-    path = 'output'
-    file = open(path,'r')
-    lines = file.readlines()
-    file.close()
-    line_list = []
-    flag1 = False
-    flag2 = False
-    for i in range(len(lines)):
-        line = lines[i]
-        line = line.split()
-        if 'pm' in line or "pera" in line:
-            flag2 = False
-        else:
-            flag2 = True
-        if flag1 == True and flag2 == True:
-            line_list.append(line)
-        if 'Original' in line:
-            flag1 = True
-
-    rms_error = 0
-    for i in range(len(line_list)):
-        line = line_list[i]
-        E_dft = float(line[1])
-        E_fit = float(line[2])
-        rms_error += (E_dft-E_fit)**2
-    rms_error = rms_error/len(line_list)
-    rms_error = rms_error**(.5)
-    return rms_error
-
-
-def calc_alpha(a,b,alphas):
-    errors = []
-    for i in range(len(alphas)):
-        errors.append(looCV(a,b,alphas[i]))
-    index = np.argmin(errors)
-    return alphas[index], np.min(errors)
-
-
-def looCV2(a,b,alphas):
-    test_errors = []
-    alphas = [0.1]
-    for i in range(len(b)):
-        a_loo = []
-        b_loo = []
-        a_test = []
-        b_test = []
-        for j in range(len(b)):
-            if i != j:
-                a_loo.append(a[j])
-                b_loo.append(b[j])
-            else:
-                a_test = a[j]
-                b_test = b[j]
-        Js = ridge_cv(a_loo,b_loo,alphas)
-        prediction = 0
-        for j in range(len(Js)):
-            prediction += Js[j]*a_test[j]
-        test_errors.append((prediction-b_test)**2)
-    rms_test_error = np.average(test_errors)**.5
-    cv_var_list = []
-    mean = np.average(test_errors)**.5
-    for i in range(len(test_errors)):
-        cv_var_list.append((test_errors[i]**.5-mean)**2)
-    cv_var = np.average(cv_var_list)
-    print('variance: '+ str(cv_var))
-    return rms_test_error
-
-
-def looCV(a,b,alpha):
-    test_errors = []
-    for i in range(len(b)):
-        a_loo = []
-        b_loo = []
-        a_test = []
-        b_test = []
-        for j in range(len(b)):
-            if i != j:
-                a_loo.append(a[j])
-                b_loo.append(b[j])
-            else:
-                a_test = a[j]
-                b_test = b[j]
-        ridge_fit = linear_model.Ridge(alpha=alpha,fit_intercept=False)
-        ridge_fit.fit(a_loo,b_loo)
-        Js = ridge_fit.coef_
-        prediction = 0
-        for j in range(len(Js)):
-            prediction += Js[j]*a_test[j]
-            test_error = (prediction-b_test)**2
-        test_errors.append(test_error)
-    rms_test_error = (np.average(test_errors))**.5
-    return rms_test_error
-
-
-def CV_score(m_structure_list, BEG_rules, Cluster_rules, J_rules,alphas):
-    a = []
-    b = []
-    for i in range(len(m_structure_list)):
-        mat = m_structure_list[i]
-        if mat.mag_phase != "pera" and mat.phase_name != "pm":
-            # if mat.phase_name != "pm" and mat.enrg <= limit:
-            row = mat.BEG_sums + mat.Cluster_sums + mat.J_sums
-            a.append(row)
-            b.append(mat.enrg)
-    CV = looCV2(a,b,alphas)
-    rms = calc_RMS_error()
-    print([CV,rms])
-    return
-=======
             energies.append(m_structure_list[i].enrg)
     x_rows = len(energies)
     x_colm = m_structure_list[0].num_beg_rules+m_structure_list[0].num_cluster_rules+m_structure_list[0].num_j_rules
@@ -526,7 +383,6 @@ def CV_score(m_structure_list, BEG_rules, Cluster_rules, J_rules,alphas):
         CV2 += ((energies[i]-en_calc[i])/(1-x_i*np.linalg.inv(x_trans*x_matrix+np.matrix(np.eye(26,26)*.05))*x_it))**2
     CV2 *= 1/len(m_structure_list)
     return CV2
->>>>>>> parent of 5d63795... added LOO CV
 
 
 def CV_score2(m_structure_list):
@@ -585,21 +441,12 @@ def ridge_simple(m_structure_list,alpha):
             b.append(mat.enrg * mat.weight)
     a = np.matrix(a)
     b = np.transpose(np.matrix(b))
-<<<<<<< HEAD
-<<<<<<< HEAD
-    ridge_fit = linear_model.RidgeCV(alphas=[0.001],fit_intercept=False)
-=======
     ridge_fit = linear_model.RidgeCV(alphas=[.01,.05,.1,.15,.2,.25,.3,1,2,3,4,5,10],fit_intercept=False, )
->>>>>>> parent of 5d63795... added LOO CV
-=======
-    ridge_fit = linear_model.RidgeCV(alphas=[0.0000001],fit_intercept=False)
->>>>>>> parent of cebda8d... trying to figure out why Tc changed
     ridge_fit.fit(a,b)
     Js = ridge_fit.coef_
     JS_list = []
     Js_0 = Js[0]
     for i in range(len(Js_0)):
-<<<<<<< HEAD
         JS_list.append(Js_0[i])
     #print(Js)
     #print(ridge_fit.predict(a))
@@ -607,7 +454,6 @@ def ridge_simple(m_structure_list,alpha):
     return JS_list
 
 
-<<<<<<< HEAD
 def ridge_simple_ORIG(m_structure_list,alpha):
     a = []
     b = []
@@ -628,19 +474,14 @@ def ridge_simple_ORIG(m_structure_list,alpha):
     JS_list = []
     Js_0 = Js[0]
     for i in range(len(Js_0)):
-=======
->>>>>>> parent of 5d63795... added LOO CV
         Js_0
         JS_list.append(Js_0[i])
     #print(Js)
     #print(ridge_fit.predict(a))
     print(ridge_fit.intercept_)
     return JS_list
-<<<<<<< HEAD
 
 
-=======
->>>>>>> parent of cebda8d... trying to figure out why Tc changed
 def ridgeFit(m_structure_list,beg_list,clusters_list,j_list,alphas):
     a = []
     b = []
@@ -714,8 +555,6 @@ def ridge_cv(a,b,alphas):
             best_Js = Js_list
     #print("regularization parameter: "+ str(best_alpha))
     return best_Js
-=======
->>>>>>> parent of 5d63795... added LOO CV
 
 
 def ridge_optimized_fit(m_structure_list,a_min,a_max,step):
