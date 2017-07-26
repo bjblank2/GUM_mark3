@@ -13,11 +13,7 @@ import sys
 # structures and finally write the final parameters to the
 # the "Js" list
 
-<<<<<<< HEAD
-root_dir = '/Users/brian/Downloads/Mart/'
-=======
 root_dir = '/Volumes/TOURO/Ni-Fe-Ga/Data_Pts'
->>>>>>> parent of 5d63795... added LOO CV
 data_file = './NiMnIn_Data'
 beg_file = './BEG_rules'
 cluster_file = './Cluster_Rules'
@@ -51,19 +47,13 @@ if Js_exist == True:
 else:
     M_structures = Cp.read_m_structure_data(data_file, num_species, len(BEG_rules), len(Cluster_rules), len(J_rules))
     Cp.calculate_sums(M_structures, BEG_rules, Cluster_rules, J_rules)
-<<<<<<< HEAD
-    Js = Cp.ridgeFit(M_structures,BEG_rules,Cluster_rules,J_rules,alphas)
-    #Js = Cp.ridge_simple_ORIG(M_structures,1)
-    #Js = Cp.ridge_simple(M_structures,1)
-=======
     Js = Cp.ridge_simple(M_structures,1)
->>>>>>> parent of 5d63795... added LOO CV
     Cp.write_data(M_structures, 200, Js)
     Cp.write_output(M_structures, BEG_rules, Cluster_rules, J_rules, Js, 200)
     Cp.plot_data3(M_structures,BEG_rules,Cluster_rules,J_rules,Js,200)
 print('#######################')
 #print(Cp.CV_score(Js,M_structures))
-Cp.CV_score(M_structures,BEG_rules,Cluster_rules,J_rules,alphas)
+#Cp.CV_score(M_structures,BEG_rules,Cluster_rules,J_rules,alphas)
 #print(Cp.CV_score2(M_structures))
 print('#######################\n')
 #--------------------------------------------------------------#
@@ -76,7 +66,7 @@ temp_data = open('Temp_data','a')
 temp_data.write('size,Temp,passes,H_avg,mimj_avg,mag_avg,absmag_avg,phase_avg,absphase_avg\n')
 temp_data.close()
 
-<<<<<<< HEAD
+
 x_pts = 2 #|
 y_pts = 2 #|- Dimensions of the mc_supercellObj (simulation supercell)
 z_pts = 4 #|
@@ -87,24 +77,9 @@ species_init = 'rand'
 species_flips = True
 num_passes = 30 # number of cluster/wolf moves done
 num_sub_passes = 30 # number of spin/species flips done per cluster/wolf move
-Temp0 = 250 # initial temperature in K
+Temp0 = 280 # initial temperature in K
 TempF = 450 # final temperature in K
 Temp_inc = 5 # temperature increase per pass in K
-=======
-x_pts = 4 #|
-y_pts = 4 #|- Dimensions of the mc_supercellObj (simulation supercell)
-z_pts = 8 #|
-comp = [64,64,0]
-phase_init = 'rand' # initial phase configuration (aust, mart, rand)
-spin_init = 'rand' # initial spin configuration
-species_init = 'ordered'
-species_flips = False
-num_passes = 10 # number of cluster/wolf moves done
-num_sub_passes = 10 # number of spin/species flips done per cluster/wolf move
-Temp0 = 600 # initial temperature in K
-TempF = 950 # final temperature in K
-Temp_inc = 10 # temperature increase per pass in K
->>>>>>> parent of 5d63795... added LOO CV
 Mag_field = 0
 
 # Initialize an array of atoms with ms.mc_supercellObj(size,species,composition)
