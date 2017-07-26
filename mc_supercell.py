@@ -129,7 +129,6 @@ class mc_supercellObj:
                     index += 1
         if composition[2] != 0:
             if composition[1]/composition[2] == 1:
-                print("henry")
                 for i in range(self.i_length):
                     for j in range(self.j_length):
                         for k in range(self.k_length):
