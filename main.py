@@ -53,11 +53,17 @@ else:
     Cp.write_data(M_structures, 200, Js)
     Cp.write_output(M_structures, BEG_rules, Cluster_rules, J_rules, Js, 200)
     Cp.plot_data3(M_structures,BEG_rules,Cluster_rules,J_rules,Js,200)
-print('#######################\n')
+print('#######################')
 #print(Cp.CV_score(Js,M_structures))
 Cp.CV_score(M_structures,BEG_rules,Cluster_rules,J_rules,alphas)
 #print(Cp.CV_score2(M_structures))
 print('#######################\n')
+#print('RMS Error')
+#print(Cp.calc_RMS_error())
+#print('CV Score')
+#print(Cp.CV_score2(M_structures))
+#Cp.CV_score(M_structures, BEG_rules, Cluster_rules, J_rules, Js)
+#Cp.overfitt_check(M_structures)
 #--------------------------------------------------------------#
 
 #--------------------------------------------------------------#
@@ -78,8 +84,8 @@ species_init = 'rand'
 species_flips = True
 num_passes = 30 # number of cluster/wolf moves done
 num_sub_passes = 30 # number of spin/species flips done per cluster/wolf move
-Temp0 = 100 # initial temperature in K
-TempF = 1000 # final temperature in K
+Temp0 = 250 # initial temperature in K
+TempF = 450 # final temperature in K
 Temp_inc = 5 # temperature increase per pass in K
 Mag_field = 0
 
@@ -95,4 +101,4 @@ lattice = ms.mc_supercellObj((x_pts,y_pts,z_pts),(0,1,2),comp,phase_init,spin_in
 # BEG_rules,Cluster_rules,J_rules are objects that determine when and how the fitted parameters are applied
 
 print("Beginning MonteCarlo\n")
-#mc2.run_WA_MCA(lattice,num_passes,num_sub_passes,Temp0,Temp_inc,TempF,Mag_field,Cluster_rules,J_rules,Js,species_flips)
+mc2.run_WA_MCA(lattice,num_passes,num_sub_passes,Temp0,Temp_inc,TempF,Mag_field,Cluster_rules,J_rules,Js,species_flips)
