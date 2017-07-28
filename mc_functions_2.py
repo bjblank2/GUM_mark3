@@ -105,13 +105,7 @@ def eval_lattice_new(supercell_obj,Cluster_rules,J_rules,Js,T,mag_field):
                 total_Ham += eval_site_new(site,supercell_obj,Cluster_rules,J_rules,Js,T,mag_field)
                 total_phase += supercell_obj.get_site_phase(site)/supercell_obj.num_sites
                 total_phase2 += supercell_obj.get_site_phase(site)**2/supercell_obj.num_sites
-                if supercell_obj.get_site_species(site) == 0:
-                    total_spin += supercell_obj.get_site_spin(site)/supercell_obj.num_sites*3
-                if supercell_obj.get_site_species(site) == 1:
-                    total_spin += supercell_obj.get_site_spin(site)/supercell_obj.num_sites*6
-                if supercell_obj.get_site_species(site) == 2:
-                    total_spin += supercell_obj.get_site_spin(site)/supercell_obj.num_sites*1
-
+                total_spin += supercell_obj.get_site_spin(site)/supercell_obj.num_sites
                 total_spin2 += supercell_obj.get_site_spin(site)**2/supercell_obj.num_sites
     return total_Ham,total_phase,total_phase2,total_spin,total_spin2
 
