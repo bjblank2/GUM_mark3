@@ -129,7 +129,6 @@ class mc_supercellObj:
                     index += 1
         if composition[2] != 0:
             if composition[1]/composition[2] == 1:
-                print("henry")
                 for i in range(self.i_length):
                     for j in range(self.j_length):
                         for k in range(self.k_length):
@@ -140,7 +139,6 @@ class mc_supercellObj:
                             else:
                                 self.set_site_species([i,j,k],species[0])
             else:
-                print("is awesome")
                 if species_init == "rand":
                     species_count = 0
                     rand_index_list = []
