@@ -69,19 +69,19 @@ temp_data = open('Temp_data','a')
 temp_data.write('size,Temp,passes,H_avg,mimj_avg,mag_avg,absmag_avg,phase_avg,absphase_avg\n')
 temp_data.close()
 
-x_pts = 4 #|
-y_pts = 4 #|- Dimensions of the mc_supercellObj (simulation supercell)
-z_pts = 8 #|
-comp = [64,64,0]
+x_pts = 2 #|
+y_pts = 2 #|- Dimensions of the mc_supercellObj (simulation supercell)
+z_pts = 4 #|
+comp = [8,6,2]
 phase_init = 'mart' # initial phase configuration (aust, mart, rand)
 spin_init = 'rand' # initial spin configuration
 species_init = 'ordered'
-species_flips = False
-num_passes = 20 # number of cluster/wolf moves done
-num_sub_passes = 10 # number of spin/species flips done per cluster/wolf move
-Temp0 = 685 # initial temperature in K
+species_flips = True
+num_passes = 25 # number of cluster/wolf moves done
+num_sub_passes = 25 # number of spin/species flips done per cluster/wolf move
+Temp0 = 10 # initial temperature in K
 TempF = 1200 # final temperature in K
-Temp_inc = 5 # temperature increase per pass in K
+Temp_inc = 2.5 # temperature increase per pass in K
 Mag_field = 0
 
 # Initialize an array of atoms with ms.mc_supercellObj(size,species,composition)
