@@ -14,7 +14,7 @@ import sys
 # the "Js" list
 
 root_dir = '/Users/brian/Downloads/Mart/'
-data_file = './NiMnIn_Data_sup'
+data_file = './NiMnIn_Data'
 beg_file = './BEG_rules'
 cluster_file = './Cluster_Rules'
 j_file = './J_Rules'
@@ -84,9 +84,9 @@ species_init = 'rand'
 species_flips = True
 num_passes = 30 # number of cluster/wolf moves done
 num_sub_passes = 30 # number of spin/species flips done per cluster/wolf move
-Temp0 = 532 # initial temperature in K
-TempF = 1000 # final temperature in K
-Temp_inc = 2.5 # temperature increase per pass in K
+Temp0 = 100 # initial temperature in K
+TempF = 700 # final temperature in K
+Temp_inc = 5 # temperature increase per pass in K
 Mag_field = 0
 
 # Initialize an array of atoms with ms.mc_supercellObj(size,species,composition)
