@@ -1,4 +1,4 @@
-__author__ = 'brian'
+_author__ = 'brian'
 # This file handles taking the input from vasp and calculating the fit.
 # The functions that are important for the actual calculating the fit
 # have comments
@@ -792,7 +792,7 @@ def plot_data2():
     plt.rc('lines', linewidth=1)
     plt.title("NiMn -- Ni$_2$MnIn Composition Energies", fontsize=24)
     plt.xlabel("Composition", fontsize=24)
-    plt.ylabel("Energy above Hull (eV/fu)", fontsize=24)
+    plt.ylabel("Energy above Hull (eV/16 atoms)", fontsize=24)
     plt.xticks(fontsize=14)
     plt.yticks(fontsize=14)
     #    plt.legend(loc='center left', bbox_to_anchor=(1, 0.5),fontsize=12)
@@ -873,7 +873,7 @@ def plot_data3(M_structures, beg_list, clusters_list, j_list, Js, limit):
                 m = 'x'
             y = float(enrg_list[i])
             if M_structures[i].phase_name != 'pm':
-                plt.plot([x + x_itter, x + x_itter], [y, float(new_enrg_list[i])], lw=1, color="k")
+                #plt.plot([x + x_itter, x + x_itter], [y, float(new_enrg_list[i])], lw=1, color="k")
                 plt.plot(x + x_itter, y, lw=0, markersize=8, marker=m, color=c)
                 plt.plot(x + x_itter, float(new_enrg_list[i]), lw=0, markersize=8, marker=".", color="r")
     #plt.xlim(0,8)
@@ -881,7 +881,7 @@ def plot_data3(M_structures, beg_list, clusters_list, j_list, Js, limit):
     plt.rc('lines', linewidth=1)
     plt.title("NiMn -- Ni$_2$MnIn Composition Energies", fontsize=24)
     plt.xlabel("Composition", fontsize=24)
-    plt.ylabel("Energy above Hull (eV/fu)", fontsize=24)
+    plt.ylabel("Energy above Hull (eV/16 atoms)", fontsize=24)
     #plt.xticks(fontsize=14)
     plt.yticks(fontsize=14)
     #plt.legend(loc='center left', bbox_to_anchor=(1, 0.5),fontsize=12)

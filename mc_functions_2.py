@@ -197,10 +197,12 @@ def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,temp_inc,tempf,Clus
     H_total,total_phase,total_phase2,total_spin,total_spin2 = eval_lattice_new(supercell_obj,Cluster_rules,J_rules,Js,T)
 
     while T<=tempf:
-        print('\nCURRENT TEMP = ',T,'\n')
+        print('\nCURRENT TEMP = ',T)
+        print('starting details of phase: total phase = ',total_phase,' ; total |phase| = ',total_phase2)
+        print('starting details of magnetization: total spin = ',total_spin,' ; total |spin| = ',total_spin2,'. energy = ',H_total,'\n' )
         for passes in range(numb_passes):
             #Flip spins and Species
-            print('initiating pass no. ',passes)
+            print('initiating pass no. ',passes,'\n')
             print('...start subpasses')
             for sub_passes in range(num_sub_passes):
                 M = 0
@@ -252,8 +254,10 @@ def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,temp_inc,tempf,Clus
                             #             supercell_obj.set_site_species(site,old_site_species)
                             #             supercell_obj.set_site_species(random_site,old_randsite_species)
                             #             inc_not += 1
-
-
+            H_total,total_phase,total_phase2,total_spin,total_spin2 = eval_lattice_new(supercell_obj,Cluster_rules,J_rules,Js,T)
+            print('\tdetails of phase: total phase = ',total_phase,' ; total |phase| = ',total_phase2)
+            print('\tdetails of magnetization: total spin = ',total_spin,' ; total |spin| = ',total_spin2,'. energy = ',H_total,'\n' )
+            
             #Randdom Seed
             print('...sub-passes done, start cluster growth!')
             cluster = []
@@ -273,7 +277,7 @@ def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,temp_inc,tempf,Clus
                 H_cluster_old = eval_cluster(supercell_obj,seed_phase,new_phase,cluster,Cluster_rules,J_rules,Js,T)
                 flip_cluster(supercell_obj,seed_phase,new_phase,cluster)
                 H_cluster_new = eval_cluster(supercell_obj,seed_phase,new_phase,cluster,Cluster_rules,J_rules,Js,T)
-                print('new Ham = ',H_cluster_new,' ; old Ham = ',H_cluster_old)
+                print('\tnew Ham = ',H_cluster_new,' ; old Ham = ',H_cluster_old)
                 if H_cluster_new <= H_cluster_old:
                     inc_down += 1
                     print('\taccepting MC cluster flip: new energy < old energy')
@@ -289,7 +293,11 @@ def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,temp_inc,tempf,Clus
                         flip_cluster(supercell_obj,new_phase,seed_phase,cluster)
                         inc_not += 1
 
-            print('...finish cluster moves, run subpasses \n')
+            H_total,total_phase,total_phase2,total_spin,total_spin2 = eval_lattice_new(supercell_obj,Cluster_rules,J_rules,Js,T)
+            print('\tdetails of phase: total phase = ',total_phase,' ; total |phase| = ',total_phase2)
+            print('\tdetails of magnetization: total spin = ',total_spin,' ; total |spin| = ',total_spin2,'. energy = ',H_total,'\n' )
+
+            print('...finish cluster moves, run subpasses')
             for sub_passes in range(num_sub_passes):
                 M = 0
                 for i in range(supercell_obj.i_length):
@@ -312,6 +320,8 @@ def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,temp_inc,tempf,Clus
                             M += calc_avg_spin(site,supercell_obj)
 
             H_total,total_phase,total_phase2,total_spin,total_spin2 = eval_lattice_new(supercell_obj,Cluster_rules,J_rules,Js,T)
+            print('\tdetails of phase: total phase = ',total_phase,' ; total |phase| = ',total_phase2)
+            print('\tdetails of magnetization: total spin = ',total_spin,' ; total |spin| = ',total_spin2,'\n' )
 
             temp_output = open('Temp_data','a')
             temp_output.write(str(supercell_obj.i_length)+','+str(T)+','+str(passes)+','+str(H_total/supercell_obj.num_sites)+','+str(M/supercell_obj.num_sites)+','+str(total_spin)+','+str(total_spin2)+','+str(total_phase)+','+str(total_phase2)+'\n')
@@ -320,84 +330,85 @@ def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,temp_inc,tempf,Clus
         T += temp_inc
         #print(T)
 
-#        if temp_inc == 0:
-#            X_axis = passes
-#        else: X_axis = T
-#        if supercell_obj.get_site_phase([0,0,0]) == 0:
-#            c = 'r'
-#        else: c = 'b'
-#        H_total,total_phase,total_phase2,total_spin,total_spin2 = eval_lattice_new(supercell_obj,Cluster_rules,J_rules,Js,T)
-#        plt.figure(2)
+        if temp_inc == 0:
+            X_axis = passes
+        else: X_axis = T
+        if supercell_obj.get_site_phase([0,0,0]) == 0:
+            c = 'r'
+        else: c = 'b'
+        H_total,total_phase,total_phase2,total_spin,total_spin2 = eval_lattice_new(supercell_obj,Cluster_rules,J_rules,Js,T)
+        plt.figure(2)
 #        plt.errorbar(X_axis,H_total,yerr=H_total_dev,lw=3,marker='o',color=c)
-#        plt.figure(3)
-#        plt.subplot(311)
-#        plt.xlabel("Temp", fontsize=10)
-#        plt.ylabel("Magnetic Order Parameter", fontsize=10)
-#        plt.errorbar(X_axis,M/supercell_obj.num_sites,yerr=M_dev/supercell_obj.num_sites,lw=3,marker='o',color=c)
-#        plt.subplot(312)
-#        plt.xlabel("Temp", fontsize=10)
-#        plt.ylabel("(Average Mag)^2", fontsize=10)
-#        plt.errorbar(X_axis,total_spin2,yerr=total_spin2_dev,lw=3,marker='o',color=c)###########
-#        plt.figure(4)
-#        plt.subplot(411)
-#        plt.xlabel("Temp", fontsize=10)
-#        plt.ylabel("Average Phase", fontsize=10)
-#        plt.errorbar(X_axis,total_phase,yerr=total_phase_dev,lw=3,marker='o',color=c)
-#        plt.subplot(412)
-#        plt.xlabel("Temp", fontsize=10)
-#        plt.ylabel("Average Phase^2", fontsize=10)
-#        plt.errorbar(X_axis,total_phase2,yerr=total_phase2_dev,lw=3,marker='o',color=c)
-#        #print([H_total,H_total])
+        plt.errorbar(X_axis,H_total,lw=3,marker='o',color=c)
+        plt.figure(3)
+        plt.subplot(311)
+        plt.xlabel("Temp", fontsize=10)
+        plt.ylabel("Magnetic Order Parameter", fontsize=10)
+        plt.errorbar(X_axis,M/supercell_obj.num_sites,lw=3,marker='o',color=c)
+        plt.subplot(312)
+        plt.xlabel("Temp", fontsize=10)
+        plt.ylabel("(Average Mag)^2", fontsize=10)
+        plt.errorbar(X_axis,total_spin2,lw=3,marker='o',color=c)###########
+        plt.figure(4)
+        plt.subplot(411)
+        plt.xlabel("Temp", fontsize=10)
+        plt.ylabel("Average Phase", fontsize=10)
+        plt.errorbar(X_axis,total_phase,lw=3,marker='o',color=c)
+        plt.subplot(412)
+        plt.xlabel("Temp", fontsize=10)
+        plt.ylabel("Average Phase^2", fontsize=10)
+        plt.errorbar(X_axis,total_phase2,lw=3,marker='o',color=c)
+        #print([H_total,H_total])
 
-#    if do_figs is True:
-#        plt.figure(2)
-#        plt.xlabel("Temp", fontsize=20)
-#        plt.ylabel("Energy of lattice (eV)", fontsize=20)
-#        plt.savefig('Enrg.pdf')
-#        plt.figure(3)
-#        plt.savefig('Mag.pdf')
-#        plt.figure(4)
-#        plt.savefig('Phase.pdf')
+    if do_figs is True:
+        plt.figure(2)
+        plt.xlabel("Temp", fontsize=20)
+        plt.ylabel("Energy of lattice (eV)", fontsize=20)
+        plt.savefig('Enrg.pdf')
+        plt.figure(3)
+        plt.savefig('Mag.pdf')
+        plt.figure(4)
+        plt.savefig('Phase.pdf')
 #    print("\n")
 #    #print(inc_down)
 #    #print(inc_up)
 #    #print(inc_not)
 #    print("\n")
 
-#    fig = plt.figure(5)
-#    ax = fig.add_subplot(111, projection='3d')
-#    xs = []
-#    ys = []
-#    zs = []
-#    cs = []
-#    us = []
-#    vs = []
-#    ws = []
-#    for i in range(supercell_obj.i_length):
-#        for j in range(supercell_obj.j_length):
-#            for k in range(supercell_obj.k_length):
-#                if np.mod(k,2) == 0:
-#                    offset = 0
-#                else:
-#                    offset = .5
-#                site = [i,j,k]
-#                pos = supercell_obj.get_site_pos(site)
-#                xs.append(pos[0]+offset)
-#                ys.append(pos[1]+offset)
-#                zs.append(pos[2]*.5)
-#                us.append(0)
-#                vs.append(0)
-#                ws.append(supercell_obj.get_site_spin(site))
-#                if supercell_obj.get_site_species(site) == 0:
-#                    cs.append('g')
-#                if supercell_obj.get_site_species(site) == 1:
-#                    cs.append('r')
-#                if supercell_obj.get_site_species(site) == 2:
-#                    cs.append('b')
-#    ax.quiver(xs,ys,zs,us,vs,ws,pivot='middle',length=.5)
-#    ax.scatter(xs,ys,zs,c=cs,marker='o',s=50)
-#    plt.savefig('3D_plt.png')
-#    plt.show()
+    fig = plt.figure(5)
+    ax = fig.add_subplot(111, projection='3d')
+    xs = []
+    ys = []
+    zs = []
+    cs = []
+    us = []
+    vs = []
+    ws = []
+    for i in range(supercell_obj.i_length):
+        for j in range(supercell_obj.j_length):
+            for k in range(supercell_obj.k_length):
+                if np.mod(k,2) == 0:
+                    offset = 0
+                else:
+                    offset = .5
+                site = [i,j,k]
+                pos = supercell_obj.get_site_pos(site)
+                xs.append(pos[0]+offset)
+                ys.append(pos[1]+offset)
+                zs.append(pos[2]*.5)
+                us.append(0)
+                vs.append(0)
+                ws.append(supercell_obj.get_site_spin(site))
+                if supercell_obj.get_site_species(site) == 0:
+                    cs.append('g')
+                if supercell_obj.get_site_species(site) == 1:
+                    cs.append('r')
+                if supercell_obj.get_site_species(site) == 2:
+                    cs.append('b')
+    ax.quiver(xs,ys,zs,us,vs,ws,pivot='middle',length=.5)
+    ax.scatter(xs,ys,zs,c=cs,marker='o',s=50)
+    plt.savefig('3D_plt.png')
+    plt.show()
 
 #-# Grows the clusters
 def grow_cluster(site,supercell_obj,seed_phase,new_phase,links,Cluster_rules,J_rules,Js,T): # Recursive function
@@ -415,13 +426,13 @@ def grow_cluster(site,supercell_obj,seed_phase,new_phase,links,Cluster_rules,J_r
 ######### END ELIF MODIFICATIONS #############
     links.append(site)
     #print('site = ',site)
-    # Wolf Algorithm
+    # Wolff Algorithm
     if new_phase*seed_phase == -1:
         for neighbor in range(supercell_obj.get_number_of_neighbors(site)):
             #print('neighbors are ',range(supercell_obj.get_number_of_neighbors(site)))
             if supercell_obj.get_neighbor_order(site,neighbor) == 1:
                 #print('here is a first neighbor')
-                if supercell_obj.get_neighbor_phase(site,neighbor) == seed_phase:
+                if supercell_obj.get_neighbor_phase(site,neighbor) == seed_phase:           ## NOT SURE WHY WE HAVE THIS HERE!!!!!
                     if supercell_obj.get_neighbor_pos(site,neighbor) not in links:
                         rand = np.random.random()
 ######### START ELIF MODIFICATIONS #############
