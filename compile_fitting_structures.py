@@ -77,7 +77,7 @@ def import_vasp(root_dir, output_dir):
                 index += 1
     output.close()
 
-def generate_m_structure(data_file, num_Cluster_rules, num_J_rules, aust_tol, spin_tol):
+def generate_m_structure(data_file, num_Cluster_rules, num_J_rules, aust_tol, spin_style, spin_tol):
     m_struct_list = []
     data = open(data_file, 'r')
     lines = data.readlines()
@@ -88,7 +88,7 @@ def generate_m_structure(data_file, num_Cluster_rules, num_J_rules, aust_tol, sp
             m_struct = m_structure.MStructureObj(lines[i+1], species, num_Cluster_rules, num_J_rules, aust_tol)
             for j in range(m_struct.num_Atoms):
                 atom_data = lines[i + j + 2]
-                m_struct.set_atom_properties(j, atom_data, spin_tol)
+                m_struct.set_atom_properties(j, atom_data, spin_style, spin_tol)
             if m_struct.phase_name != 'prem':
                 m_struct_list.append(m_struct)
     return m_struct_list
@@ -114,9 +114,9 @@ def write_structures_processedvasp(structures,data_file_pp):
 
 # This function sweeps through the VASP data and determines active interactions and clusters
 # for each atom site and group of sites
-def calculate_sums(m_structure_list, cluster_rule_list, j_rule_list, spin_tol):
+def calculate_sums(m_structure_list, cluster_rule_list, j_rule_list, spin_style, spin_tol):
     for i in range(len(m_structure_list)):          # maybe this loop should be outside, just have this calc sums for a given structure
-        m_structure_list[i].create_supercell(spin_tol)
+        m_structure_list[i].create_supercell(spin_style, spin_tol)
         m_structure_list[i].calculate_distances()
         m_structure_list[i].calculate_minimums()
         for j in range(m_structure_list[i].num_Atoms):

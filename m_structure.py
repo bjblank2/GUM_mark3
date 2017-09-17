@@ -67,14 +67,14 @@ class MStructureObj:
         self.distances = np.ones([self.num_Atoms, self.num_Atoms * 27]) * 100
         self.mins = np.ones([self.num_Atoms, 10]) * 100
 
-    def set_atom_properties(self, index, atom_data, spin_tol):
+    def set_atom_properties(self, index, atom_data, spin_style, spin_tol):
         atom_data = atom_data.split()
         mag = float(atom_data[1])
         #print("atom number ",index," , magnetization is ",mag)
         pos = [round(float(atom_data[2]), 5), round(float(atom_data[3]), 5), round(float(atom_data[4]), 5)]
-        self.basis.append(atom.AtomObj(index, self.composition, mag, pos, spin_tol, self.Cindex))
+        self.basis.append(atom.AtomObj(index, self.composition, mag, pos, spin_style, spin_tol, self.Cindex))
 
-    def create_supercell(self,spin_tol):
+    def create_supercell(self,spin_style, spin_tol):
         for i in range(-1, 2):
             for j in range(-1, 2):
                 for k in range(-1, 2):
@@ -83,7 +83,7 @@ class MStructureObj:
                             atom_copy = self.basis[l]
                             mag = atom_copy.mag
                             pos = [atom_copy.a_pos + i, atom_copy.b_pos + j, atom_copy.c_pos + k]
-                            self.basis.append(atom.AtomObj(l, self.composition, mag, pos, spin_tol))
+                            self.basis.append(atom.AtomObj(l, self.composition, mag, pos, spin_style, spin_tol))
 ## wait - should append line above include self.Cindex??
 
     def calculate_distances(self):

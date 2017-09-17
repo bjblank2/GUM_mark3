@@ -2,20 +2,20 @@ __author__ = 'brian'
 import numpy as np
 
 class AtomObj:                      # does this need mag in here?  The object should only contain what is           needed for fitting and Monte Carlo from here on out.
-    def __init__(self, index, species_list, mag, pos, spin_tol, c_index=None):
+    def __init__(self, index, species_list, mag, pos, spin_style, spin_tol, c_index=None):
         self.atom_index = index
         self.species = 0
         self.set_species(index, species_list)
         self.mag = mag
         self.spin = 0
-        self.set_spin(mag,spin_tol)
+        self.set_spin(mag,spin_style, spin_tol)
         self.set_pos(pos[0], pos[1], pos[2])
         if c_index is not None:
             self.rotate(c_index)
 
-    def set_spin(self, mag, spin_tol):
+    def set_spin(self, mag, spin_style, spin_tol):
             #if self.species == 0:
-            #if abs(round(mag, 2)) >= .1:
+            #if abs(round(mag, 2)) >= .1: koo
             #    self.spin = round(abs(mag) / mag, 5)
             #else:
             #    self.spin = 0
@@ -30,7 +30,14 @@ class AtomObj:                      # does this need mag in here?  The object sh
             elif round(mag,2) == 0:
                 self.spin = 0
             else:
-                self.spin = np.floor(abs(mag)/spin_tol[self.species])*round(abs(mag) / mag, 5)
+                if spin_style[self.species] == 'factor':
+                    self.spin = np.floor(abs(mag)/spin_tol[self.species])*round(abs(mag) / mag, 5)
+                else:
+                    if mag > spin_tol[self.species]:
+                        self.spin = 1
+                    else:
+                        self.spin = 0
+
     
 
     def set_pos(self, a_pos, b_pos, c_pos):        # again very specific assumptions about positions
