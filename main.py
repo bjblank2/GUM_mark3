@@ -74,30 +74,32 @@ Cluster_rules_exist = True                          # define cluster rules
 J_rules_exist = True                                # define heisenberg rules
 Js_exist = True                                     # results of fitting model
 
-# set all rules and summarize VASP data
+# summarize VASP data
 if vasp_summary_exists is False:                    # will make summary of VASP results if it doesn't already exist
     cvs.import_vasp(root_dir, vasp_data_file)
-if vasp_pp_exists is False:                         # will make summary of VASP results if it doesn't already exist
-    ppv.import_vasp(vasp_data_file,vasp_data_file_pp)
+
+# write Cluster and J rules file if doesn't exist
 if Cluster_rules_exist is False:                    # writes cluster rules if doesn't already exist
     cmr.write_cluster_rules(cluster_file)
 if J_rules_exist is False:                          # writes j_rules if doesn't already exist
     cmr.write_j_rules(j_file)
 
-# Read the summarized VASP data and rules files, and initialize a structure object for each
-# data set without doing sum rules yet.
+# read cluster and J rules file
 Cluster_rules = cmr.read_cluster_rules(cluster_file)
 J_rules = cmr.read_j_rules(j_file)
-M_structures = cfs.generate_m_structure(data_file, len(Cluster_rules), len(J_rules), aust_tol, spin_style, spin_tol)
-cfs.write_structures_processedvasp(M_structures,data_file_pp)
+
+# Read the summarized VASP data and rules files, and initialize a structure object for each
+# data set without doing sum rules yet.
+M_structures = ppv.generate_m_structure(data_file, len(Cluster_rules), len(J_rules), aust_tol, spin_style, spin_tol)
+ppv.write_structures_processedvasp(M_structures,data_file_pp)
 
 # Evaluate cluster and spin sums here, and check for duplicates
 # Seems like there should be the option to read the sums from the
 # summary_fitting_structures file to avoid doing this summing each time.
-cfs.calculate_sums(M_structures, Cluster_rules, J_rules, spin_style, spin_tol)
-if (cfs.check_duplicate_structures(M_structures)=='True'):
-    print ('Based on summed cluster and spin rules, fitting structures appear to contain duplicates. \n')
-cfs.summarize_fitting_structures(M_structures)
+#cfs.calculate_sums(M_structures, Cluster_rules, J_rules, spin_style, spin_tol)
+#if (cfs.check_duplicate_structures(M_structures)=='True'):
+#    print ('Based on summed cluster and spin rules, fitting structures appear to contain duplicates. \n')
+#cfs.summarize_fitting_structures(M_structures)
 
 ## Ridge Regression Fitting with Regularization
 #Js,intercept = cfp.ridge_simple(M_structures,1)

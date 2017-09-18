@@ -4,15 +4,11 @@ _author__ = 'brian'
 # have comments
 
 import numpy as np
-#import BEG
 import clusters
 import js
 import m_structure
 import os
 import matplotlib.pyplot as plt
-#from scipy.optimize import least_squares
-#from sklearn.linear_model import Ridge
-#from sklearn import linear_model
 
 def import_vasp(root_dir, output_dir):
     output = open(output_dir, 'w')
