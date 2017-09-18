@@ -62,7 +62,7 @@ spin_tol = [0.3,2.5,0]                              # insert spin parameters her
 
 root_dir = '/Volumes/TOURO/Ni-Fe-Ga/Data_Pts'       # where the VASP directories are
 vasp_data_file = './NiMnIn_Data'                    # generated in compile_vasp_structures>import_vasp, summarizes output of all VASP calculations
-vasp_data_file_pp = './NiMnIn_Data_NoDups_pp'       # post-processed version of VASP results with spins, positions selected
+vasp_data_file_pp = './NiMnIn_Data_pp'              # post-processed version of VASP results with spins, positions selected
 cluster_file = './Cluster_Rules'                    # cluster expansion rules
 j_file = './J_Rules'                                # heisenberg rules
 fitting_structures_file = './'
@@ -90,8 +90,8 @@ J_rules = cmr.read_j_rules(j_file)
 
 # Read the summarized VASP data and rules files, and initialize a structure object for each
 # data set without doing sum rules yet.
-M_structures = ppv.generate_m_structure(data_file, len(Cluster_rules), len(J_rules), aust_tol, spin_style, spin_tol)
-ppv.write_structures_processedvasp(M_structures,data_file_pp)
+M_structures = ppv.generate_m_structure(vasp_data_file, len(Cluster_rules), len(J_rules), aust_tol, spin_style, spin_tol)
+ppv.write_structures_processedvasp(M_structures,vasp_data_file_pp)
 
 # Evaluate cluster and spin sums here, and check for duplicates
 # Seems like there should be the option to read the sums from the
