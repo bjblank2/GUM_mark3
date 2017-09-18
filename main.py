@@ -75,6 +75,8 @@ import sys
 ##      to include it.  But I think we do not.
 
 aust_tol = 0.025
+
+spin_style = 'factor'  # or threshhold 
 spin_tol = [0.3,2.5,0]                        # insert spin parameters here, this assumes [Ni Mn In ]
 
 root_dir = '/Volumes/TOURO/Ni-Fe-Ga/Data_Pts'  # where the VASP directories are
