@@ -75,8 +75,7 @@ import sys
 ##      to include it.  But I think we do not.
 
 aust_tol = 0.025
-
-spin_style = 'factor'  # or threshhold 
+spin_style = ['threshold','threshold','threshold']  # options for spin_tol. Assuming [Ni Mn In]. choose 'threshold' or 'factor'
 spin_tol = [0.3,2.5,0]                        # insert spin parameters here, this assumes [Ni Mn In ]
 
 root_dir = '/Volumes/TOURO/Ni-Fe-Ga/Data_Pts'  # where the VASP directories are
@@ -104,13 +103,13 @@ if J_rules_exist is False:                     # writes j_rules if doesn't alrea
 # data set without doing sum rules yet.
 Cluster_rules = cmr.read_cluster_rules(cluster_file)
 J_rules = cmr.read_j_rules(j_file)
-M_structures = cfs.generate_m_structure(data_file, len(Cluster_rules), len(J_rules), aust_tol, spin_tol)
+M_structures = cfs.generate_m_structure(data_file, len(Cluster_rules), len(J_rules), aust_tol, spin_style, spin_tol)
 cfs.write_structures_processedvasp(M_structures,data_file_pp)
 
 # Evaluate cluster and spin sums here, and check for duplicates
 # Seems like there should be the option to read the sums from the
 # summary_fitting_structures file to avoid doing this summing each time.
-cfs.calculate_sums(M_structures, Cluster_rules, J_rules, spin_tol)
+cfs.calculate_sums(M_structures, Cluster_rules, J_rules, spin_style, spin_tol)
 if (cfs.check_duplicate_structures(M_structures)=='True'):
     print ('Based on summed cluster and spin rules, fitting structures appear to contain duplicates. \n')
 cfs.summarize_fitting_structures(M_structures)
