@@ -1,4 +1,5 @@
 __author__ = 'brian'
+import postprocess_vasp as pp
 import compile_fitting_structures as cfs
 import clustermag_rules as cmr  
 import calc_fitting_params as cfp
@@ -11,21 +12,10 @@ import sys
 ## Some notes from Elif's Modifications to Parameter Fitting
 ##
 ## *) We need to modify CFS.IMPORT_DATA which writes NiMnIn_Data to avoid
-##      assigning phase and magnetism (avoid human intervention at this stage).
+##      assigning phase and magnetism (avoid human interpretation of data at this stage).
 ##      This function should only summarize the results of DFT simulations compactly.
 ##      For now I modified the NiMnIn_Data file the way I want it to appear
 ##      but have not yet modified the function because I do not have Brian's directory.
-##
-## *) I eliminated BEG rules entirely.
-##
-## *) We can now set the tolerance whether a given structure is austenite or not
-##      here using variable 'aust_tol'. I think it was hard-coded in, and set too loose before (0.1).
-##      Right now I'm going with 0.025 but this also may not be optimal.  I wonder if there is a way
-##      to assess this "intelligently" by comparing how well our fitting goes for different tolerances.
-##
-## *) Adjustment of spins.  We do some assessment when selecting how to define the spins. It is now
-##      also no longer hard coded in. This also would be nice to evaluate in an intelligent manner. I
-##      did this in a sloppy way though, and generally this could be cleaned up.
 ##
 ## *) M_structures now stores the array of species like [Ni,Mn,In]. As implemented right now,
 ##      several parts of this code assume that the VASP POSCAR/CONTCAR always enter Ni,Mn,In in the
@@ -47,19 +37,11 @@ import sys
 ##      Some manual work is required though because need to check that the structures are
 ##      actually duplicates -- i.e. energies, latt consts are similar.
 ##
-## *) Now, after creating M_structures, a summary of all fitting structures and how they have been assigned
-##      is output to file 'summary_fitting_structures'.  Here is where we have post-processed the VASP results
-##      to assign phase and spin, and summed the cluster/spin rules for each structure, and removed duplicates.
-##
 ## *) we should make an option to just read cluster and j sums from summary rather than regenerating each time
 ##
 ## *) Look at m_structure.py line 86 for minor question.
 ##
-## *) Now we create plots of fitted parameters vs. regularization, and the score vs. the regularization
 ############################
-
-## *) manually play with spin description. spin selection rules need eyeballing - see Ni, seems to step up in 0.15 units , in atom.py
-##      Seems that the way I did it made it worse?
 ##
 ## *) SHOULD OUTPUT HERE THE POST-PROCESSED VASP WITHOUT PRIOR TO DOING ANY SUM CALCULATIONS WHICH DEPEND ON THE RULES
 ##      want to break up cfs into post-process vasp data and then generate fitting structures
@@ -79,21 +61,24 @@ spin_style = ['threshold','threshold','threshold']  # options for spin_tol. Assu
 spin_tol = [0.3,2.5,0]                        # insert spin parameters here, this assumes [Ni Mn In ]
 
 root_dir = '/Volumes/TOURO/Ni-Fe-Ga/Data_Pts'  # where the VASP directories are
-data_file = './NiMnIn_Data_NoDups'             # generated in calc_params>import_data, summarizes output of all VASP calculations
-data_file_pp = './NiMnIn_Data_NoDups_pp'       # post-processed version of VASP results with spins, positions selected
+vasp_data_file = './NiMnIn_Data_NoDups'        # generated in calc_params>import_data, summarizes output of all VASP calculations
+vasp_data_file_pp = './NiMnIn_Data_NoDups_pp'  # post-processed version of VASP results with spins, positions selected
 cluster_file = './Cluster_Rules'               # cluster expansion rules
 j_file = './J_Rules'                           # heisenberg rules
 fitting_structures_file = './'
 
 # Determine what needs to be generated from scratch
 vasp_summary_exists = True                     # summarize VASP results from VASP directories or no?
+vasp_pp_exists = True                          # postprocessing of VASP results or no?
 Cluster_rules_exist = True                     # define cluster rules
 J_rules_exist = True                           # define heisenberg rules
 Js_exist = True                                # results of fitting model
 
 # set all rules and summarize VASP data
 if vasp_summary_exists is False:               # will make summary of VASP results if it doesn't already exist
-    cfs.import_vasp(root_dir, data_file)
+    cfs.import_vasp(root_dir, vasp_data_file)
+if vasp_pp_exists is False:                    # will make summary of VASP results if it doesn't already exist
+    pp.import_vasp(vasp_data_file,vasp_data_file_pp)
 if Cluster_rules_exist is False:               # writes cluster rules if doesn't already exist
     cmr.write_cluster_rules(cluster_file)
 if J_rules_exist is False:                     # writes j_rules if doesn't already exist
