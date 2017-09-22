@@ -33,8 +33,8 @@ class AtomObj:                      # does this need mag in here?  The object sh
                 if spin_style[self.species] == 'factor':
                     self.spin = np.floor(abs(mag)/spin_tol[self.species])*round(abs(mag) / mag, 5)
                 else:
-                    if mag > spin_tol[self.species]:
-                        self.spin = 1
+                    if abs(mag) > spin_tol[self.species]:
+                        self.spin = round(abs(mag) / mag, 5)
                     else:
                         self.spin = 0
 

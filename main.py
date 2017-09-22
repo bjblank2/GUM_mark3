@@ -41,6 +41,8 @@ import sys
 ##
 ## *) Look at m_structure.py line 86 for minor question.
 ##
+## *) can I lose: BEG_rules, BEG.py, generate_FFCV_files.py
+##
 ############################
 ##
 ## *) SHOULD OUTPUT HERE THE POST-PROCESSED VASP WITHOUT PRIOR TO DOING ANY SUM CALCULATIONS WHICH DEPEND ON THE RULES
@@ -55,10 +57,16 @@ import sys
 ##      expects non-centered data?  Otherwise it spends it energy pulling out the linear dependence on composition.
 ##      Note: fitting is currently modified so intercept is not fit, need to change cfp.ridge_simple if we want
 ##      to include it.  But I think we do not.
+##
+############################
+##
+## *) SEE if we can recover Brian's fit. Then do changes in line 100
+##
+##
 
 aust_tol = 0.025
 spin_style = ['threshold','threshold','threshold']  # options for spin_tol. Assuming [Ni Mn In]. choose 'threshold' or 'factor'
-spin_tol = [0.3,2.5,0]                              # insert spin parameters here, this assumes [Ni Mn In ]
+spin_tol = [0.1,2,0]                              # insert spin parameters here, this assumes [Ni Mn In ]
 
 root_dir = '/Volumes/TOURO/Ni-Fe-Ga/Data_Pts'       # where the VASP directories are
 vasp_data_file = './NiMnIn_Data'                    # generated in compile_vasp_structures>import_vasp, summarizes output of all VASP calculations
@@ -78,33 +86,30 @@ Js_exist = True                                     # results of fitting model
 if vasp_summary_exists is False:                    # will make summary of VASP results if it doesn't already exist
     cvs.import_vasp(root_dir, vasp_data_file)
 
-# write Cluster and J rules file if doesn't exist
+# write Cluster and J rules file if doesn't exist, then read the rules
 if Cluster_rules_exist is False:                    # writes cluster rules if doesn't already exist
     cmr.write_cluster_rules(cluster_file)
 if J_rules_exist is False:                          # writes j_rules if doesn't already exist
     cmr.write_j_rules(j_file)
-
-# read cluster and J rules file
 Cluster_rules = cmr.read_cluster_rules(cluster_file)
 J_rules = cmr.read_j_rules(j_file)
 
-# Read the summarized VASP data and rules files, and initialize a structure object for each
-# data set without doing sum rules yet.
+# Read the summarized VASP data and initialize a structure object for each
+# postprocess according to user selected parameters above and the cluster and j rules
 M_structures = ppv.generate_m_structure(vasp_data_file, len(Cluster_rules), len(J_rules), aust_tol, spin_style, spin_tol)
 ppv.write_structures_processedvasp(M_structures,vasp_data_file_pp)
 
-# Evaluate cluster and spin sums here, and check for duplicates
 # Seems like there should be the option to read the sums from the
 # summary_fitting_structures file to avoid doing this summing each time.
-#cfs.calculate_sums(M_structures, Cluster_rules, J_rules, spin_style, spin_tol)
-#if (cfs.check_duplicate_structures(M_structures)=='True'):
-#    print ('Based on summed cluster and spin rules, fitting structures appear to contain duplicates. \n')
-#cfs.summarize_fitting_structures(M_structures)
+ppv.calculate_sums(M_structures, Cluster_rules, J_rules, spin_style, spin_tol)
+if (ppv.check_duplicate_structures(M_structures)=='True'):
+    print ('Based on summed cluster and spin rules, fitting structures appear to contain duplicates. \n')
+ppv.summarize_fitting_structures(M_structures)
 
 ## Ridge Regression Fitting with Regularization
-#Js,intercept = cfp.ridge_simple(M_structures,1)
-#cfp.write_fitting_parameters(M_structures, Cluster_rules, J_rules, Js, intercept, 200)
-#cfp.plot_data3(M_structures,Cluster_rules,J_rules,Js,intercept,200)
+Js,intercept = cfp.ridge_simple(M_structures,1)
+cfp.write_fitting_parameters(M_structures, Cluster_rules, J_rules, Js, intercept, 200)
+cfp.plot_data3(M_structures,Cluster_rules,J_rules,Js,intercept,200)
 
 #print('#######################\n')
 ##print(cp.CV_score(Js,M_structures))

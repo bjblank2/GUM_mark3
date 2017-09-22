@@ -14,8 +14,6 @@ from scipy.optimize import least_squares
 from sklearn.linear_model import Ridge
 from sklearn import linear_model
 
-
-
 def read_Js(num_Js):
     js_file = open('output','r')
     Js = []
