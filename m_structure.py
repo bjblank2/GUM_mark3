@@ -41,9 +41,9 @@ class MStructureObj:
         self.num_j_rules = num_j_rules
         self.species = species
         itter = 0
-        self.composition = [0] * len(species)
+        self.composition = [0] * (len(species)-1)
         self.num_Atoms = 0
-        for i in range(len(species)):
+        for i in range(len(species)-1):
             self.num_Atoms += int(data[itter])
             self.composition[i] = int(data[itter])
             itter += 1

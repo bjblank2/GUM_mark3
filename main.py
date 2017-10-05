@@ -64,11 +64,12 @@ import sys
 ##
 ##
 
-aust_tol = 0.025
+aust_tol = 0.10
 spin_style = ['threshold','threshold','threshold']  # options for spin_tol. Assuming [Ni Mn In]. choose 'threshold' or 'factor'
-spin_tol = [0.1,2,0]                              # insert spin parameters here, this assumes [Ni Mn In ]
+spin_tol = [0.1,2,0]                                # insert spin parameters here, this assumes [Ni Mn In ]
+species = ['Ni','Mn','In']
 
-root_dir = '/Volumes/TOURO/Ni-Fe-Ga/Data_Pts'       # where the VASP directories are
+root_dir = '/Volumes/TOURO/NiMnIn_Vasp_Data'        # where the VASP directories are  #root_dir = '/Users/brian/Desktop/folder'
 vasp_data_file = './NiMnIn_Data'                    # generated in compile_vasp_structures>import_vasp, summarizes output of all VASP calculations
 vasp_data_file_pp = './NiMnIn_Data_pp'              # post-processed version of VASP results with spins, positions selected
 cluster_file = './Cluster_Rules'                    # cluster expansion rules
@@ -77,14 +78,15 @@ fitting_structures_file = './'
 
 # Determine what needs to be generated from scratch
 vasp_summary_exists = True                          # summarize VASP results from VASP directories or no?
-vasp_pp_exists = True                               # postprocessing of VASP results or no?
+vasp_pp_exists = False                              # postprocessing of VASP results or no?
 Cluster_rules_exist = True                          # define cluster rules
 J_rules_exist = True                                # define heisenberg rules
 Js_exist = True                                     # results of fitting model
 
+
 # summarize VASP data
 if vasp_summary_exists is False:                    # will make summary of VASP results if it doesn't already exist
-    cvs.import_vasp(root_dir, vasp_data_file)
+    cvs.import_vasp(root_dir, vasp_data_file,species)
 
 # write Cluster and J rules file if doesn't exist, then read the rules
 if Cluster_rules_exist is False:                    # writes cluster rules if doesn't already exist
@@ -96,14 +98,13 @@ J_rules = cmr.read_j_rules(j_file)
 
 # Read the summarized VASP data and initialize a structure object for each
 # postprocess according to user selected parameters above and the cluster and j rules
-M_structures = ppv.generate_m_structure(vasp_data_file, len(Cluster_rules), len(J_rules), aust_tol, spin_style, spin_tol)
+# calculation of sums and checking for duplicates occurs in here now
+# if a given structure is considered a duplicate then it is not added to the structure_list
+M_structures = ppv.generate_m_structure(vasp_data_file, len(Cluster_rules), len(J_rules), aust_tol, spin_style, spin_tol, Cluster_rules, J_rules)
 ppv.write_structures_processedvasp(M_structures,vasp_data_file_pp)
 
 # Seems like there should be the option to read the sums from the
 # summary_fitting_structures file to avoid doing this summing each time.
-ppv.calculate_sums(M_structures, Cluster_rules, J_rules, spin_style, spin_tol)
-if (ppv.check_duplicate_structures(M_structures)=='True'):
-    print ('Based on summed cluster and spin rules, fitting structures appear to contain duplicates. \n')
 ppv.summarize_fitting_structures(M_structures)
 
 ## Ridge Regression Fitting with Regularization

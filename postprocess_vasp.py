@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 #from sklearn.linear_model import Ridge
 #from sklearn import linear_model
 
-def generate_m_structure(data_file, num_Cluster_rules, num_J_rules, aust_tol, spin_style, spin_tol):
+def generate_m_structure(data_file, num_Cluster_rules, num_J_rules, aust_tol, spin_style, spin_tol, Cluster_rules, J_rules):
     m_struct_list = []
     data = open(data_file, 'r')
     lines = data.readlines()
@@ -26,8 +26,10 @@ def generate_m_structure(data_file, num_Cluster_rules, num_J_rules, aust_tol, sp
             for j in range(m_struct.num_Atoms):
                 atom_data = lines[i + j + 2]
                 m_struct.set_atom_properties(j, atom_data, spin_style, spin_tol)
+            calculate_sums(m_struct, Cluster_rules, J_rules, spin_style, spin_tol)
             if m_struct.phase_name != 'prem':
-                m_struct_list.append(m_struct)
+                if check_duplicate_structures(m_struct,m_struct_list)=='False':
+                    m_struct_list.append(m_struct)
     return m_struct_list
 
 def write_structures_processedvasp(structures,data_file_pp):
@@ -51,63 +53,38 @@ def write_structures_processedvasp(structures,data_file_pp):
 
 # This function sweeps through the VASP data and determines active interactions and clusters
 # for each atom site and group of sites
-def calculate_sums(m_structure_list, cluster_rule_list, j_rule_list, spin_style, spin_tol):
-    for i in range(len(m_structure_list)):          # maybe this loop should be outside, just have this calc sums for a given structure
-        m_structure_list[i].create_supercell(spin_style, spin_tol)
-        m_structure_list[i].calculate_distances()
-        m_structure_list[i].calculate_minimums()
-        for j in range(m_structure_list[i].num_Atoms):
-            for k in range(len(m_structure_list[i].basis)):
-#                # Calc BEG sums
-#                for l in range(len(beg_rule_list)):
-#                    if m_structure_list[i].basis[j].species in beg_rule_list[l].home_atom_list:
-#                        if m_structure_list[i].basis[k].species in beg_rule_list[l].neighbor_atom_list:
-#                            if m_structure_list[i].distances[j, k] == m_structure_list[i].mins[j, beg_rule_list[l].neighbor_order - 1]:
-#                                if m_structure_list[i].phase_name == beg_rule_list[l].phase:
-#                                    if m_structure_list[i].composition == beg_rule_list[l].composition:
-#                                        if beg_rule_list[l].neighbor_arrangement == 'COMB':
-#                                            m_structure_list[i].BEG_sums[l] += 1
-#                                        if beg_rule_list[l].neighbor_arrangement == 'PERM':
-#                                            if m_structure_list[i].basis[k].species != m_structure_list[i].basis[j].species:
-#                                                m_structure_list[i].BEG_sums[l] += 1
-#        ##########################BEG V2#########################
-#        # for j in range(m_structure_list[i].num_Atoms):
-#        #     for k in range(len(m_structure_list[i].basis)):
-#        #         # Calc BEG sums
-#        #         for l in range(len(beg_rule_list)):
-#        #             if m_structure_list[i].basis[j].species in beg_rule_list[l].home_atom_list:
-#        #                 if m_structure_list[i].basis[k].species in beg_rule_list[l].neighbor_atom_list:
-#        #                     if m_structure_list[i].distances[j, k] == m_structure_list[i].mins[j, beg_rule_list[l].neighbor_order - 1]:
-#        #                         if m_structure_list[i].phase_name == beg_rule_list[l].phase:
-#        #                             if m_structure_list[i].composition == beg_rule_list[l].composition:
-#        #                                 m_structure_list[i].BEG_sums[l] += -1
-#        #########################################################
+def calculate_sums(m_struct, cluster_rule_list, j_rule_list, spin_style, spin_tol):
+        m_struct.create_supercell(spin_style, spin_tol)
+        m_struct.calculate_distances()
+        m_struct.calculate_minimums()
+        for j in range(m_struct.num_Atoms):
+            for k in range(len(m_struct.basis)):
                 # Calc Cluster sums
                 for l in range(len(cluster_rule_list)):
-                    if m_structure_list[i].basis[j].species in cluster_rule_list[l].home_atom_list:
-                        if m_structure_list[i].distances[j, k] == m_structure_list[i].mins[j, cluster_rule_list[l].neighbor_order - 1]:
-                            if m_structure_list[i].check_plane(j, k) == cluster_rule_list[l].plane or m_structure_list[i].check_plane(j, k) == 'ALL':
-                                if m_structure_list[i].phase_name == cluster_rule_list[l].phase:
+                    if m_struct.basis[j].species in cluster_rule_list[l].home_atom_list:
+                        if m_struct.distances[j, k] == m_struct.mins[j, cluster_rule_list[l].neighbor_order - 1]:
+                            if m_struct.check_plane(j, k) == cluster_rule_list[l].plane or m_struct.check_plane(j, k) == 'ALL':
+                                if m_struct.phase_name == cluster_rule_list[l].phase:
                                     if cluster_rule_list[l].neighbor_arrangement == 'COMB':
-                                        if m_structure_list[i].basis[k].species in cluster_rule_list[l].neighbor_atom_list:
-                                            m_structure_list[i].Cluster_sums[l] += 1
+                                        if m_struct.basis[k].species in cluster_rule_list[l].neighbor_atom_list:
+                                            m_struct.Cluster_sums[l] += 1
                                     if cluster_rule_list[l].neighbor_arrangement == 'PERM':
-                                        if m_structure_list[i].basis[k].species in cluster_rule_list[l].neighbor_atom_list:
-                                            if m_structure_list[i].basis[k].species != m_structure_list[i].basis[j].species:
-                                                m_structure_list[i].Cluster_sums[l] += 1
+                                        if m_struct.basis[k].species in cluster_rule_list[l].neighbor_atom_list:
+                                            if m_struct.basis[k].species != m_struct.basis[j].species:
+                                                m_struct.Cluster_sums[l] += 1
                 # Calc J sums
                 for l in range(len(j_rule_list)):
-                    if m_structure_list[i].basis[j].species in j_rule_list[l].home_atom_list:
-                        if m_structure_list[i].distances[j, k] == m_structure_list[i].mins[j, j_rule_list[l].neighbor_order - 1]:
-                            if m_structure_list[i].check_plane(j, k) == j_rule_list[l].plane or m_structure_list[i].check_plane(j, k) == 'ALL':
-                                if m_structure_list[i].phase_name == j_rule_list[l].phase:
+                    if m_struct.basis[j].species in j_rule_list[l].home_atom_list:
+                        if m_struct.distances[j, k] == m_struct.mins[j, j_rule_list[l].neighbor_order - 1]:
+                            if m_struct.check_plane(j, k) == j_rule_list[l].plane or m_struct.check_plane(j, k) == 'ALL':
+                                if m_struct.phase_name == j_rule_list[l].phase:
                                     if j_rule_list[l].neighbor_arrangement == 'COMB':
-                                        if m_structure_list[i].basis[k].species in j_rule_list[l].neighbor_atom_list:
-                                            m_structure_list[i].J_sums[l] += m_structure_list[i].basis[j].spin * m_structure_list[i].basis[k].spin
+                                        if m_struct.basis[k].species in j_rule_list[l].neighbor_atom_list:
+                                            m_struct.J_sums[l] += m_struct.basis[j].spin * m_struct.basis[k].spin
                                     if j_rule_list[l].neighbor_arrangement == 'PERM':
-                                        if m_structure_list[i].basis[k].species in j_rule_list[l].neighbor_atom_list:
-                                            if m_structure_list[i].basis[k].species != m_structure_list[i].basis[j].species:
-                                                m_structure_list[i].J_sums[l] += m_structure_list[i].basis[j].spin * m_structure_list[i].basis[k].spin
+                                        if m_struct.basis[k].species in j_rule_list[l].neighbor_atom_list:
+                                            if m_struct.basis[k].species != m_struct.basis[j].species:
+                                                m_struct.J_sums[l] += m_struct.basis[j].spin * m_struct.basis[k].spin
 
 def summarize_fitting_structures(structures):
     path = 'summary_fitting_structures'
@@ -126,14 +103,13 @@ def summarize_fitting_structures(structures):
         file.write("\n")
     file.close()
 
-def check_duplicate_structures(structures):
+def check_duplicate_structures(structure,structure_list):
     dupl = 'False';
-    for i in range(len(structures)):
-        for j in range(i+1,len(structures)):
-            if (structures[i].Cluster_sums == structures[j].Cluster_sums):
-                if (structures[i].J_sums == structures[j].J_sums):
-                    dupl = 'True';
-                    print('Duplicate fitting structure found: ',structures[i].name,',',structures[j].name,'\n')
+    for i in range(len(structure_list)):
+        if (structure.Cluster_sums == structure_list[i].Cluster_sums):
+            if (structure.J_sums == structure_list[i].J_sums):
+                dupl = 'True';
+                print('Duplicate fitting structure found: ',structure.name,'(energy =',structure.enrg,'eV), ',structure_list[i].name,'(energy =',structure_list[i].enrg,'eV)')
     return dupl
 
 

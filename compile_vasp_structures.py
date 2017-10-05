@@ -10,7 +10,7 @@ import m_structure
 import os
 import matplotlib.pyplot as plt
 
-def import_vasp(root_dir, output_dir):
+def import_vasp(root_dir, output_dir,species):
     output = open(output_dir, 'w')
     for subdir, dirs, files in os.walk(root_dir):
         contcar_lines = []
@@ -18,7 +18,8 @@ def import_vasp(root_dir, output_dir):
         flag = 0
         for file in files:
             if 'CONTCAR' in files and 'OUTCAR' in files:
-                name = subdir.strip(root_dir)
+                name = subdir.replace(root_dir,"")
+                name = name.replace("/","")
                 flag = 1
                 if file == "CONTCAR":
                     contcar = open(subdir + '/' + file, 'r')
@@ -39,11 +40,14 @@ def import_vasp(root_dir, output_dir):
             b = float(b[1]) * lc
             c = contcar_lines[4].split()
             c = float(c[2]) * lc
-            composition = [0] * number_of_species
+            composition = [0] * len(species)
             comp = contcar_lines[6].split()
             for i in range(len(comp)):
                 composition[i] = comp[i]
-            output.write("#\t")
+            output.write("# ")
+            for i in range(len(species)):
+                output.write(str(species[i])+ " ")
+            output.write('\n')
             total_num = 0
             for i in range(len(composition)):
                 output.write(str(composition[i]) + "\t")
@@ -57,12 +61,11 @@ def import_vasp(root_dir, output_dir):
                     for j in range(total_num):
                         mag = outcar_lines[i + j + 4].split()
                         mag_list[j] = mag[4]
-            u = str(u)
             enrg = str(enrg)
             a = str(a)
             b = str(b)
             c = str(c)
-            output_line = name + "\t" + u + "\t" + enrg + "\t" + a + "\t" + b + "\t" + c + "\n"
+            output_line = name + "\t" + enrg + "\t" + a + "\t" + b + "\t" + c + "\n"
             output.write(output_line)
             index = 0
             for i in range(8, 8 + total_num):
