@@ -17,7 +17,7 @@ import sys
 ##      For now I modified the NiMnIn_Data file the way I want it to appear
 ##      but have not yet modified the function because I do not have Brian's directory.
 ##
-## *) M_structures now stores the array of species like [Ni,Mn,In]. As implemented right now,
+## *) As implemented right now,
 ##      several parts of this code assume that the VASP POSCAR/CONTCAR always enter Ni,Mn,In in the
 ##      same order.  You will be in trouble on many levels if this is not actually the case.
 ##      For instance, atom.py assumes the species order is NiMnIn always.
@@ -29,24 +29,11 @@ import sys
 ## *) When M_structures are set, right now it just calls everything 'sd' = spin-disordered.
 ##      Would be good to have the code guess AFM, FM, etc.
 ##
-## *) I added a function in cfs to check for duplicate data sets in NiMnIn_Data based on cluster summing.
-##      Note that Brian's data set did have some duplicates, which I have removed from NiMnIn_Data.
-##      For now you get warned and you have to manually remove them. In the future, might be nice to
-##      just have it done internally in the code. Would be better to leave NiMnIn_Data represent EXACTLY
-##      what came from VASP directories, and just have duplicates not included in the structures.
-##      Some manual work is required though because need to check that the structures are
-##      actually duplicates -- i.e. energies, latt consts are similar.
-##
 ## *) we should make an option to just read cluster and j sums from summary rather than regenerating each time
 ##
 ## *) Look at m_structure.py line 86 for minor question.
 ##
 ## *) can I lose: BEG_rules, BEG.py, generate_FFCV_files.py
-##
-############################
-##
-## *) SHOULD OUTPUT HERE THE POST-PROCESSED VASP WITHOUT PRIOR TO DOING ANY SUM CALCULATIONS WHICH DEPEND ON THE RULES
-##      want to break up cfs into post-process vasp data and then generate fitting structures
 ##
 ## *) I have not yet made sure the cluster and j rules are being calculated properly.  I also think we need
 ##      to make it easy to change them to get the best possible description.
@@ -58,13 +45,11 @@ import sys
 ##      Note: fitting is currently modified so intercept is not fit, need to change cfp.ridge_simple if we want
 ##      to include it.  But I think we do not.
 ##
-############################
-##
 ## *) SEE if we can recover Brian's fit. Then do changes in line 100
 ##
 ##
 
-aust_tol = 0.10
+aust_tol = 0.025
 spin_style = ['threshold','threshold','threshold']  # options for spin_tol. Assuming [Ni Mn In]. choose 'threshold' or 'factor'
 spin_tol = [0.1,2,0]                                # insert spin parameters here, this assumes [Ni Mn In ]
 species = ['Ni','Mn','In']
@@ -83,7 +68,6 @@ Cluster_rules_exist = True                          # define cluster rules
 J_rules_exist = True                                # define heisenberg rules
 Js_exist = True                                     # results of fitting model
 
-
 # summarize VASP data
 if vasp_summary_exists is False:                    # will make summary of VASP results if it doesn't already exist
     cvs.import_vasp(root_dir, vasp_data_file,species)
@@ -101,6 +85,7 @@ J_rules = cmr.read_j_rules(j_file)
 # calculation of sums and checking for duplicates occurs in here now
 # if a given structure is considered a duplicate then it is not added to the structure_list
 M_structures = ppv.generate_m_structure(vasp_data_file, len(Cluster_rules), len(J_rules), aust_tol, spin_style, spin_tol, Cluster_rules, J_rules)
+
 ppv.write_structures_processedvasp(M_structures,vasp_data_file_pp)
 
 # Seems like there should be the option to read the sums from the

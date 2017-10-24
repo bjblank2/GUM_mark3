@@ -27,6 +27,7 @@ def generate_m_structure(data_file, num_Cluster_rules, num_J_rules, aust_tol, sp
                 atom_data = lines[i + j + 2]
                 m_struct.set_atom_properties(j, atom_data, spin_style, spin_tol)
             calculate_sums(m_struct, Cluster_rules, J_rules, spin_style, spin_tol)
+            # NEED TO ASSIGN SPIN TYPE HERE BASED ON CALCULATED SUMS - need a function for this.
             if m_struct.phase_name != 'prem':
                 if check_duplicate_structures(m_struct,m_struct_list)=='False':
                     m_struct_list.append(m_struct)
