@@ -84,9 +84,11 @@ J_rules = cmr.read_j_rules(j_file)
 # postprocess according to user selected parameters above and the cluster and j rules
 # calculation of sums and checking for duplicates occurs in here now
 # if a given structure is considered a duplicate then it is not added to the structure_list
-M_structures = ppv.generate_m_structure(vasp_data_file, len(Cluster_rules), len(J_rules), aust_tol, spin_style, spin_tol, Cluster_rules, J_rules)
+M_structures,norms = ppv.generate_m_structure(vasp_data_file, len(Cluster_rules), len(J_rules), aust_tol, spin_style, spin_tol, Cluster_rules, J_rules)
+# set spin phase here
+ppv.phase_determine(M_structures,norms,J_rules)
 
-ppv.write_structures_processedvasp(M_structures,vasp_data_file_pp)
+ppv.write_structures_processedvasp(M_structures,vasp_data_file_pp,norms)
 
 # Seems like there should be the option to read the sums from the
 # summary_fitting_structures file to avoid doing this summing each time.
