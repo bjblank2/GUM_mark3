@@ -125,12 +125,17 @@ def calculate_sums_scaled(m_structure_list, cluster_rule_list, j_rule_list, spin
                                 if j_rule_list[l].neighbor_arrangement == 'COMB':
                                     if m_structure_list.basis[k].species in j_rule_list[l].neighbor_atom_list:
                                         m_structure_list.J_sums[l] += m_structure_list.basis[j].spin * m_structure_list.basis[k].spin
-                                        j_count[l]+=1
+                                        # will change in the future determine Mg - Mg only
+                                        if m_structure_list.basis[j].species != 2:
+                                            if m_structure_list.basis[k].species != 2:
+                                                j_count[l]+=1
                                 if j_rule_list[l].neighbor_arrangement == 'PERM':
                                     if m_structure_list.basis[k].species in j_rule_list[l].neighbor_atom_list:
                                         if m_structure_list.basis[k].species != m_structure_list.basis[j].species:
                                             m_structure_list.J_sums[l] += m_structure_list.basis[j].spin * m_structure_list.basis[k].spin
-                                            j_count[l]+=1
+                                            if m_structure_list.basis[j].species != 2:
+                                                if m_structure_list.basis[k].species != 2:
+                                                    j_count[l]+=1
 
     return j_count
 

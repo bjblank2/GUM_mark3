@@ -89,7 +89,7 @@ M_structures,norms = ppv.generate_m_structure(vasp_data_file, len(Cluster_rules)
 ppv.phase_determine(M_structures,norms,J_rules)
 
 ppv.write_structures_processedvasp(M_structures,vasp_data_file_pp,norms)
-
+ppv.summarize_classification(M_structures,norms)
 # Seems like there should be the option to read the sums from the
 # summary_fitting_structures file to avoid doing this summing each time.
 ppv.summarize_fitting_structures(M_structures)
