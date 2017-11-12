@@ -31,8 +31,26 @@ def determine_phaseu(LCs,aust_tol):
         phase = "prem"
     return(phase,u)
 
-def determine_spin():
-    return('sd')
+def check_aust(Jscale,J_rule):
+    determine = Jscale[J_rule]
+    if determine <= 1 and determine >= 0.9:
+        return "fm"
+    elif determine >= -1 and determine <= -0.9:
+            return "afm"
+    else:
+        return 0
+
+def check_mart(Jscale,J1,J2):
+    first = Jscale[J1]
+    second = Jscale[J2]
+    # if one of them is -1, afm
+    if (first <= -0.9 and first >= -1) or (second <= -0.9 and second >= -1):
+        return "afm"
+        # if both are 1, fm
+    elif (first >= 0.9 and first <= 1) and (second >= 0.9 and second <= 1):
+            return  "fm"
+    else:
+        return 0
 
 class MStructureObj:
     def __init__(self, data, species, num_cluster_rules, num_j_rules, aust_tol):
@@ -54,7 +72,7 @@ class MStructureObj:
         c = float(data[itter + 4])
         self.LCs = [a, b, c]
         self.phase_name,self.u = determine_phaseu(self.LCs,aust_tol)
-        self.mag_phase = determine_spin()   # does this ever get used anywhere?
+        self.mag_phase = 'sd'
         find_c = [abs(b - c), abs(a - c), abs(a - b)]
         self.Cindex = find_c.index(min(find_c))
         self.C = self.LCs[self.Cindex]
@@ -66,6 +84,7 @@ class MStructureObj:
         self.basis = []
         self.distances = np.ones([self.num_Atoms, self.num_Atoms * 27]) * 100
         self.mins = np.ones([self.num_Atoms, 10]) * 100
+        self.mnmn_count = [0.0] * num_j_rules
 
     def set_atom_properties(self, index, atom_data, spin_style, spin_tol):
         atom_data = atom_data.split()
@@ -123,3 +142,68 @@ class MStructureObj:
         if self.phase_name == 'aust':
             plane = 'ALL'
         return plane
+
+    def spinphase_determine(self,J_rules):
+        # find out the corresponding index for each J_rule we want to look at
+        for i in range(len(J_rules)):
+            J_rule = J_rules[i]
+            name = ''.join(J_rule.name.split())
+            if name == "J1b0":
+                J1b0 = i
+            elif name == "J1bU":
+                J1bU = i
+            elif name == "J2bU":
+                J2bU = i
+            elif name == "J1c0":
+                J1c0 = i
+            elif name == "J1cU":
+                J1cU = i
+            elif name == "J2cU":
+                J2cU = i
+
+        Jsums = self.J_sums
+        mnmncounts = self.mnmn_count
+        Jscale = []
+        # for each m_structure, get the j_sum scaled by number of Mg-Mg bonds
+        for j in range(len(mnmncounts)):
+            mnmncount = mnmncounts[j]
+            if mnmncount == 0:
+                Jscale.append(0.0)
+            else:
+                Jscale.append(Jsums[j] / mnmncount)
+        # print(Jscale)
+        # step 1: check if all 0
+        if (all( v >= -0.1 and v <= 0.1 for v in Jscale)):
+            self.mag_phase = "NA"
+        else:
+            #step 2: if it is austinite
+            if self.phase_name == "aust":
+                # check J1b0 first
+                phase =  check_aust(Jscale,J1b0)
+                if phase != 0:
+                    self.mag_phase = phase
+                else:
+                    #check J1c0 then
+                    phase = check_aust(Jscale,J1c0)
+                    if phase != 0:
+                        self.mag_phase = phase
+                    else:
+                        self.mag_phase = "sd"
+            #step 3: if it is martensite
+            elif self.phase_name == "mart":
+                # check J2bU and J1bU first
+                phase = check_mart(Jscale,J1bU,J2bU)
+                if phase != 0:
+                    self.mag_phase = phase
+                else:
+                    #check J1cU and J2cU
+                    phase = check_mart(Jscale,J1cU,J2cU)
+                    if phase!= 0:
+                        self.mag_phase = phase
+                    else:
+                        self.mag_phase = "sd"
+            else:
+                # when it is not aust or mart? can be pm i guess?
+                self.mag_phase = "sd"
+
+

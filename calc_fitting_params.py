@@ -552,9 +552,9 @@ def write_fitting_parameters(structures, clusters_list, j_list, Js, intercept, l
 def plot_data3(M_structures, clusters_list, j_list, Js, intercept, limit):
     plt.figure(3)           # do we really need to keep count of the number of figures?
     colors = {'mart': 'g', 'aus': 'b', 'pre-mart': 'r'}
-    markers = {'FM': 'o', 'AFM': 's', 'none': '^', 'FM/AFM': 'D'}
+    markers = {'none': 'x', 'FM': 'o', 'AFM': 's', 'spin disordered':'D'}
     labels = ['NiMn', 'Ni4Mn3In1', 'Ni2MnIn']
-    actual_labels = ['Ni$_8$Mn$_8$', 'Ni$_4$Mn$_3$In$_1$', 'Ni$_4$Mn$_2$In$_2$']
+    actual_labels = ['Ni$_8$Mn$_8$', 'Ni$_8$Mn$_6$In$_2$', 'Ni$_8$Mn$_4$In$_4$']
     e_comp0 = []
     e_comp50 = []
     for i in range(len(M_structures)):
@@ -627,14 +627,17 @@ def plot_data3(M_structures, clusters_list, j_list, Js, intercept, limit):
                 #plt.plot([x + x_itter, x + x_itter], [y, float(new_enrg_list[i])], lw=1, color="k")
                 plt.plot(x + x_itter, y, lw=0, markersize=8, marker=m, color=c)
                 plt.plot(x + x_itter, float(new_enrg_list[i]), lw=0, markersize=8, marker=".", color="r")
-#plt.xlim(0,8)
-#plt.ylim(-1,9)
+    for c in colors.keys():
+        for m in markers.keys():
+            plt.plot([],[],label=c+', '+m,lw=0,markersize=12,marker=markers[m],color=colors[c])
+    #plt.xlim(0,8)
+    #plt.ylim(-1,9)
     plt.rc('lines', linewidth=1)
     plt.title("NiMn -- Ni$_2$MnIn Composition Energies", fontsize=16)
     plt.xlabel("Composition", fontsize=14)
     plt.ylabel("Energy above Hull (eV/16 atoms)", fontsize=14)
     #plt.xticks(fontsize=14)
     plt.yticks(fontsize=14)
-    #plt.legend(loc='center left', bbox_to_anchor=(1, 0.5),fontsize=12)
-    #lt.xticks([2,5.5,10],actual_labels, rotation='horizontal',fontsize=18)
-    plt.savefig('FittedDataSummary.pdf')
+    lgd = plt.legend(loc='center left', bbox_to_anchor=(1, 0.5),fontsize=12)
+    plt.xticks([2,5.5,10],actual_labels, rotation='horizontal',fontsize=14)
+    plt.savefig('FittedDataSummary.pdf', bbox_extra_artists=(lgd,), bbox_inches='tight')
