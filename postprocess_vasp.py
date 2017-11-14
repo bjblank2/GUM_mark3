@@ -183,7 +183,7 @@ def check_duplicate_structures(structure,structure_list):
 def summarize_classification(structures):
     path = 'summary_classification'
     file = open(path, 'w')
-    file.write("NAME    ".ljust(15) + "SCALED_SUMS->\n")
+    file.write("NAME".ljust(15) + "SCALED_SUMS->\n")
     for i in range(len(structures)):
         mat = structures[i]
         Jsums = mat.J_sums
