@@ -35,7 +35,7 @@ def generate_m_structure(data_file, num_Cluster_rules, num_J_rules, aust_tol, sp
 #norms.append(j_count)
     return m_struct_list
 
-def write_structures_processedvasp(structures,data_file_pp,norms):
+def write_structures_processedvasp(structures,data_file_pp):
     file = open(data_file_pp, 'w')
     for i in range(len(structures)):
         file.write('# Ni Mn In \n')            # hard coding!
