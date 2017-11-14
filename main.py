@@ -26,9 +26,6 @@ import sys
 ##      information necessary to do the fitting and to run MC simulations.  It is carrying around
 ##      a lot of information we don't need.  Cleaner to leave it behind when its not needed.
 ##
-## *) When M_structures are set, right now it just calls everything 'sd' = spin-disordered.
-##      Would be good to have the code guess AFM, FM, etc.
-##
 ## *) we should make an option to just read cluster and j sums from summary rather than regenerating each time
 ##
 ## *) Look at m_structure.py line 86 for minor question.
@@ -62,14 +59,14 @@ j_file = './J_Rules'                                # heisenberg rules
 fitting_structures_file = './'
 
 # Determine what needs to be generated from scratch
-vasp_summary_exists = True                          # summarize VASP results from VASP directories or no?
+vasp_data_exists = True                             # summarize VASP results from VASP directories or no?
 vasp_pp_exists = False                              # postprocessing of VASP results or no?
 Cluster_rules_exist = True                          # define cluster rules
 J_rules_exist = True                                # define heisenberg rules
 Js_exist = True                                     # results of fitting model
 
 # summarize VASP data
-if vasp_summary_exists is False:                    # will make summary of VASP results if it doesn't already exist
+if vasp_data_exists is False:                    # will make summary of VASP results if it doesn't already exist
     cvs.import_vasp(root_dir, vasp_data_file,species)
 
 # write Cluster and J rules file if doesn't exist, then read the rules
@@ -80,16 +77,15 @@ if J_rules_exist is False:                          # writes j_rules if doesn't 
 Cluster_rules = cmr.read_cluster_rules(cluster_file)
 J_rules = cmr.read_j_rules(j_file)
 
-# Read the summarized VASP data and initialize a structure object for each
+# Read the VASP datafile and initialize a structure object for each
 # postprocess according to user selected parameters above and the cluster and j rules
 # calculation of sums and checking for duplicates occurs in here now
 # if a given structure is considered a duplicate then it is not added to the structure_list
-M_structures,norms = ppv.generate_m_structure(vasp_data_file, len(Cluster_rules), len(J_rules), aust_tol, spin_style, spin_tol, Cluster_rules, J_rules)
-# set spin phase here
-ppv.phase_determine(M_structures,norms,J_rules)
 
-ppv.write_structures_processedvasp(M_structures,vasp_data_file_pp,norms)
-ppv.summarize_classification(M_structures,norms)
+M_structures = ppv.generate_m_structure(vasp_data_file, len(Cluster_rules), len(J_rules), aust_tol, spin_style, spin_tol, Cluster_rules, J_rules)
+
+ppv.write_structures_processedvasp(M_structures,vasp_data_file_pp)
+ppv.summarize_classification(M_structures)
 # Seems like there should be the option to read the sums from the
 # summary_fitting_structures file to avoid doing this summing each time.
 ppv.summarize_fitting_structures(M_structures)
