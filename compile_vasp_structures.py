@@ -33,6 +33,7 @@ def import_vasp(root_dir, output_dir,species):
             else:
                 flag = 0
         if len(contcar_lines) > 0 and len(outcar_lines) > 0 and flag == 1:
+            # species is in contcar_line[0]
             lc = float(contcar_lines[1])
             a = contcar_lines[2].split()
             a = float(a[0]) * lc
@@ -70,6 +71,7 @@ def import_vasp(root_dir, output_dir,species):
             index = 0
             for i in range(8, 8 + total_num):
                 pos = contcar_lines[i].split()
+                # resort pos according to the order of species
                 output_line = "\t" + str(i - 7) + "\t" + str(mag_list[index]) + "\t" + str(pos[0]) + "\t" + str(
                     pos[1]) + "\t" + str(pos[2]) + "\n"
                 output.write(output_line)
