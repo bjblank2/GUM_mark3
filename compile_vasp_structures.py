@@ -33,7 +33,9 @@ def import_vasp(root_dir, output_dir,species):
             else:
                 flag = 0
         if len(contcar_lines) > 0 and len(outcar_lines) > 0 and flag == 1:
-            # species is in contcar_line[0]
+            # species order is in contcar_line[0]
+            order = contcar_lines[5].split()
+            #print(order)
             lc = float(contcar_lines[1])
             a = contcar_lines[2].split()
             a = float(a[0]) * lc
@@ -41,19 +43,24 @@ def import_vasp(root_dir, output_dir,species):
             b = float(b[1]) * lc
             c = contcar_lines[4].split()
             c = float(c[2]) * lc
-            composition = [0] * len(species)
+            #composition = [0] * len(species)
             comp = contcar_lines[6].split()
+            composition = [[0,species[-1]]] *len(species)
             for i in range(len(comp)):
-                composition[i] = comp[i]
+                composition[i]=[comp[i],order[i]]
+
+            composition_ordered = sorted(composition, key=lambda d: species.index(d[1]))
+
+
             output.write("# ")
             for i in range(len(species)):
                 output.write(str(species[i])+ " ")
             output.write('\n')
             total_num = 0
-            for i in range(len(composition)):
-                output.write(str(composition[i]) + "\t")
-                total_num += int(composition[i])
-            mag_list = [0] * (total_num)
+            for i in range(len(composition_ordered)):
+                output.write(str(composition_ordered[i][0]) + "\t")
+                total_num += int(composition_ordered[i][0])
+            mag_list = [[0,species[-1]]] * (total_num)
             for i in range(outcar_len):
                 if "TOTEN" in outcar_lines[i]:
                     enrg = outcar_lines[i].split()
@@ -61,7 +68,16 @@ def import_vasp(root_dir, output_dir,species):
                 if "magnetization (x)" in outcar_lines[i]:
                     for j in range(total_num):
                         mag = outcar_lines[i + j + 4].split()
-                        mag_list[j] = mag[4]
+                        if j < int(composition[0][0]):
+                            kind = order[0]
+                        elif j< int(composition[0][0]) + int(composition[1][0]):
+                            kind = order[1]
+                        else:
+                            kind = order[2]
+                        mag_list[j] = [mag[4],kind]
+            #print(name)
+            #print(mag_list)
+            mag_list_ordered = sorted(mag_list, key=lambda d: species.index(d[1]))
             enrg = str(enrg)
             a = str(a)
             b = str(b)
@@ -69,11 +85,22 @@ def import_vasp(root_dir, output_dir,species):
             output_line = name + "\t" + enrg + "\t" + a + "\t" + b + "\t" + c + "\n"
             output.write(output_line)
             index = 0
+            pos_list = []
             for i in range(8, 8 + total_num):
                 pos = contcar_lines[i].split()
-                # resort pos according to the order of species
-                output_line = "\t" + str(i - 7) + "\t" + str(mag_list[index]) + "\t" + str(pos[0]) + "\t" + str(
-                    pos[1]) + "\t" + str(pos[2]) + "\n"
+                if i-8 < int(composition[0][0]):
+                    kind = order[0]
+                elif i-8 < int(composition[0][0]) + int(composition[1][0]):
+                    kind = order[1]
+                else:
+                    kind = order[2]
+                pos_list.append([pos,kind])
+
+            # resort pos according to the order of species
+            pos_list_ordered = sorted(pos_list, key=lambda d: species.index(d[1]))
+            for i in range(total_num):
+                output_line = "\t" + str(i ) + "\t" + str(mag_list_ordered[index][0]) + "\t" + str(pos_list_ordered[i][0][0]) + "\t" + str(
+                    pos_list_ordered[i][0][1]) + "\t" + str(pos_list_ordered[i][0][2]) + "\n"
                 output.write(output_line)
                 index += 1
     output.close()
