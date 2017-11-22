@@ -49,7 +49,7 @@ import sys
 aust_tol = 0.025
 spin_style = ['threshold','threshold','threshold']  # options for spin_tol. Assuming [Ni Mn In]. choose 'threshold' or 'factor'
 spin_tol = [0.1,2,0]                                # insert spin parameters here, this assumes [Ni Mn In ]
-species = ['Ni','Mn','In']
+species = ['Ni','Mn','In']                          # this is the order that the post-processed data is reported, NEEDS TO BE Heusler format Ni2MnIn, Ni2FeGa.
 
 root_dir = '/Users/apple/Box Sync/memory alloy/Chendi_GUM_mark3/NiMnIn_Data_2'        # where the VASP directories are  #root_dir = '/Users/brian/Desktop/folder'
 vasp_data_file = './NiMnIn_Data'                    # generated in compile_vasp_structures>import_vasp, summarizes output of all VASP calculations
