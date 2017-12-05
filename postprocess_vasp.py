@@ -45,6 +45,7 @@ def write_structures_processedvasp(structures,data_file_pp):
             sums = str(out[j])
             file.write(sums.ljust(20))
         file.write("".ljust(10))
+
         #file.write(str(norms[i]).ljust(20))
         file.write("\n")
         for j in range(mat.num_Atoms):
@@ -91,6 +92,7 @@ def calculate_sums_o(m_struct, cluster_rule_list, j_rule_list, spin_style, spin_
                                             if m_struct.basis[k].species != m_struct.basis[j].species:
                                                 m_struct.J_sums[l] += m_struct.basis[j].spin * m_struct.basis[k].spin
 
+
 # This function sweeps through the VASP data and determines active interactions and clusters
 # for each atom site and group of sites, and also associates each J-rule with the number of Mn-Mn interactions involved.
 def calculate_sums(m_structure_list, cluster_rule_list, j_rule_list, spin_style, spin_tol):
@@ -121,6 +123,7 @@ def calculate_sums(m_structure_list, cluster_rule_list, j_rule_list, spin_style,
                                 if j_rule_list[l].neighbor_arrangement == 'COMB':
                                     if m_structure_list.basis[k].species in j_rule_list[l].neighbor_atom_list:
                                         m_structure_list.J_sums[l] += m_structure_list.basis[j].spin * m_structure_list.basis[k].spin
+
                                         # will change in the future determine Mn - Mn only
                                         if m_structure_list.basis[j].species != 2:
                                             if m_structure_list.basis[k].species != 2:
@@ -175,6 +178,7 @@ def check_duplicate_structures(structure,structure_list):
                 dupl = 'True';
                 print('Duplicate fitting structure found: ',structure.name,'(energy =',structure.enrg,'eV), ',structure_list[i].name,'(energy =',structure_list[i].enrg,'eV)')
     return dupl
+
 
 def summarize_classification(structures):
     path = 'summary_classification'

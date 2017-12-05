@@ -51,7 +51,7 @@ spin_style = ['threshold','threshold','threshold']  # options for spin_tol. Assu
 spin_tol = [0.1,2,0]                                # insert spin parameters here, this assumes [Ni Mn In ]
 species = ['Ni','Mn','In']                          # this is the order that the post-processed data is reported, NEEDS TO BE Heusler format Ni2MnIn, Ni2FeGa.
 
-root_dir = '/Volumes/TOURO/NiMnIn_Vasp_Data'        # where the VASP directories are  #root_dir = '/Users/brian/Desktop/folder'
+root_dir = '/Users/apple/Box Sync/memory alloy/Chendi_GUM_mark3/NiMnIn_Data_2'        # where the VASP directories are  #root_dir = '/Users/brian/Desktop/folder'
 vasp_data_file = './NiMnIn_Data'                    # generated in compile_vasp_structures>import_vasp, summarizes output of all VASP calculations
 vasp_data_file_pp = './NiMnIn_Data_pp'              # post-processed version of VASP results with spins, positions selected
 cluster_file = './Cluster_Rules'                    # cluster expansion rules
@@ -59,7 +59,7 @@ j_file = './J_Rules'                                # heisenberg rules
 fitting_structures_file = './'
 
 # Determine what needs to be generated from scratch
-vasp_data_exists = True                             # summarize VASP results from VASP directories or no?
+vasp_data_exists = False            # should be False if I want to regenrate files                 # summarize VASP results from VASP directories or no?
 vasp_pp_exists = False                              # postprocessing of VASP results or no?
 Cluster_rules_exist = True                          # define cluster rules
 J_rules_exist = True                                # define heisenberg rules
@@ -81,6 +81,7 @@ J_rules = cmr.read_j_rules(j_file)
 # postprocess according to user selected parameters above and the cluster and j rules
 # calculation of sums and checking for duplicates occurs in here now
 # if a given structure is considered a duplicate then it is not added to the structure_list
+
 M_structures = ppv.generate_m_structure(vasp_data_file, len(Cluster_rules), len(J_rules), aust_tol, spin_style, spin_tol, Cluster_rules, J_rules)
 
 ppv.write_structures_processedvasp(M_structures,vasp_data_file_pp)
