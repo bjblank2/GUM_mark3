@@ -36,7 +36,7 @@ def import_vasp(root_dir, output_dir,species):
             # species order is in contcar_line[0]
             order = contcar_lines[5].split()
             #print(order)
-            lc = float(contcar_lines[1])
+            lc = float(contcar_lines[1])                # ARE ALL OF THESE IN ORDER A, B, C???
             a = contcar_lines[2].split()
             a = float(a[0]) * lc
             b = contcar_lines[3].split()

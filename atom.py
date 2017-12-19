@@ -14,17 +14,6 @@ class AtomObj:                      # does this need mag in here?  The object sh
             self.rotate(c_index)
 
     def set_spin(self, mag, spin_style, spin_tol):
-            #if self.species == 0:
-            #if abs(round(mag, 2)) >= .1: koo
-            #    self.spin = round(abs(mag) / mag, 5)
-            #else:
-            #    self.spin = 0
-            #if self.species == 1:
-            #if abs(round(mag, 2)) >= 2:
-            #if abs(mag) >= 2:
-            #    self.spin = round(abs(mag) / mag, 5)
-            #else:
-            #    self.spin = 0
             if self.species == 2:                   # again somehow assuming that 2 = In
                 self.spin = 0
             elif round(mag,2) == 0:
@@ -37,8 +26,6 @@ class AtomObj:                      # does this need mag in here?  The object sh
                         self.spin = round(abs(mag) / mag, 5)
                     else:
                         self.spin = 0
-
-    
 
     def set_pos(self, a_pos, b_pos, c_pos):        # again very specific assumptions about positions
         if a_pos >= .2 and a_pos <= .3:
