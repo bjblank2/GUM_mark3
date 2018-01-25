@@ -103,29 +103,37 @@ def calculate_sums(m_structure_list, cluster_rule_list, j_rule_list, spin_style,
     m_structure_list.calculate_distances()
     m_structure_list.calculate_minimums()
     for j in range(m_structure_list.num_Atoms):
+        for l in range(len(cluster_rule_list)):
+            if m_structure_list.basis[j].species in cluster_rule_list[l].home_atom_list:        # Calc cluster sums monomers only
+                if (cluster_rule_list[l].neighbor_order < 0.5):        # monomer contributions
+                    if m_structure_list.phase_name == cluster_rule_list[l].phase:
+                        m_structure_list.Cluster_sums[l] += 1
         for k in range(len(m_structure_list.basis)):
-            # Calc Cluster sums
+            # Calc Cluster sums binaries
             for l in range(len(cluster_rule_list)):
-                if m_structure_list.basis[j].species in cluster_rule_list[l].home_atom_list:
-                    if m_structure_list.distances[j, k] == m_structure_list.mins[j, cluster_rule_list[l].neighbor_order - 1]:
-                        if m_structure_list.check_plane(j, k) == cluster_rule_list[l].plane or m_structure_list.check_plane(j, k) == 'ALL':
-                            if m_structure_list.phase_name == cluster_rule_list[l].phase:
-                                if cluster_rule_list[l].neighbor_arrangement == 'COMB':
-                                    if m_structure_list.basis[k].species in cluster_rule_list[l].neighbor_atom_list:
-                                        m_structure_list.Cluster_sums[l] += 1
-                                if cluster_rule_list[l].neighbor_arrangement == 'PERM':
-                                    if m_structure_list.basis[k].species in cluster_rule_list[l].neighbor_atom_list:
-                                        if m_structure_list.basis[k].species != m_structure_list.basis[j].species:
+                if (cluster_rule_list[l].neighbor_order > 0.5):
+                    if m_structure_list.basis[j].species in cluster_rule_list[l].home_atom_list:
+                        if (m_structure_list.distances[j, k] == m_structure_list.mins[j, cluster_rule_list[l].neighbor_order - 1]):
+                            if m_structure_list.check_plane(j, k) == cluster_rule_list[l].plane or m_structure_list.check_plane(j, k) == 'ALL' or cluster_rule_list[l].plane == 'ALL':
+                                if m_structure_list.phase_name == cluster_rule_list[l].phase:
+                                    if cluster_rule_list[l].neighbor_arrangement == 'COMB':
+                                        if m_structure_list.basis[k].species in cluster_rule_list[l].neighbor_atom_list:
                                             m_structure_list.Cluster_sums[l] += 1
+                                    if cluster_rule_list[l].neighbor_arrangement == 'PERM':
+                                        if m_structure_list.basis[k].species in cluster_rule_list[l].neighbor_atom_list:
+                                            if m_structure_list.basis[k].species != m_structure_list.basis[j].species:
+                                                m_structure_list.Cluster_sums[l] += 1
             # Calc J sums
             for l in range(len(j_rule_list)):
                 if m_structure_list.basis[j].species in j_rule_list[l].home_atom_list:
                     if m_structure_list.distances[j, k] == m_structure_list.mins[j, j_rule_list[l].neighbor_order - 1]:
-                        if m_structure_list.check_plane(j, k) == j_rule_list[l].plane or m_structure_list.check_plane(j, k) == 'ALL':
+                        if ((m_structure_list.check_plane(j, k) == j_rule_list[l].plane) or (m_structure_list.check_plane(j, k) == 'ALL') or (j_rule_list[l].plane == 'ALL')):
                             if m_structure_list.phase_name == j_rule_list[l].phase:
                                 if j_rule_list[l].neighbor_arrangement == 'COMB':
                                     if m_structure_list.basis[k].species in j_rule_list[l].neighbor_atom_list:
                                         m_structure_list.J_sums[l] += m_structure_list.basis[j].spin * m_structure_list.basis[k].spin
+                                        #if j_rule_list[l].name == 'mag-2NN-MnMn-Mart-OUT\n':
+                                            #print('home atom ',j,' ; neighbor atom ',k,' ; spins: ',m_structure_list.basis[j].spin,m_structure_list.basis[k].spin,' ; planes: ',m_structure_list.check_plane(j, k),j_rule_list[l].plane)
                                         if m_structure_list.basis[j].species != 2:
                                             if m_structure_list.basis[k].species != 2:
                                                 m_structure_list.mnmn_count[l]+=1

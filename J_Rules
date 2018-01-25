@@ -1,76 +1,52 @@
-# J2a0
+# mag-NN-NiNi-Mart
 1
-PERM
-0 1
-0 1
-aust
+COMB
+0
+0
+mart
 ALL
 
-# J2aU
+# mag-NN-NiMn-Mart
 1
-PERM
-0 1
-0 1
-mart
-OUT
-
-# J1b0
-2
 COMB
-1 2
-1 2
-aust
+0
+1
+mart
 ALL
 
-# J1bU
-2
+# mag-NN-MnMn-Mart
+1
 COMB
-1 2
-1 2
+1
+1
 mart
-IN
-
-# J2bU
-2
-COMB
-1 2
-1 2
-mart
-OUT
-
-# J1c0
-3
-COMB
-1 2
-1 2
-aust
 ALL
 
-# J1cU
-3
-COMB
-1 2
-1 2
-mart
-IN
-
-# J2cU
-3
-COMB
-1 2
-1 2
-mart
-OUT
-
-# J1d0
-2
+# mag-NN-NiNi-Aust
+1
 COMB
 0
 0
 aust
 ALL
 
-# J1dU
+# mag-NN-NiMn-Aust
+1
+COMB
+0
+1
+aust
+ALL
+
+# mag-NN-MnMn-Aust
+1
+COMB
+1
+1
+aust
+ALL
+
+# mag-2NN-NiNi-Mart-IN
 2
 COMB
 0
@@ -78,10 +54,90 @@ COMB
 mart
 IN
 
-# J2dU
+# mag-2NN-NiMn-Mart-IN
+2
+COMB
+0
+1
+mart
+IN
+
+# mag-2NN-MnMn-Mart-IN
+2
+COMB
+1
+1
+mart
+IN
+
+# mag-2NN-NiNi-Mart-OUT
 2
 COMB
 0
 0
+mart
+OUT
+
+# mag-2NN-NiMn-Mart-OUT
+2
+COMB
+0
+1
+mart
+OUT
+
+# mag-2NN-MnMn-Mart-OUT
+2
+COMB
+1
+1
+mart
+OUT
+
+# mag-2NN-NiNi-Aust
+2
+COMB
+0
+0
+aust
+ALL
+
+# mag-2NN-NiMn-Aust
+2
+COMB
+0
+1
+aust
+ALL
+
+# mag-2NN-MnMn-Aust
+2
+COMB
+1
+1
+aust
+ALL
+
+# mag-3NN-MnMn-Aust 
+3
+COMB
+1
+1
+aust
+ALL
+
+# mag-3NN-MnMn-Mart-IN 
+3
+COMB
+1
+1
+mart
+IN
+
+# mag-3NN-MnMn-Mart-OUT
+3
+COMB
+1
+1
 mart
 OUT

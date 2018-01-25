@@ -1,12 +1,148 @@
-# E_XX10
-2
+# mono_NiA
+0
 COMB
 0
 0
 aust
 ALL
 
-# E_XX1U
+# mono_MnA
+0
+COMB
+1
+0
+aust
+ALL
+
+# mono_InA
+0
+COMB
+2
+0
+aust
+ALL
+
+# mono_NiM
+0
+COMB
+0 
+0
+mart
+ALL
+
+# mono_MnM
+0
+COMB
+1
+0
+mart
+ALL
+
+# mono_InM
+0
+COMB
+2
+0
+mart
+ALL
+
+# NN-NiNi-Mart
+1
+COMB
+0
+0
+mart
+ALL
+
+# NN-NiMn-Mart
+1
+COMB
+0
+1
+mart
+ALL
+
+# NN-NiIn-Mart
+1
+COMB
+0
+2
+mart
+ALL
+
+# NN-MnMn-Mart
+1
+COMB
+1
+1
+mart
+ALL
+
+# NN-MnIn-Mart
+1
+COMB
+1
+2
+mart
+ALL
+
+# NN-InIn-Mart
+1
+COMB
+2
+2
+mart
+ALL
+
+# NN-NiNi-Aust
+1
+COMB
+0
+0
+aust
+ALL
+
+# NN-NiMn-Aust
+1
+COMB
+0
+1
+aust
+ALL
+
+# NN-NiIn-Aust
+1
+COMB
+0
+2
+aust
+ALL
+
+# NN-MnMn-Aust
+1
+COMB
+1
+1
+aust
+ALL
+
+# NN-MnIn-Aust
+1
+COMB
+1
+2
+aust
+ALL
+
+# NN-InIn-Aust
+1
+COMB
+2
+2
+aust
+ALL
+
+# 2NN-NiNi-Mart-IN
 2
 COMB
 0
@@ -14,7 +150,47 @@ COMB
 mart
 IN
 
-# E_XX2U
+# 2NN-NiMn-Mart-IN
+2
+COMB
+0
+1
+mart
+IN
+
+# 2NN-NiIn-Mart-IN
+2
+COMB
+0
+2
+mart
+IN
+
+# 2NN-MnMn-Mart-IN
+2
+COMB
+1
+1
+mart
+IN
+
+# 2NN-MnIn-Mart-IN
+2
+COMB
+1
+2
+mart
+IN
+
+# 2NN-InIn-Mart-IN
+2
+COMB
+2
+2
+mart
+IN
+
+# 2NN-NiNi-Mart-OUT
 2
 COMB
 0
@@ -22,23 +198,23 @@ COMB
 mart
 OUT
 
-# E_YY10
+# 2NN-NiMn-Mart-OUT
 2
 COMB
-1
-1
-aust
-ALL
-
-# E_YY1U
-2
-COMB
-1
+0
 1
 mart
-IN
+OUT
 
-# E_YY2U
+# 2NN-NiIn-Mart-OUT
+2
+COMB
+0
+2
+mart
+OUT
+
+# 2NN-MnMn-Mart-OUT
 2
 COMB
 1
@@ -46,31 +222,63 @@ COMB
 mart
 OUT
 
-# E_YZ10
+# 2NN-MnIn-Mart-OUT
 2
-PERM
-1 2
-1 2
-aust
-ALL
-
-# E_YZ1U
+COMB
+1
 2
-PERM
-1 2
-1 2
-mart
-IN
-
-# E_YZ2U
-2
-PERM
-1 2
-1 2
 mart
 OUT
 
-# E_ZZ10
+# 2NN-InIn-Mart-OUT
+2
+COMB
+2
+2
+mart
+OUT
+
+# 2NN-NiNi-Aust
+2
+COMB
+0
+0
+aust
+ALL
+
+# 2NN-NiMn-Aust
+2
+COMB
+0
+1
+aust
+ALL
+
+# 2NN-NiIn-Aust
+2
+COMB
+0
+2
+aust
+ALL
+
+# 2NN-MnMn-Aust
+2
+COMB
+1
+1
+aust
+ALL
+
+# 2NN-MnIn-Aust
+2
+COMB
+1
+2
+aust
+ALL
+
+# 2NN-InIn-Aust
 2
 COMB
 2
@@ -78,18 +286,50 @@ COMB
 aust
 ALL
 
-# E_ZZ1U
-2
+# 3NN-MnMn-Aust 
+3
 COMB
-2
-2
+1
+1
+aust
+ALL
+
+# 3NN-MnIn-Aust 
+3
+COMB
+1
+1
+aust
+ALL
+
+# 3NN-MnMn-Mart-IN 
+3
+COMB
+1
+1
 mart
 IN
 
-# E_ZZ2U
-2
+# 3NN-MnMn-Mart-OUT
+3
 COMB
-2
-2
+1
+1
+mart
+OUT
+
+# 3NN-MnIn-Mart-IN 
+3
+COMB
+1
+1
+mart
+IN
+
+# 3NN-MnIn-Mart-OUT
+3
+COMB
+1
+1
 mart
 OUT

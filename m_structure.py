@@ -36,7 +36,7 @@ def check_aust(Jscale,J_rule):
     if determine <= 1 and determine >= 0.9:
         return "fm"
     elif determine >= -1 and determine <= -0.9:
-            return "afm"
+        return "afm"
     else:
         return 0
 
@@ -155,23 +155,23 @@ class MStructureObj:
         for i in range(len(J_rules)):
             J_rule = J_rules[i]
             name = ''.join(J_rule.name.split())
-            if name == "J1b0":
+            if name == "mag-2NN-MnMn-Aust":
                 J1b0 = i
-            elif name == "J1bU":
+            elif name == "mag-2NN-MnMn-Mart-IN":
                 J1bU = i
-            elif name == "J2bU":
+            elif name == "mag-2NN-MnMn-Mart-OUT":
                 J2bU = i
-            elif name == "J1c0":
+            elif name == "mag-3NN-MnMn-Aust":
                 J1c0 = i
-            elif name == "J1cU":
+            elif name == "mag-3NN-MnMn-Mart-IN":
                 J1cU = i
-            elif name == "J2cU":
+            elif name == "mag-3NN-MnMn-Mart-OUT":
                 J2cU = i
 
         Jsums = self.J_sums
         mnmncounts = self.mnmn_count
         Jscale = []
-        # for each m_structure, get the j_sum scaled by number of Mg-Mg bonds
+        # for each m_structure, get the j_sum scaled by number of Mn-Mn bonds
         for j in range(len(mnmncounts)):
             mnmncount = mnmncounts[j]
             if mnmncount == 0:
