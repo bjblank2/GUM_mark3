@@ -1,34 +1,33 @@
 __author__ = 'brian'
+import numpy as np
 
-
-class AtomObj:
-    def __init__(self, index, species_list, mag, pos, c_index=None):
+class AtomObj:                      # does this need mag in here?  The object should only contain what is           needed for fitting and Monte Carlo from here on out.
+    def __init__(self, index, species_list, mag, pos, spin_style, spin_tol, c_index=None):
         self.atom_index = index
         self.species = 0
         self.set_species(index, species_list)
         self.mag = mag
         self.spin = 0
-        self.set_spin(mag)
+        self.set_spin(mag,spin_style, spin_tol)
         self.set_pos(pos[0], pos[1], pos[2])
         if c_index is not None:
             self.rotate(c_index)
 
-    def set_spin(self, mag):
-        if self.species == 0:
-            if abs(round(mag, 2)) >= .1:
-                self.spin = round(abs(mag) / mag, 5)
-            else:
+    def set_spin(self, mag, spin_style, spin_tol):
+            if self.species == 2:                   # again somehow assuming that 2 = In
                 self.spin = 0
-        if self.species == 1:
-            #if abs(round(mag, 2)) >= 2:
-            if abs(mag) >= 2:
-                self.spin = round(abs(mag) / mag, 5)
-            else:
+            elif round(mag,2) == 0:
                 self.spin = 0
-        if self.species == 2:
-            self.spin = 0
+            else:
+                if spin_style[self.species] == 'factor':
+                    self.spin = np.floor(abs(mag)/spin_tol[self.species])*round(abs(mag) / mag, 5)
+                else:
+                    if abs(mag) > spin_tol[self.species]:
+                        self.spin = round(abs(mag) / mag, 5)
+                    else:
+                        self.spin = 0
 
-    def set_pos(self, a_pos, b_pos, c_pos):
+    def set_pos(self, a_pos, b_pos, c_pos):        # again very specific assumptions about positions
         if a_pos >= .2 and a_pos <= .3:
             a_pos = .25
         if a_pos >= .7 and a_pos <= .8:

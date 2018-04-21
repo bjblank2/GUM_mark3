@@ -105,9 +105,7 @@ class mc_supercellObj:
                             else:
                                 spin = -1
                         else:
-                            if np.mod(i+j+(k+1)/2,2) == 0:
-                                spin = 1
-                            else: spin = -1
+                            spin = 0
                     else: spin = 1
                     if phase_init == 'aust':
                         phase = 0
@@ -164,7 +162,7 @@ class mc_supercellObj:
                                         else: self.set_site_species([i,j,k],species[1])
                                     else: self.set_site_species([i,j,k],species[0])
         self.find_neighbors()
-    
+
     def apply_bc(self,i,inc,limit):
         if i + inc >= limit:
             new_i = i+inc-limit

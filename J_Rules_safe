@@ -168,39 +168,3 @@ COMB
 mart
 OUT
 4
-
-# mag-3NN-NiNi-Aust-IN
-3
-COMB
-0
-0
-aust
-OUT
-4
-
-# mag-3NN-NiNi-Aust-OUT
-3
-COMB
-0
-0
-aust
-OUT
-8
-
-# mag-3NN-NiNi-Mart-IN
-3
-COMB
-0
-0
-mart
-IN
-8
-
-# mag-3NN-NiNi-Mart-OUT
-3
-COMB
-0
-0
-mart
-OUT
-4
