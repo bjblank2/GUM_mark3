@@ -158,7 +158,7 @@ COMB
 1
 mart
 IN
-8
+4
 
 # mag-3NN-MnMn-Mart-OUT
 3
@@ -167,7 +167,7 @@ COMB
 1
 mart
 OUT
-4
+8
 
 # mag-3NN-NiNi-Aust-IN
 3
@@ -175,7 +175,7 @@ COMB
 0
 0
 aust
-OUT
+IN
 4
 
 # mag-3NN-NiNi-Aust-OUT
@@ -187,20 +187,20 @@ aust
 OUT
 8
 
-# mag-3NN-NiNi-Mart-IN
+#mag-3NN-NiNi-Mart-IN
 3
 COMB
 0
 0
 mart
 IN
-8
+4
 
-# mag-3NN-NiNi-Mart-OUT
+#mag-3NN-NiNi-Mart-OUT
 3
 COMB
 0
 0
 mart
 OUT
-4
+8
