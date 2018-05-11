@@ -1,0 +1,142 @@
+Fitting Parameters
+mono_NiA = -0.0538377682491
+mono_MnA = -0.0306227581878
+mono_InA = -0.0232150100613
+mono_NiM = -0.064498105115
+mono_MnM = -0.0386338307539
+mono_InM = -0.025864274361
+NN-NiNi-Mart = 0.0
+NN-NiMn-Mart = -0.618141292063
+NN-NiIn-Mart = -0.413828389777
+NN-MnMn-Mart = 0.0
+NN-MnIn-Mart = 0.0
+NN-InIn-Mart = 0.0
+NN-NiNi-Aust = 0.0
+NN-NiMn-Aust = -0.489964131005
+NN-NiIn-Aust = -0.371440160981
+NN-MnMn-Aust = 0.0
+NN-MnIn-Aust = 0.0
+NN-InIn-Aust = 0.0
+2NN-NiNi-Mart-IN = -0.25799242046
+2NN-NiMn-Mart-IN = 0.0
+2NN-NiIn-Mart-IN = 0.0
+2NN-MnMn-Mart-IN = -0.124975487747
+2NN-MnIn-Mart-IN = -0.059119670538
+2NN-InIn-Mart-IN = -0.0738972621751
+2NN-NiNi-Mart-OUT = -0.12899621023
+2NN-NiMn-Mart-OUT = 0.0
+2NN-NiIn-Mart-OUT = 0.0
+2NN-MnMn-Mart-OUT = -0.088728096427
+2NN-MnIn-Mart-OUT = 0.0229208698384
+2NN-InIn-Mart-OUT = -0.0631889836413
+2NN-NiNi-Aust = -0.323026609495
+2NN-NiMn-Aust = 0.0
+2NN-NiIn-Aust = 0.0
+2NN-MnMn-Aust = -0.136609828475
+2NN-MnIn-Aust = -0.0942534413033
+2NN-InIn-Aust = -0.0921633397163
+3NN-MnMn-Aust = -0.300552079386
+3NN-MnIn-Aust = -0.133842037735
+3NN-MnMn-Mart-IN = -0.13157921962
+3NN-MnMn-Mart-OUT = -0.246866982292
+3NN-MnIn-Mart-IN = -0.0459122067903
+3NN-MnIn-Mart-OUT = -0.124407327478
+mag-NN-NiNi-Mart = 0.0
+mag-NN-NiMn-Mart = -0.00579725862668
+mag-NN-MnMn-Mart = 0.0
+mag-NN-NiNi-Aust = 0.0
+mag-NN-NiMn-Aust = -0.0665506609694
+mag-NN-MnMn-Aust = 0.0
+mag-2NN-NiNi-Mart-IN = 0.0036443954117
+mag-2NN-NiMn-Mart-IN = 0.0
+mag-2NN-MnMn-Mart-IN = 0.050583073513
+mag-2NN-NiNi-Mart-OUT = 0.000386740931095
+mag-2NN-NiMn-Mart-OUT = 0.0
+mag-2NN-MnMn-Mart-OUT = -0.0428822227448
+mag-2NN-NiNi-Aust = 0.00596516317686
+mag-2NN-NiMn-Aust = 0.0
+mag-2NN-MnMn-Aust = 0.0735020026121
+mag-3NN-MnMn-Aust-IN = 0.00690883090073
+mag-3NN-MnMn-Aust-OUT = 0.00690883090073
+mag-3NN-MnMn-Mart-IN = -0.0188666048843
+mag-3NN-MnMn-Mart-OUT = -0.00548287541862
+mag-3NN-NiNi-Aust-IN = 0.0119303263537
+mag-3NN-NiNi-Aust-OUT = 0.0119303263537
+mag-3NN-NiNi-Mart-IN = 0.00077348186219
+mag-3NN-NiNi-Mart-OUT = 0.0072887908234
+
+Name                Actual Energy       Predicted Energy    Magnetic Order      Phase               Weight              
+Aust_A_1            -91.05525589        -90.4529527438      sd                  aust                1.0                 
+Aust_B_1            -90.99479599        -90.9520602627      afm                 mart                1.0                 
+Aust_B_Z            -90.60253471        -91.1334951257      afm                 mart                1.0                 
+Aust_C_1            -90.75116214        -89.7194617792      afm                 mart                1.0                 
+Aust_D_1            -90.46111502        -90.3554283916      afm                 mart                1.0                 
+Aust_D_2            -90.47912529        -89.8691577464      afm                 aust                1.0                 
+Aust_E_2            -90.97320551        -90.4584673801      afm                 mart                1.0                 
+Aust_F_2            -90.57369077        -90.3242308992      afm                 aust                1.0                 
+Mart_C_2            -90.54580111        -90.463725661       afm                 aust                1.0                 
+Mart_C_3            -89.64791551        -89.9486350617      sd                  aust                1.0                 
+Mart_D_2            -90.46215669        -90.273044184       afm                 mart                1.0                 
+Mart_D_3            -90.2034177         -90.311322924       afm                 aust                1.0                 
+Mart_F_3            -90.63541669        -89.9894960927      afm                 mart                1.0                 
+Ni2MnIn_M_OM        -91.36547702        -91.2509141981      fm                  aust                1.0                 
+_NiMn               -116.08143991       -115.845823893      fm                  mart                1.0                 
+_NiMn_1             -117.32804306       -117.582902906      afm                 mart                1.0                 
+_NiMn_2             -116.34587955       -115.778108942      afm                 mart                1.0                 
+_NiMn_3             -116.90565122       -116.505053911      sd                  mart                1.0                 
+_NiMn_5             -115.95763608       -115.695724735      sd                  mart                1.0                 
+_NiMn_6             -116.10882451       -115.520272721      sd                  mart                1.0                 
+NiMn_1              -115.88358978       -116.508242216      afm                 aust                1.0                 
+NiMn_5              -115.93543797       -114.960112579      sd                  aust                1.0                 
+Aust_A_M            -102.93418          -102.865040927      fm                  aust                1.0                 
+Aust_A_1            -100.22711          -101.847357227      sd                  aust                1.0                 
+Aust_A_4            -102.85172          -102.289522405      sd                  aust                1.0                 
+Aust_B_M            -103.5313           -103.017443664      fm                  aust                1.0                 
+Aust_B_2            -101.71773          -102.615850704      sd                  mart                1.0                 
+Aust_B_3            -101.55633          -101.578459724      afm                 mart                1.0                 
+Aust_C_M            -103.36772          -102.812011539      fm                  mart                1.0                 
+Aust_C_2            -100.58688          -102.42994069       sd                  mart                1.0                 
+Aust_C_3            -103.30359          -102.698772715      sd                  mart                1.0                 
+Aust_C_4            -103.62754          -103.699573336      afm                 mart                1.0                 
+Mart_A_O            -103.25568          -102.746177143      afm                 mart                1.0                 
+Mart_A_M            -102.93818          -101.849447369      fm                  mart                1.0                 
+Mart_A_1            -101.26311          -101.937098888      afm                 mart                1.0                 
+Mart_A_2            -102.98725          -102.212845365      sd                  mart                1.0                 
+Mart_A_3            -103.29215          -102.83949587       afm                 mart                1.0                 
+Mart_B_O            -101.69266          -102.114625106      sd                  mart                1.0                 
+Mart_B_1            -103.59661          -103.174207248      afm                 mart                1.0                 
+Mart_B_2            -102.1402           -101.366575452      sd                  mart                1.0                 
+Mart_B_3            -99.947035          -101.836462399      sd                  mart                1.0                 
+Mart_B_4            -101.70129          -102.519725714      sd                  mart                1.0                 
+Mart_C_O            -103.96595          -103.708741312      afm                 mart                1.0                 
+Mart_C_M            -101.92844          -103.088847535      sd                  mart                1.0                 
+Mart_C_1            -103.37573          -102.388748586      sd                  mart                1.0                 
+Mart_C_2            -102.59285          -102.628736419      afm                 mart                1.0                 
+Mart_C_3            -103.58134          -103.175409535      sd                  mart                1.0                 
+Mart_C_4            -101.58784          -102.042018603      afm                 mart                1.0                 
+NiMn                -116.069182         -115.393584077      fm                  aust                1.0                 
+_NiMn_1             -118.2737173        -118.25332598       afm                 mart                1.0                 
+Ni8Mn6In2_1M        -101.19889281       -102.297812256      sd                  mart                1.0                 
+Ni8Mn6In2_2_4       -103.62301288       -103.21514843       afm                 mart                1.0                 
+Ni8Mn6In2_2_4M      -100.97802582       -101.250983324      afm                 mart                1.0                 
+Ni8Mn6In2_3_4       -101.29548513       -101.578459724      afm                 mart                1.0                 
+Aust_C_M            -102.81902565       -102.732098059      fm                  aust                1.0                 
+Aust_C_4            -102.64875934       -102.744595558      sd                  aust                1.0                 
+Aust_C_3            -102.71479879       -102.156579537      sd                  aust                1.0                 
+Aust_A_1            -101.53721565       -100.702150743      sd                  aust                1.0                 
+Aust_C_2            -102.6166631        -101.568563516      sd                  aust                1.0                 
+2NiMn_6             -115.7404701        -114.748806801      sd                  aust                1.0                 
+Aust_B_1            -101.68929305       -102.135524544      sd                  aust                1.0                 
+Aust_B_O            -98.43689059        -101.185497191      sd                  aust                1.0                 
+Aust_A_3            -102.91003379       -102.581224092      afm                 aust                1.0                 
+Aust_C_1            -100.46269401       -102.00842237       sd                  aust                1.0                 
+Aust_C_O            -102.6464358        -101.709250196      sd                  aust                1.0                 
+2NiMn_5             -114.54232884       -113.344901855      sd                  aust                1.0                 
+2NiMn_2             -112.00057274       -114.591818803      sd                  aust                1.0                 
+2NiMn_3             -115.84669628       -115.482673666      sd                  aust                1.0                 
+2NiMn_4             -115.69866679       -115.924838843      sd                  aust                1.0                 
+Aust_B_M            -103.16289803       -103.017443664      fm                  aust                1.0                 
+Aust_B_3            -100.33374515       -101.964450416      sd                  aust                1.0                 
+Aust_B_4            -102.97910595       -102.220842553      sd                  aust                1.0                 
+Aust_B_2            -102.98039188       -102.07499171       sd                  aust                1.0                 
+NiMn_1              -117.94529357       -118.25332598       afm                 mart                1.0                 
