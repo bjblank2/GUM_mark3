@@ -279,7 +279,6 @@ def plot_data3(M_structures, clusters_list, j_list, Js, intercept, limit):
                 #plt.plot([x + x_itter, x + x_itter], [y, float(new_enrg_list[i])], lw=1, color="k")
                 plt.plot(x + x_itter, y, lw=0, markersize=8, marker=m, color=c)
                 plt.plot(x + x_itter, float(new_enrg_list[i]), lw=0, markersize=8, marker=".", color="r")
-                plt.plot([x + x_itter, x + x_itter], [float(new_enrg_list[i]),y], lw=1, markersize=0, marker=".",color="k")
     for c in colors.keys():
         for m in markers.keys():
             plt.plot([],[],label=c+', '+m,lw=0,markersize=12,marker=markers[m],color=colors[c])
