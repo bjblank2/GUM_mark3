@@ -113,36 +113,20 @@ z_pts = 4 #|
 phase_init = 'mart' # initial phase configuration
 spin_init = 'rand' # initial spin configuration
 species_init = 'ordered'
-<<<<<<< HEAD
-num_passes = 1 # number of cluster/wolf moves done
-num_sub_passes = 1 # number of spin/species flips done per cluster/wolf move
+num_passes = 2 # number of cluster/wolf moves done
+num_sub_passes = 2 # number of spin/species flips done per cluster/wolf move
 Temp0 = 100 # initial temperature in K
-TempF = 102 # final temperature in K
-Temp_inc = 2 # temperature increase per pass in K
-=======
-num_passes = 15 # number of cluster/wolf moves done
-num_sub_passes = 20 # number of spin/species flips done per cluster/wolf move
-Temp0 = 100 # initial temperature in K
-TempF = 600 # final temperature in K
+TempF = 120 # final temperature in K
 Temp_inc = 5 # temperature increase per pass in K
->>>>>>> parent of 1afe97c... No Change
 
 ## Initialize an array of atoms with ms.mc_supercellObj(size,species,composition)
 ## size is (x,y,z)dimensions, species is types of atoms allowed (0=Ni,1=Mn,2=In)
 ## composition is number of each atom (#Ni,#Mn,#In)
-<<<<<<< HEAD
 lattice = ms.mc_supercellObj((x_pts,y_pts,z_pts),(0,1,2),[8,8,0],phase_init,spin_init,species_init)
-=======
-#lattice = ms.mc_supercellObj((x_pts,y_pts,z_pts),(0,1,2),[8,6,2],phase_init,spin_init,species_init)
->>>>>>> parent of 1afe97c... No Change
 #sys.setrecursionlimit(lattice.num_sites+2)
 ## To actually run the simulation use
 ## mc.run_montecarlo(reference_to_atom_array,number_of_passes,starting_temp, BEG_rules,Cluster_rules,J_rules,plot_figs=TRUE)
 ## BEG_rules,Cluster_rules,J_rules are objects that determine when and how the fitted parameters are applied
 ## print("Beginning MonteCarlo\n")
 ## mc.run_WA_MCA(lattice,num_passes,num_sub_passes,Temp0,Temp_inc,TempF,Cluster_rules,J_rules,Js,do_figs=True)
-<<<<<<< HEAD
 mc2.run_WA_MCA(lattice,num_passes,num_sub_passes,Temp0,Temp_inc,TempF,Cluster_rules,J_rules,Js,do_figs=False)
-=======
-#mc2.run_WA_MCA(lattice,num_passes,num_sub_passes,Temp0,Temp_inc,TempF,Cluster_rules,J_rules,Js,do_figs=True)
->>>>>>> parent of 1afe97c... No Change
