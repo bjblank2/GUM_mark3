@@ -436,10 +436,11 @@ def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,temp_inc,tempf,Clus
                             ##############
                             if supercell_obj.get_site_species(site) != 0:
                                 random_site_not_0 = False
-                                species_not_same = False
-                                while [species_not_same,random_site_not_0] != [True,True]:
+                                #species_not_same = False
+                                #while [species_not_same,random_site_not_0] != [True,True]:
+                                while random_site_not_0 != True:
                                     random_site_not_0 = False
-                                    species_not_same = False
+                                    #species_not_same = False
                                     random_site = [np.random.randint(0,supercell_obj.i_length),np.random.randint(0,supercell_obj.j_length),np.random.randint(0,supercell_obj.k_length)]
                                     if supercell_obj.get_site_species(random_site) != 0:
                                         random_site_not_0 = True
