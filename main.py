@@ -104,12 +104,12 @@ y_pts = 2 #|- Dimensions of the mc_supercellObj (simulation supercell)
 z_pts = 4 #|
 phase_init = 'mart' # initial phase configuration
 spin_init = 'rand' # initial spin configuration
-species_init = 'ordered'
-num_passes = 40 # number of cluster/wolf moves done
-num_sub_passes = 20 # number of spin/species flips done per cluster/wolf move
-Temp0 = 10 # initial temperature in K
-TempF = 50 # final temperature in K
-Temp_inc = 50 # temperature increase per pass in K
+species_init = 'rand'
+num_passes = 400 # number of cluster/wolf moves done
+num_sub_passes = 30 # number of spin/species flips done per cluster/wolf move
+Temp0 = 100 # initial temperature in K
+TempF = 200 # final temperature in K
+Temp_inc = 5 # temperature increase per pass in K
 
 ## Initialize an array of atoms with ms.mc_supercellObj(size,species,composition)
 ## size is (x,y,z)dimensions, species is types of atoms allowed (0=Ni,1=Mn,2=In)
