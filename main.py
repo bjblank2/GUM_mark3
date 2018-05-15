@@ -53,12 +53,8 @@ j_file = './J_Rules'                                # heisenberg rules
 vasp_data_exists = True                            # should be False if I want to regenrate files
 vasp_pp_exists = False                              # postprocessing of VASP results or no?
 Cluster_rules_exist = True                          # define cluster rules
-J_rules_exist = True                                # define heisenberg rules
-#Js_exist = True                                     # results of fitting model
-
-# summarize VASP data
-if vasp_data_exists is False:                    # will make summary of VASP results if it doesn't already exist
-    cvs.import_vasp(root_dir, vasp_data_file,species)
+J_rules_exist = True                                # define heisenberg rules                                  # results of fitting model
+Fitting_params_exist = True
 
 # write Cluster and J rules file if doesn't exist, then read the rules
 if Cluster_rules_exist is False:                    # writes cluster rules if doesn't already exist
@@ -68,29 +64,52 @@ if J_rules_exist is False:                          # writes j_rules if doesn't 
 Cluster_rules = cmr.read_cluster_rules(cluster_file)
 J_rules = cmr.read_j_rules(j_file)
 
-# Read the VASP datafile and initialize a structure object for each
-# postprocess according to user selected parameters above and the cluster and j rules
-# calculation of sums and checking for duplicates occurs in here now
-# if a given structure is considered a duplicate then it is not added to the structure_list
-M_structures = ppv.generate_m_structure(vasp_data_file, len(Cluster_rules), len(J_rules), aust_tol, spin_style, spin_tol, Cluster_rules, J_rules)
+if Fitting_params_exist == False:
+    # summarize VASP data
+    if vasp_data_exists is False:                    # will make summary of VASP results if it doesn't already exist
+        cvs.import_vasp(root_dir, vasp_data_file,species)
 
-ppv.write_structures_processedvasp(M_structures,vasp_data_file_pp)
-ppv.summarize_classification(M_structures)
-# Seems like there should be the option to read the sums from the
-# summary_fitting_structures file to avoid doing this summing each time.
-warning_threshold = 0.5
-ppv.summarize_fitting_structures(M_structures,warning_threshold)
+    # Read the VASP datafile and initialize a structure object for each
+    # postprocess according to user selected parameters above and the cluster and j rules
+    # calculation of sums and checking for duplicates occurs in here now
+    # if a given structure is considered a duplicate then it is not added to the structure_list
+    M_structures = ppv.generate_m_structure(vasp_data_file, len(Cluster_rules), len(J_rules), aust_tol, spin_style, spin_tol, Cluster_rules, J_rules)
 
-## Ridge Regression Fitting with Regularization
-Js,intercept = cfp.ridge_simple(M_structures,1,Cluster_rules,J_rules)
-cfp.write_fitting_parameters(M_structures, Cluster_rules, J_rules, Js, intercept, 200)
-cfp.plot_data3(M_structures,Cluster_rules,J_rules,Js,intercept,200)
+    ppv.write_structures_processedvasp(M_structures,vasp_data_file_pp)
+    ppv.summarize_classification(M_structures)
+    # Seems like there should be the option to read the sums from the
+    # summary_fitting_structures file to avoid doing this summing each time.
+    warning_threshold = 0.5
+    ppv.summarize_fitting_structures(M_structures,warning_threshold)
 
-#print('#######################\n')
-##print(cp.CV_score(Js,M_structures))
-##print(cp.CV_score2(M_structures))
-#print('#######################\n')
-##--------------------------------------------------------------#
+    ## Ridge Regression Fitting with Regularization
+    Js,intercept = cfp.ridge_simple(M_structures,1,Cluster_rules,J_rules)
+    cfp.write_fitting_parameters(M_structures, Cluster_rules, J_rules, Js, intercept, 200)
+    cfp.plot_data3(M_structures,Cluster_rules,J_rules,Js,intercept,200)
+
+    #print('#######################\n')
+    ##print(cp.CV_score(Js,M_structures))
+    ##print(cp.CV_score2(M_structures))
+    #print('#######################\n')
+    ##--------------------------------------------------------------#
+
+else:
+    paramiters_file = open('FittingParameters','r')
+    lines = paramiters_file.readlines()
+    reading_params = True
+    line_index = 1
+    Js = []
+    while reading_params == True:
+        line = lines[line_index]
+        if 'Actual Energy' in line or line.split() == []:
+            reading_params = False
+        else:
+            line = line.split()
+            Js.append(float(line[2]))
+            line_index += 1
+
+
+
 
 
 
@@ -113,11 +132,11 @@ z_pts = 4 #|
 phase_init = 'mart' # initial phase configuration
 spin_init = 'rand' # initial spin configuration
 species_init = 'ordered'
-num_passes = 20 # number of cluster/wolf moves done
+num_passes = 40 # number of cluster/wolf moves done
 num_sub_passes = 20 # number of spin/species flips done per cluster/wolf move
-Temp0 = 100 # initial temperature in K
-TempF = 110 # final temperature in K
-Temp_inc = 5 # temperature increase per pass in K
+Temp0 = 10 # initial temperature in K
+TempF = 50 # final temperature in K
+Temp_inc = 50 # temperature increase per pass in K
 
 ## Initialize an array of atoms with ms.mc_supercellObj(size,species,composition)
 ## size is (x,y,z)dimensions, species is types of atoms allowed (0=Ni,1=Mn,2=In)
