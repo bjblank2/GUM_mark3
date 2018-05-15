@@ -4,6 +4,7 @@ _author__ = 'brian'
 # have comments
 
 import numpy as np
+cimport numpy as np
 import clusters
 import js
 import m_structure
