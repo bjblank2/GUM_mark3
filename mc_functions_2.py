@@ -16,9 +16,6 @@ import mc_supercell as mcs
 from copy import deepcopy
 from mpl_toolkits.mplot3d import Axes3D
 
-#-# ELIF: I THINK WE NEED THIS ONE TOO.
-
-
 
 
 
@@ -37,18 +34,14 @@ def calc_BEG_params(site,supercell_obj,Cluster_rules,J_rules,Js,T):
                                 if Cluster_rules[rule].neighbor_arrangement == 'PERM':
                                     if supercell_obj.get_site_species(site) != supercell_obj.get_neighbor_species(site,neighbor):
                                         if Cluster_rules[rule].phase == 'mart':
-                                            BEG_J += Js[rule]#/Cluster_rules[rule].coordination_number
-                                            #SUMS[rule]+=1
+                                            BEG_J += Js[rule]
                                         if Cluster_rules[rule].phase == 'aust':
-                                            BEG_K += Js[rule]#/Cluster_rules[rule].coordination_number
-                                            #SUMS[rule]+=1
+                                            BEG_K += Js[rule]
                                 if Cluster_rules[rule].neighbor_arrangement == 'COMB':
                                     if Cluster_rules[rule].phase == 'mart':
-                                        BEG_J += Js[rule]#/Cluster_rules[rule].coordination_number
-                                        #SUMS[rule]+=1
+                                        BEG_J += Js[rule]
                                     if Cluster_rules[rule].phase == 'aust':
-                                        BEG_K += Js[rule]#/Cluster_rules[rule].coordination_number
-                                        #SUMS[rule]+=1
+                                        BEG_K += Js[rule]
         for rule in range(len(J_rules)):
             if J_rules[rule].neighbor_order != 0:
                 if supercell_obj.get_site_species(site) in J_rules[rule].home_atom_list:
@@ -58,36 +51,28 @@ def calc_BEG_params(site,supercell_obj,Cluster_rules,J_rules,Js,T):
                                 if J_rules[rule].neighbor_arrangement == 'PERM':
                                     if supercell_obj.get_site_species(site) != supercell_obj.get_neighbor_species(site,neighbor):
                                         if J_rules[rule].phase == 'mart':
-                                            BEG_J += Js[rule+len(Cluster_rules)]*home_spin*neighbor_spin#/J_rules[rule].coordination_number
-                                            #SUMS[len(Cluster_rules)+rule]+=1*home_spin*neighbor_spin
+                                            BEG_J += Js[rule+len(Cluster_rules)]*home_spin*neighbor_spin
                                         if J_rules[rule].phase == 'aust':
-                                            BEG_K += Js[rule+len(Cluster_rules)]*home_spin*neighbor_spin#/J_rules[rule].coordination_number
-                                            #SUMS[len(Cluster_rules)+rule]+=1*home_spin*neighbor_spin
+                                            BEG_K += Js[rule+len(Cluster_rules)]*home_spin*neighbor_spin
                                 if J_rules[rule].neighbor_arrangement == 'COMB':
                                     if J_rules[rule].phase == 'mart':
-                                        BEG_J += Js[rule+len(Cluster_rules)]*home_spin*neighbor_spin#/J_rules[rule].coordination_number
-                                        #SUMS[len(Cluster_rules)+rule]+=1*home_spin*neighbor_spin
+                                        BEG_J += Js[rule+len(Cluster_rules)]*home_spin*neighbor_spin
                                     if J_rules[rule].phase == 'aust':
-                                        BEG_K += Js[rule+len(Cluster_rules)]*home_spin*neighbor_spin#/J_rules[rule].coordination_number
-                                        #SUMS[len(Cluster_rules)+rule]+=1*home_spin*neighbor_spin
+                                        BEG_K += Js[rule+len(Cluster_rules)]*home_spin*neighbor_spin
     for rule in range(len(Cluster_rules)):
         if Cluster_rules[rule].neighbor_order == 0:
             if supercell_obj.get_site_species(site) in Cluster_rules[rule].home_atom_list:
                 if Cluster_rules[rule].phase == 'mart':
                     BEG_J += Js[rule]
-                    #SUMS[rule]+=1
                 if Cluster_rules[rule].phase == 'aust':
                     BEG_K += Js[rule]
-                    #SUMS[rule]+=1
     for rule in range(len(J_rules)):
         if J_rules[rule].neighbor_order == 0:
             if supercell_obj.get_site_species(site) in Cluster_rules[rule].home_atom_list:
                 if J_rules[rule].phase == 'mart':
                     BEG_J += Js[rule+len(Cluster_rules)]
-                    #SUMS[len(Cluster_rules)+rule]+=1
                 if J_rules[rule].phase == 'aust':
                     BEG_K += Js[rule+len(Cluster_rules)]
-                    #SUMS[len(Cluster_rules)+rule]+=1
     return BEG_J,BEG_K
 
 
@@ -107,17 +92,17 @@ def calc_BEG_params2(site,supercell_obj,Cluster_rules,J_rules,Js,T,SUMS):
                                 if Cluster_rules[rule].neighbor_arrangement == 'PERM':
                                     if supercell_obj.get_site_species(site) != supercell_obj.get_neighbor_species(site,neighbor):
                                         if Cluster_rules[rule].phase == 'mart':
-                                            BEG_J += Js[rule]#/Cluster_rules[rule].coordination_number
+                                            BEG_J += Js[rule]
                                             SUMS[rule]+=1
                                         if Cluster_rules[rule].phase == 'aust':
-                                            BEG_K += Js[rule]#/Cluster_rules[rule].coordination_number
+                                            BEG_K += Js[rule]
                                             SUMS[rule]+=1
                                 if Cluster_rules[rule].neighbor_arrangement == 'COMB':
                                     if Cluster_rules[rule].phase == 'mart':
-                                        BEG_J += Js[rule]#/Cluster_rules[rule].coordination_number
+                                        BEG_J += Js[rule]
                                         SUMS[rule]+=1
                                     if Cluster_rules[rule].phase == 'aust':
-                                        BEG_K += Js[rule]#/Cluster_rules[rule].coordination_number
+                                        BEG_K += Js[rule]
                                         SUMS[rule]+=1
         for rule in range(len(J_rules)):
             if J_rules[rule].neighbor_order != 0:
@@ -161,80 +146,6 @@ def calc_BEG_params2(site,supercell_obj,Cluster_rules,J_rules,Js,T,SUMS):
     return BEG_J,BEG_K
 
 
-# def calc_BEG_params(site,supercell_obj,Cluster_rules,J_rules,Js,T):
-#     H_BEG_J = 0
-#     H_BEG_K = 0
-#     Kb = .000086173324
-#     for neighbor in range(supercell_obj.get_number_of_neighbors(site)):
-#         for Cluster_rule in range(len(Cluster_rules)):
-#             if supercell_obj.get_neighbor_order(site,neighbor) == Cluster_rules[Cluster_rule].neighbor_order and Cluster_rules[Cluster_rule].neighbor_order != 0:
-#                 if supercell_obj.get_neighbor_plain(site,neighbor) == Cluster_rules[Cluster_rule].plane or Cluster_rules[Cluster_rule].plane == 'ALL':
-#                     if supercell_obj.get_site_species(site) in Cluster_rules[Cluster_rule].home_atom_list:
-#                         if supercell_obj.get_neighbor_species(site,neighbor) in Cluster_rules[Cluster_rule].neighbor_atom_list:
-#                             if Cluster_rules[Cluster_rule].neighbor_arrangement == 'PERM':
-#                                 if supercell_obj.get_site_species(site) != supercell_obj.get_neighbor_species(site,neighbor):
-#                                     if Cluster_rules[Cluster_rule].phase == "mart":
-#                                         H_BEG_J += float(Js[Cluster_rule])
-#                                     if Cluster_rules[Cluster_rule].phase == "aust":
-#                                         H_BEG_K += float(Js[Cluster_rule])
-#                             if Cluster_rules[Cluster_rule].neighbor_arrangement == 'COMB':
-#                                 if Cluster_rules[Cluster_rule].phase == "mart":
-#                                     H_BEG_J += float(Js[Cluster_rule])
-#                                 if Cluster_rules[Cluster_rule].phase == "aust":
-#                                     H_BEG_K += float(Js[Cluster_rule])
-#         for J_rule in range(len(J_rules)):
-#             if supercell_obj.get_neighbor_order(site,neighbor) == J_rules[J_rule].neighbor_order and J_rules[J_rule].neighbor_order != 0:
-#                 if supercell_obj.get_neighbor_plain(site,neighbor) == J_rules[J_rule].plane or J_rules[J_rule].plane == 'ALL':
-#                     if supercell_obj.get_site_species(site) in J_rules[J_rule].home_atom_list:
-#                         if supercell_obj.get_neighbor_species(site,neighbor) in J_rules[J_rule].neighbor_atom_list:
-#                             if J_rules[J_rule].neighbor_arrangement == 'PERM':
-#                                 if supercell_obj.get_site_species(site) != supercell_obj.get_neighbor_species(site,neighbor):
-#                                     home_spin = supercell_obj.get_site_spin(site)
-#                                     neighbor_spin = supercell_obj.get_neighbor_spin(site,neighbor)
-#                                     if J_rules[J_rule].phase == "mart":
-#                                         H_BEG_J += float(Js[J_rule+len(Cluster_rules)])*home_spin*neighbor_spin
-#                                     if J_rules[J_rule].phase == "aust":
-#                                         H_BEG_K += float(Js[J_rule+len(Cluster_rules)])*home_spin*neighbor_spin
-#                             if J_rules[J_rule].neighbor_arrangement == 'COMB':
-#                                 home_spin = supercell_obj.get_site_spin(site)
-#                                 neighbor_spin = supercell_obj.get_neighbor_spin(site,neighbor)
-#                                 if J_rules[J_rule].phase == "mart":
-#                                     H_BEG_J += float(Js[J_rule+len(Cluster_rules)])*home_spin*neighbor_spin
-#                                 if J_rules[J_rule].phase == "aust":
-#                                     H_BEG_K += float(Js[J_rule+len(Cluster_rules)])*home_spin*neighbor_spin
-#
-#     for rule in range(len(Cluster_rules)):
-#         if Cluster_rules[rule].neighbor_order == 0:
-#             if supercell_obj.get_site_species(site) in Cluster_rules[rule].home_atom_list:
-#                 if Cluster_rules[rule].phase == 'mart':
-#                     H_BEG_J += Js[rule]
-#                 if Cluster_rules[rule].phase == 'aust':
-#                     H_BEG_K += Js[rule]
-#     for rule in range(len(J_rules)):
-#         if J_rules[rule].neighbor_order == 0:
-#             if supercell_obj.get_site_species(site) in Cluster_rules[rule].home_atom_list:
-#                 if J_rules[rule].phase == 'mart':
-#                     H_BEG_J += Js[rule+len(Cluster_rules)]
-#                 if J_rules[rule].phase == 'aust':
-#                     H_BEG_K += Js[rule+len(Cluster_rules)]
-# ######### START ELIF MODIFICATIONS #############
-#     #K = -1*(H_BEG_K/(-1*8)-Kb*T*np.log(2)/8)
-#     #delta = 8*K+Kb*T*np.log(2)
-#     #J = -1*((H_BEG_J-delta)/(-1*8)-K)
-#     K = H_BEG_K/8
-#     J = H_BEG_J/8
-# # As I understand it, we are just evaluating a site-specific J, K here.
-# # Not an energy.
-# # Consequently we do not need to add these delta and kB*T*log(2) type terms in here
-# ######## END ELIF MODIFICATIONS  ##############################
-#     return J,K
-
-
-
-
-
-
-
 
 #-# Determine the total energy of the entire lattice and return that energy
 ### COMMENT FROM ELIF: IS THIS THE ENTIRE LATTICE OR IS THIS A GIVEN SITE SPECIFIC CONTRIBUTION TO THE ENERGY??????
@@ -252,7 +163,6 @@ def eval_site_new(site,supercell_obj,Cluster_rules,J_ruels,Js,T):
 
 
 
-
 def eval_site_new2(site,supercell_obj,Cluster_rules,J_ruels,Js,T,SUMS):
     Kb = .000086173324
     total_Ham = 0
@@ -264,14 +174,6 @@ def eval_site_new2(site,supercell_obj,Cluster_rules,J_ruels,Js,T,SUMS):
             total_Ham += (J*(site_phase*neighbor_phase)+K*(1-site_phase**2)*(1-neighbor_phase**2))/8
     total_Ham += Kb*T*np.log(8)*(site_phase**2)
     return total_Ham
-
-
-
-
-
-
-
-
 
 
 #-# Determine the total energy of the entire lattice and return that energy
@@ -296,23 +198,6 @@ def eval_lattice_new(supercell_obj,Cluster_rules,J_rules,Js,T):
                 total_spin2 += np.absolute(supercell_obj.get_site_spin(site))/supercell_obj.num_sites
     print(SUMS)
     return total_Ham,total_phase,total_phase2,total_spin,total_spin2
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #-# Randomly change the phase of a specific element in the lattice and return the value of the original phase
 def flip_phase(site,neighbor,supercell_obj):
@@ -393,6 +278,7 @@ def calc_avg_spin(site,supercell_obj):
 # weird.
 # I changed x-axis from "T" to "passes"
 ######### END ELIF COMMENT #############
+
 def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,temp_inc,tempf,Cluster_rules,J_rules,Js,do_figs=True):
     T = temp
     Kb = .000086173324
@@ -436,11 +322,8 @@ def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,temp_inc,tempf,Clus
                             ##############
                             if supercell_obj.get_site_species(site) != 0:
                                 random_site_not_0 = False
-                                #species_not_same = False
-                                #while [species_not_same,random_site_not_0] != [True,True]:
                                 while random_site_not_0 != True:
                                     random_site_not_0 = False
-                                    #species_not_same = False
                                     random_site = [np.random.randint(0,supercell_obj.i_length),np.random.randint(0,supercell_obj.j_length),np.random.randint(0,supercell_obj.k_length)]
                                     if supercell_obj.get_site_species(random_site) != 0:
                                         random_site_not_0 = True
@@ -474,7 +357,6 @@ def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,temp_inc,tempf,Clus
             new_phase = get_new_phase(seed,supercell_obj)
             grow_cluster(seed,supercell_obj,seed_phase,new_phase,cluster,Cluster_rules,J_rules,Js,T)
             ### Track size here (print(len(cluster))
-            #print('[seed_phase, new_phase] = ',[seed_phase,new_phase])
             print('\tcluster length = ',len(cluster))
             if seed_phase*new_phase == -1:
                 print('\tenter Wolff')
@@ -492,7 +374,6 @@ def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,temp_inc,tempf,Clus
                 else:
                     rand = np.random.random()
                     prob = math.exp(-1/(Kb*T)*(H_cluster_new-H_cluster_old))
-                    #print([H_cluster_new,H_cluster_old])
                     if rand < prob:
                         print('\taccepting MC cluster flip: prob is ',prob,' ... rand is ',rand)
                         inc_up += 1
@@ -536,7 +417,6 @@ def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,temp_inc,tempf,Clus
             temp_output.close()
                 
         T += temp_inc
-        #print(T)
 
         if temp_inc == 0:
             X_axis = passes
@@ -546,7 +426,6 @@ def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,temp_inc,tempf,Clus
         else: c = 'b'
         H_total,total_phase,total_phase2,total_spin,total_spin2 = eval_lattice_new(supercell_obj,Cluster_rules,J_rules,Js,T)
         plt.figure(2)
-#        plt.errorbar(X_axis,H_total,yerr=H_total_dev,lw=3,marker='o',color=c)
         plt.errorbar(X_axis,H_total,lw=3,marker='o',color=c)
         plt.figure(3)
         plt.subplot(311)
@@ -556,7 +435,7 @@ def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,temp_inc,tempf,Clus
         plt.subplot(312)
         plt.xlabel("Temp", fontsize=10)
         plt.ylabel("(Average Mag)^2", fontsize=10)
-        plt.errorbar(X_axis,total_spin2,lw=3,marker='o',color=c)###########
+        plt.errorbar(X_axis,total_spin2,lw=3,marker='o',color=c)
         plt.figure(4)
         plt.subplot(411)
         plt.xlabel("Temp", fontsize=10)
@@ -566,7 +445,6 @@ def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,temp_inc,tempf,Clus
         plt.xlabel("Temp", fontsize=10)
         plt.ylabel("Average Phase^2", fontsize=10)
         plt.errorbar(X_axis,total_phase2,lw=3,marker='o',color=c)
-        #print([H_total,H_total])
 
     if do_figs is True:
         plt.figure(2)
@@ -577,11 +455,6 @@ def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,temp_inc,tempf,Clus
         plt.savefig('Mag.pdf')
         plt.figure(4)
         plt.savefig('Phase.pdf')
-#    print("\n")
-#    #print(inc_down)
-#    #print(inc_up)
-#    #print(inc_not)
-#    print("\n")
 
     fig = plt.figure(5)
     ax = fig.add_subplot(111, projection='3d')
