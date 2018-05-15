@@ -11,10 +11,6 @@ import sys
 ############################
 ## Some notes from Elif's Modifications to Parameter Fitting
 ##
-## *) I removed NiMnIn_Au from Brian's data directory, it was not tetragonal and doesn't work
-## *) it is finding some non-duplicate duplicates
-## *) first task should be to separate out the rules sums calculations from the post-processing -- first make the pp file, then calculate sums
-##
 ## *) As implemented right now,
 ##      several parts of this code assume that the VASP POSCAR/CONTCAR always enter Ni,Mn,In in the
 ##      same order.  You will be in trouble on many levels if this is not actually the case.
@@ -24,18 +20,13 @@ import sys
 ##      information necessary to do the fitting and to run MC simulations.  It is carrying around
 ##      a lot of information we don't need.  Cleaner to leave it behind when its not needed.
 ##
-## *) we should make an option to just read cluster and j sums from summary rather than regenerating each time
-##
 ## *) Look at m_structure.py line 86 for minor question.
-##
-## *) need to assess degree of overfitting in model using cross-validation in sklearn. Can we improve the model?
 ##
 ## *) When doing the fitting, is selecting an intercept a problem? cluster expansion model inherently
 ##      expects non-centered data?  Otherwise it spends it energy pulling out the linear dependence on composition.
 ##      Note: fitting is currently modified so intercept is not fit, need to change cfp.ridge_simple if we want
 ##      to include it.  But I think we do not.
-##
-## *) SEE if we can recover Brian's fit. Then do changes in line 100
+##################################################
 
 aust_tol = 0.02
 spin_style = ['threshold','threshold','threshold']  # options for spin_tol. Assuming [Ni Mn In]. choose 'threshold' or 'factor'
@@ -63,7 +54,6 @@ if J_rules_exist is False:                          # writes j_rules if doesn't 
     cmr.write_j_rules(j_file)
 Cluster_rules = cmr.read_cluster_rules(cluster_file)
 J_rules = cmr.read_j_rules(j_file)
-
 if Fitting_params_exist == False:
     # summarize VASP data
     if vasp_data_exists is False:                    # will make summary of VASP results if it doesn't already exist
@@ -77,8 +67,6 @@ if Fitting_params_exist == False:
 
     ppv.write_structures_processedvasp(M_structures,vasp_data_file_pp)
     ppv.summarize_classification(M_structures)
-    # Seems like there should be the option to read the sums from the
-    # summary_fitting_structures file to avoid doing this summing each time.
     warning_threshold = 0.5
     ppv.summarize_fitting_structures(M_structures,warning_threshold)
 
@@ -86,12 +74,6 @@ if Fitting_params_exist == False:
     Js,intercept = cfp.ridge_simple(M_structures,1,Cluster_rules,J_rules)
     cfp.write_fitting_parameters(M_structures, Cluster_rules, J_rules, Js, intercept, 200)
     cfp.plot_data3(M_structures,Cluster_rules,J_rules,Js,intercept,200)
-
-    #print('#######################\n')
-    ##print(cp.CV_score(Js,M_structures))
-    ##print(cp.CV_score2(M_structures))
-    #print('#######################\n')
-    ##--------------------------------------------------------------#
 
 else:
     paramiters_file = open('FittingParameters','r')
@@ -107,15 +89,6 @@ else:
             line = line.split()
             Js.append(float(line[2]))
             line_index += 1
-
-
-
-
-
-
-
-
-
 
 
 ##--------------------------------------------------------------#
@@ -146,6 +119,5 @@ lattice = ms.mc_supercellObj((x_pts,y_pts,z_pts),(0,1,2),[8,8,0],phase_init,spin
 ## To actually run the simulation use
 ## mc.run_montecarlo(reference_to_atom_array,number_of_passes,starting_temp, BEG_rules,Cluster_rules,J_rules,plot_figs=TRUE)
 ## BEG_rules,Cluster_rules,J_rules are objects that determine when and how the fitted parameters are applied
-## print("Beginning MonteCarlo\n")
-## mc.run_WA_MCA(lattice,num_passes,num_sub_passes,Temp0,Temp_inc,TempF,Cluster_rules,J_rules,Js,do_figs=True)
+print("Beginning MonteCarlo\n")
 mc2.run_WA_MCA(lattice,num_passes,num_sub_passes,Temp0,Temp_inc,TempF,Cluster_rules,J_rules,Js,do_figs=True)
