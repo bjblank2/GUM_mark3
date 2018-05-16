@@ -76,77 +76,6 @@ def calc_BEG_params(site,supercell_obj,Cluster_rules,J_rules,Js,T):
     return BEG_J,BEG_K
 
 
-
-def calc_BEG_params2(site,supercell_obj,Cluster_rules,J_rules,Js,T,SUMS):
-    BEG_J = 0
-    BEG_K = 0
-    home_spin = supercell_obj.get_site_spin(site)
-    for neighbor in range(supercell_obj.get_number_of_neighbors(site)):
-        neighbor_spin = supercell_obj.get_neighbor_spin(site,neighbor)
-        for rule in range(len(Cluster_rules)):
-            if Cluster_rules[rule].neighbor_order != 0:
-                if supercell_obj.get_site_species(site) in Cluster_rules[rule].home_atom_list:
-                    if supercell_obj.get_neighbor_order(site,neighbor) == Cluster_rules[rule].neighbor_order:
-                        if supercell_obj.get_neighbor_plain(site,neighbor) == Cluster_rules[rule].plane or Cluster_rules[rule].plane == 'ALL':
-                            if supercell_obj.get_neighbor_species(site,neighbor) in Cluster_rules[rule].neighbor_atom_list:
-                                if Cluster_rules[rule].neighbor_arrangement == 'PERM':
-                                    if supercell_obj.get_site_species(site) != supercell_obj.get_neighbor_species(site,neighbor):
-                                        if Cluster_rules[rule].phase == 'mart':
-                                            BEG_J += Js[rule]
-                                            SUMS[rule]+=1
-                                        if Cluster_rules[rule].phase == 'aust':
-                                            BEG_K += Js[rule]
-                                            SUMS[rule]+=1
-                                if Cluster_rules[rule].neighbor_arrangement == 'COMB':
-                                    if Cluster_rules[rule].phase == 'mart':
-                                        BEG_J += Js[rule]
-                                        SUMS[rule]+=1
-                                    if Cluster_rules[rule].phase == 'aust':
-                                        BEG_K += Js[rule]
-                                        SUMS[rule]+=1
-        for rule in range(len(J_rules)):
-            if J_rules[rule].neighbor_order != 0:
-                if supercell_obj.get_site_species(site) in J_rules[rule].home_atom_list:
-                    if supercell_obj.get_neighbor_order(site,neighbor) == J_rules[rule].neighbor_order:
-                        if supercell_obj.get_neighbor_plain(site,neighbor) == J_rules[rule].plane or J_rules[rule].plane == 'ALL':
-                            if supercell_obj.get_neighbor_species(site,neighbor) in J_rules[rule].neighbor_atom_list:
-                                if J_rules[rule].neighbor_arrangement == 'PERM':
-                                    if supercell_obj.get_site_species(site) != supercell_obj.get_neighbor_species(site,neighbor):
-                                        if J_rules[rule].phase == 'mart':
-                                            BEG_J += Js[rule+len(Cluster_rules)]*home_spin*neighbor_spin#/J_rules[rule].coordination_number
-                                            SUMS[len(Cluster_rules)+rule]+=1*home_spin*neighbor_spin
-                                        if J_rules[rule].phase == 'aust':
-                                            BEG_K += Js[rule+len(Cluster_rules)]*home_spin*neighbor_spin#/J_rules[rule].coordination_number
-                                            SUMS[len(Cluster_rules)+rule]+=1*home_spin*neighbor_spin
-                                if J_rules[rule].neighbor_arrangement == 'COMB':
-                                    if J_rules[rule].phase == 'mart':
-                                        BEG_J += Js[rule+len(Cluster_rules)]*home_spin*neighbor_spin#/J_rules[rule].coordination_number
-                                        SUMS[len(Cluster_rules)+rule]+=1*home_spin*neighbor_spin
-                                    if J_rules[rule].phase == 'aust':
-                                        BEG_K += Js[rule+len(Cluster_rules)]*home_spin*neighbor_spin#/J_rules[rule].coordination_number
-                                        SUMS[len(Cluster_rules)+rule]+=1*home_spin*neighbor_spin
-    for rule in range(len(Cluster_rules)):
-        if Cluster_rules[rule].neighbor_order == 0:
-            if supercell_obj.get_site_species(site) in Cluster_rules[rule].home_atom_list:
-                if Cluster_rules[rule].phase == 'mart':
-                    BEG_J += Js[rule]
-                    SUMS[rule]+=1
-                if Cluster_rules[rule].phase == 'aust':
-                    BEG_K += Js[rule]
-                    SUMS[rule]+=1
-    for rule in range(len(J_rules)):
-        if J_rules[rule].neighbor_order == 0:
-            if supercell_obj.get_site_species(site) in Cluster_rules[rule].home_atom_list:
-                if J_rules[rule].phase == 'mart':
-                    BEG_J += Js[rule+len(Cluster_rules)]
-                    SUMS[len(Cluster_rules)+rule]+=1
-                if J_rules[rule].phase == 'aust':
-                    BEG_K += Js[rule+len(Cluster_rules)]
-                    SUMS[len(Cluster_rules)+rule]+=1
-    return BEG_J,BEG_K
-
-
-
 #-# Determine the total energy of the entire lattice and return that energy
 ### COMMENT FROM ELIF: IS THIS THE ENTIRE LATTICE OR IS THIS A GIVEN SITE SPECIFIC CONTRIBUTION TO THE ENERGY??????
 def eval_site_new(site,supercell_obj,Cluster_rules,J_ruels,Js,T):
@@ -162,20 +91,6 @@ def eval_site_new(site,supercell_obj,Cluster_rules,J_ruels,Js,T):
     return total_Ham
 
 
-
-def eval_site_new2(site,supercell_obj,Cluster_rules,J_ruels,Js,T,SUMS):
-    Kb = .000086173324
-    total_Ham = 0
-    site_phase = supercell_obj.get_site_phase(site)
-    J,K = calc_BEG_params2(site,supercell_obj,Cluster_rules,J_ruels,Js,T,SUMS)
-    for neighbor in range(supercell_obj.get_number_of_neighbors(site)):
-        if supercell_obj.get_neighbor_order(site,neighbor) == 1:
-            neighbor_phase = supercell_obj.get_neighbor_phase(site,neighbor)
-            total_Ham += (J*(site_phase*neighbor_phase)+K*(1-site_phase**2)*(1-neighbor_phase**2))/8
-    total_Ham += Kb*T*np.log(8)*(site_phase**2)
-    return total_Ham
-
-
 #-# Determine the total energy of the entire lattice and return that energy
 def eval_lattice_new(supercell_obj,Cluster_rules,J_rules,Js,T):
     total_Ham = 0
@@ -183,7 +98,6 @@ def eval_lattice_new(supercell_obj,Cluster_rules,J_rules,Js,T):
     total_phase2 = 0
     total_spin = 0
     total_spin2 = 0
-    SUMS = [0]*(len(Cluster_rules)+len(J_rules))
 ######### START ELIF COMMENT #############
 # I am assuming that this is now summing over all lattice points and each lattice point neighbors, so that each interaction does get summed twice???
 ######### END ELIF COMMENT #############
@@ -191,12 +105,11 @@ def eval_lattice_new(supercell_obj,Cluster_rules,J_rules,Js,T):
         for j in range(supercell_obj.j_length):
             for k in range(supercell_obj.k_length):
                 site = [i,j,k]
-                total_Ham += eval_site_new2(site,supercell_obj,Cluster_rules,J_rules,Js,T,SUMS)
+                total_Ham += eval_site_new(site,supercell_obj,Cluster_rules,J_rules,Js,T)
                 total_phase += supercell_obj.get_site_phase(site)/supercell_obj.num_sites
                 total_phase2 += np.absolute(supercell_obj.get_site_phase(site))/supercell_obj.num_sites
                 total_spin += supercell_obj.get_site_spin(site)/supercell_obj.num_sites
                 total_spin2 += np.absolute(supercell_obj.get_site_spin(site))/supercell_obj.num_sites
-    print(SUMS)
     return total_Ham,total_phase,total_phase2,total_spin,total_spin2
 
 #-# Randomly change the phase of a specific element in the lattice and return the value of the original phase
