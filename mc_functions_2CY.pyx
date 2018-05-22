@@ -21,10 +21,12 @@ from mpl_toolkits.mplot3d import Axes3D
 
 
 
+cpdef void do_nothing():
+    print('test')
 
-cdef calc_BEG_params(list site,mc_supercellObj supercell,Cluster_rules,J_rules,np.ndarray Js,float T):
-    cdef float H_BEG_J = 0
-    cdef float H_BEG_K = 0
+cdef list calc_BEG_params(list site,mc_supercellObj supercell,Cluster_rules,J_rules,list Js,float T):
+    cdef float BEG_J = 0
+    cdef float BEG_K = 0
     cdef float Kb = .000086173324
     cdef int neighbor
     cdef int neighbor_spin
@@ -82,13 +84,13 @@ cdef calc_BEG_params(list site,mc_supercellObj supercell,Cluster_rules,J_rules,n
                     BEG_J += Js[rule+len(Cluster_rules)]
                 if J_rules[rule].phase == 'aust':
                     BEG_K += Js[rule+len(Cluster_rules)]
-    return BEG_J,BEG_K
+    return [BEG_J,BEG_K]
 
 
 #-# Determine the total energy of the entire lattice and return that energy
 ### COMMENT FROM ELIF: IS THIS THE ENTIRE LATTICE OR IS THIS A GIVEN SITE SPECIFIC CONTRIBUTION TO THE ENERGY??????
 
-cdef float eval_site_new(list site, mc_supercellObj supercell, Cluster_rules,J_ruels, np.ndarray Js, float T):
+cdef float eval_site_new(list site, mc_supercellObj supercell, Cluster_rules,J_ruels, list Js, float T):
     cdef mc_supercellObj supercell_obj
     cdef float Kb = .000086173324
     cdef float total_Ham = 0
@@ -255,7 +257,7 @@ cdef float calc_avg_spin(list site, mc_supercellObj supercell):
 # I changed x-axis from "T" to "passes"
 ######### END ELIF COMMENT #############
 
-cdef void run_WA_MCA(mc_supercellObj supercell, int numb_passes, int num_sub_passes,float temp,float temp_inc,float tempf,Cluster_rules,J_rules,list Js, bint do_figs=True):
+cpdef void run_WA_MCA(mc_supercellObj supercell, int numb_passes, int num_sub_passes,float temp,float temp_inc,float tempf,Cluster_rules,J_rules,list Js, bint do_figs=True):
     cdef mc_supercellObj supercell_obj
     cdef float T = temp
     cdef float Kb = .000086173324
@@ -335,7 +337,7 @@ cdef void run_WA_MCA(mc_supercellObj supercell, int numb_passes, int num_sub_pas
             #Randdom Seed
             print('...sub-passes done, start cluster growth!')
             cluster = []
-            seed =(np.random.randint(0,supercell_obj.i_length),np.random.randint(0,supercell_obj.j_length),np.random.randint(0,supercell_obj.k_length))
+            seed =[np.random.randint(0,supercell_obj.i_length),np.random.randint(0,supercell_obj.j_length),np.random.randint(0,supercell_obj.k_length)]
             seed_phase = supercell_obj.get_site_phase(seed)
             new_phase = get_new_phase(seed,supercell_obj)
             grow_cluster(seed,supercell_obj,seed_phase,new_phase,cluster,Cluster_rules,J_rules,Js,T)

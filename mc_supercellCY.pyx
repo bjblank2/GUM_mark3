@@ -292,62 +292,124 @@ cdef class mc_supercellObj:
 
 
     cdef list get_composition(self):
-        return <mc_siteObj>self.composition
+        return self.composition
 
     cdef int get_site_index(self,list site):
-        return <mc_siteObj>self.supercell[site[0],site[1],site[2]].get_index()
+        cdef mc_siteObj site_obj
+        site_obj = <mc_siteObj>self.supercell[site[0],site[1],site[2]]
+        return site_obj.get_index()
 
     cdef list get_site_pos(self,list site):
-        return <mc_siteObj>self.supercell[site[0],site[1],site[2]].get_pos()
+        cdef mc_siteObj site_obj
+        site_obj = <mc_siteObj>self.supercell[site[0],site[1],site[2]]
+        return site_obj.get_pos()
 
     cdef int get_site_species(self, list site):
-        return <mc_siteObj>self.supercell[site[0],site[1],site[2]].get_species()
+        cdef mc_siteObj site_obj
+        site_obj = <mc_siteObj>self.supercell[site[0],site[1],site[2]]
+        return site_obj.get_species()
 
     cdef int get_site_spin(self, list site):
-        return <mc_siteObj>self.supercell[site[0],site[1],site[2]].get_spin()
+        cdef mc_siteObj site_obj
+        site_obj = <mc_siteObj>self.supercell[site[0],site[1],site[2]]
+        return site_obj.get_spin()
 
     cdef int get_site_phase(self, list site):
-        return <mc_siteObj>self.supercell[site[0],site[1],site[2]].get_phase()
+        cdef mc_siteObj site_obj
+        site_obj = <mc_siteObj>self.supercell[site[0],site[1],site[2]]
+        return site_obj.get_phase()
 
     cdef void set_site_species(self, list site, int species):
-        <mc_siteObj>self.supercell[site[0],site[1],site[2]].set_species(species)
+        cdef mc_siteObj site_obj
+        site_obj = <mc_siteObj>self.supercell[site[0],site[1],site[2]]
+        site_obj.set_species(species)
+        self.supercell[site[0],site[1],site[2]] = site_obj
 
-    cdef void set_site_spin(self, list site, int spin):
-        <mc_siteObj>self.supercell[site[0],site[1],site[2]].set_spin(spin)
+    cdef void set_site_spin(self,list site,int spin):
+        cdef mc_siteObj site_obj
+        site_obj = <mc_siteObj>self.supercell[site[0],site[1],site[2]]
+        site_obj.set_spin(spin)
+        self.supercell[site[0],site[1],site[2]] = site_obj
 
-    cdef void set_site_phase(self, list site, int phase):
-        <mc_siteObj>self.supercell[site[0],site[1],site[2]].set_phase(phase)
+    cdef void set_site_phase(self,list site,int phase):
+        cdef mc_siteObj site_obj
+        site_obj = <mc_siteObj>self.supercell[site[0],site[1],site[2]]
+        site_obj.set_phase(phase)
+        self.supercell[site[0],site[1],site[2]] = site_obj
 
-    cdef void set_neighbor_phase(self, list site, int neighbor, int phase):
-        cdef list neighbor_site = <mc_siteObj>self.get_neighbor_pos(site,neighbor)
-        <mc_siteObj>self.set_site_phase(neighbor_site,phase)
+    cdef void set_neighbor_phase(self,list site,int neighbor,int phase):
+        cdef mc_siteObj site_obj
+        cdef list neighbor_pos
+        cdef mc_siteObj neighbor_site_obj
+        site_obj = <mc_siteObj>self.supercell[site[0],site[1],site[2]]
+        neighbor_pos = self.get_neighbor_pos(site,neighbor)
+        neighbor_site_obj = <mc_siteObj>self.supercell[neighbor_pos[0],neighbor_pos[1],neighbor_pos[2]]
+        neighbor_site_obj.set_site_phase(neighbor_pos,phase)
+        self.supercell[neighbor_pos[0],neighbor_pos[1],neighbor_pos[2]] = neighbor_site_obj
 
-    cdef int get_number_of_neighbors(self, list site):
-        return len(<mc_siteObj>self.supercell[site[0],site[1],site[2]].neighbors)
+    cdef int get_number_of_neighbors(self,list site):
+        cdef mc_siteObj site_obj
+        site_obj = <mc_siteObj>self.supercell[site[0],site[1],site[2]]
+        return len(site_obj.neighbors)
 
-    cdef list get_neighbor_pos(self, list site, int neighbor):
-        return <mc_siteObj>self.supercell[site[0],site[1],site[2]].neighbors[neighbor].get_pos()
+    cdef list get_neighbor_pos(self,list site,int neighbor):
+        cdef mc_siteObj site_obj
+        cdef mc_neighborObj neighbor_obj
+        site_obj = <mc_siteObj>self.supercell[site[0],site[1],site[2]]
+        neighbor_obj= <mc_neighborObj>site_obj.neighbors[neighbor]
+        return neighbor_obj.get_pos()
 
-    cdef int get_neighbor_order(self, list site, int neighbor):
-        return <mc_siteObj>self.supercell[site[0],site[1],site[2]].neighbors[neighbor].get_order()
+    cdef int get_neighbor_order(self,list site,int neighbor):
+        cdef mc_siteObj site_obj
+        cdef mc_neighborObj neighbor_obj
+        site_obj = <mc_siteObj>self.supercell[site[0],site[1],site[2]]
+        neighbor_obj = <mc_neighborObj>site_obj.neighbors[neighbor]
+        return neighbor_obj.get_order()
 
-    cdef str get_neighbor_plain(self, list site, int neighbor):
-        return <mc_siteObj>self.supercell[site[0],site[1],site[2]].neighbors[neighbor].get_plain()
+    cdef str get_neighbor_plain(self,list site,int neighbor):
+        cdef mc_siteObj site_obj
+        cdef mc_neighborObj neighbor_obj
+        site_obj = <mc_siteObj>self.supercell[site[0],site[1],site[2]]
+        neighbor_obj = <mc_neighborObj>site_obj.neighbors[neighbor]
+        return neighbor_obj.get_plain()
 
-    cdef int get_neighbor_phase(self, list site, int neighbor):
-        cdef list neighbor_pos = <mc_siteObj>self.supercell[site[0],site[1],site[2]].neighbors[neighbor].get_pos()
-        return <mc_siteObj>self.supercell[neighbor_pos[0],neighbor_pos[1],neighbor_pos[2]].get_phase()
+    cdef int get_neighbor_phase(self,list site,int neighbor):
+        cdef mc_siteObj site_obj
+        cdef mc_neighborObj neighbor_obj
+        cdef mc_siteObj neighbor_site_obj
+        cdef list neighbor_pos
+        site_obj = <mc_siteObj>self.supercell[site[0],site[1],site[2]]
+        neighbor_obj = <mc_neighborObj>site_obj.neighbors[neighbor]
+        neighbor_pos = neighbor_obj.get_pos()
+        neighbor_site_obj = <mc_siteObj>self.supercell[neighbor_pos[0],neighbor_pos[1],neighbor_pos[2]]
+        return neighbor_site_obj.get_phase()
 
-    cdef int get_neighbor_species(self,list site, int neighbor):
-        cdef list neighbor_pos = <mc_siteObj>self.supercell[site[0],site[1],site[2]].neighbors[neighbor].get_pos()
-        return <mc_siteObj>self.supercell[neighbor_pos[0],neighbor_pos[1],neighbor_pos[2]].get_species()
+    cdef int get_neighbor_species(self,list site,int neighbor):
+        cdef mc_siteObj site_obj
+        cdef mc_neighborObj neighbor_obj
+        cdef mc_siteObj neighbor_site_obj
+        cdef list neighbor_pos
+        site_obj = <mc_siteObj>self.supercell[site[0],site[1],site[2]]
+        neighbor_obj = <mc_neighborObj>site_obj.neighbors[neighbor]
+        neighbor_pos = neighbor_obj.get_pos()
+        neighbor_site_obj = <mc_siteObj>self.supercell[neighbor_pos[0],neighbor_pos[1],neighbor_pos[2]]
+        return neighbor_site_obj.get_species()
 
-    cdef int get_neighbor_spin(self, list site, int neighbor):
-        cdef list neighbor_pos = <mc_siteObj>self.supercell[site[0],site[1],site[2]].neighbors[neighbor].get_pos()
-        return <mc_siteObj>self.supercell[neighbor_pos[0],neighbor_pos[1],neighbor_pos[2]].get_spin()
+    cdef int get_neighbor_spin(self,list site,int neighbor):
+        cdef mc_siteObj site_obj
+        cdef mc_neighborObj neighbor_obj
+        cdef mc_siteObj neighbor_site_obj
+        cdef list neighbor_pos
+        site_obj = <mc_siteObj>self.supercell[site[0],site[1],site[2]]
+        neighbor_obj = <mc_neighborObj>site_obj.neighbors[neighbor]
+        neighbor_pos = neighbor_obj.get_pos()
+        neighbor_site_obj = <mc_siteObj>self.supercell[neighbor_pos[0],neighbor_pos[1],neighbor_pos[2]]
+        return neighbor_site_obj.get_spin()
 
-    cdef str check_site_phase(self, list site):
-        phase = <mc_siteObj>self.supercell[site[0],site[1],site[2]].get_phase()
+    cdef str check_site_phase(self,list site):
+        cdef mc_siteObj site_obj = <mc_siteObj>self.supercell[site[0],site[1],site[2]]
+        cdef int phase
+        phase = site_obj.get_phase()
         if abs(phase) == 1:
             phase_string = 'mart'
         if phase == 0:

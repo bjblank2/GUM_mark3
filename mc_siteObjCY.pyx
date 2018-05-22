@@ -37,5 +37,6 @@ cdef class mc_siteObj:
     cdef void set_phase(self, int new_value):
         self.phase = new_value
 
-    cdef void add_neighbor(self, mc_neighborObj neighbor_obj):
+    cdef void add_neighbor(self, mc_neighborObj neighbor):
+        cdef mc_neighborObj neighbor_obj = <mc_neighborObj>neighbor
         self.neighbors.append(neighbor_obj)

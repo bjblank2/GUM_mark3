@@ -3,10 +3,11 @@ import compile_vasp_structures as cvs
 import postprocess_vasp as ppv
 import clustermag_rules as cmr  
 import calc_fitting_params as cfp
-#import mc_functions as mc
-import mc_functions_2 as mc2
-import mc_supercell as ms
+import mc_functions_2CY as mc2
+import mc_supercellCY as ms
+import time
 import sys
+import numpy as np
 #
 ############################
 ## Some notes from Elif's Modifications to Parameter Fitting
@@ -105,7 +106,7 @@ z_pts = 4 #|
 phase_init = 'mart' # initial phase configuration
 spin_init = 'rand' # initial spin configuration
 species_init = 'rand'
-num_passes = 400 # number of cluster/wolf moves done
+num_passes = 40 # number of cluster/wolf moves done
 num_sub_passes = 30 # number of spin/species flips done per cluster/wolf move
 Temp0 = 100 # initial temperature in K
 TempF = 200 # final temperature in K
@@ -114,10 +115,11 @@ Temp_inc = 5 # temperature increase per pass in K
 ## Initialize an array of atoms with ms.mc_supercellObj(size,species,composition)
 ## size is (x,y,z)dimensions, species is types of atoms allowed (0=Ni,1=Mn,2=In)
 ## composition is number of each atom (#Ni,#Mn,#In)
-lattice = ms.mc_supercellObj((x_pts,y_pts,z_pts),(0,1,2),[8,8,0],phase_init,spin_init,species_init)
+lattice = ms.mc_supercellObj([x_pts,y_pts,z_pts],[0,1,2],[8,8,0],phase_init,spin_init,species_init)
 #sys.setrecursionlimit(lattice.num_sites+2)
 ## To actually run the simulation use
 ## mc.run_montecarlo(reference_to_atom_array,number_of_passes,starting_temp, BEG_rules,Cluster_rules,J_rules,plot_figs=TRUE)
 ## BEG_rules,Cluster_rules,J_rules are objects that determine when and how the fitted parameters are applied
 print("Beginning MonteCarlo\n")
+mc2.do_nothing()
 mc2.run_WA_MCA(lattice,num_passes,num_sub_passes,Temp0,Temp_inc,TempF,Cluster_rules,J_rules,Js,do_figs=True)

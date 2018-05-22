@@ -1120,7 +1120,7 @@ static int __pyx_f_12mc_siteObjCY_10mc_siteObj_get_phase(struct __pyx_obj_12mc_s
 static void __pyx_f_12mc_siteObjCY_10mc_siteObj_set_species(struct __pyx_obj_12mc_siteObjCY_mc_siteObj *__pyx_v_self, int __pyx_v_new_value); /* proto*/
 static void __pyx_f_12mc_siteObjCY_10mc_siteObj_set_spin(struct __pyx_obj_12mc_siteObjCY_mc_siteObj *__pyx_v_self, int __pyx_v_new_value); /* proto*/
 static void __pyx_f_12mc_siteObjCY_10mc_siteObj_set_phase(struct __pyx_obj_12mc_siteObjCY_mc_siteObj *__pyx_v_self, int __pyx_v_new_value); /* proto*/
-static void __pyx_f_12mc_siteObjCY_10mc_siteObj_add_neighbor(struct __pyx_obj_12mc_siteObjCY_mc_siteObj *__pyx_v_self, struct __pyx_obj_16mc_neighborObjCY_mc_neighborObj *__pyx_v_neighbor_obj); /* proto*/
+static void __pyx_f_12mc_siteObjCY_10mc_siteObj_add_neighbor(struct __pyx_obj_12mc_siteObjCY_mc_siteObj *__pyx_v_self, struct __pyx_obj_16mc_neighborObjCY_mc_neighborObj *__pyx_v_neighbor); /* proto*/
 
 /* Module declarations from 'mc_neighborObjCY' */
 static PyTypeObject *__pyx_ptype_16mc_neighborObjCY_mc_neighborObj = 0;
@@ -1700,7 +1700,7 @@ static void __pyx_f_12mc_siteObjCY_10mc_siteObj_set_phase(struct __pyx_obj_12mc_
  *     cdef void set_phase(self, int new_value):
  *         self.phase = new_value             # <<<<<<<<<<<<<<
  * 
- *     cdef void add_neighbor(self, mc_neighborObj neighbor_obj):
+ *     cdef void add_neighbor(self, mc_neighborObj neighbor):
  */
   __pyx_v_self->phase = __pyx_v_new_value;
 
@@ -1719,13 +1719,16 @@ static void __pyx_f_12mc_siteObjCY_10mc_siteObj_set_phase(struct __pyx_obj_12mc_
 /* "mc_siteObjCY.pyx":40
  *         self.phase = new_value
  * 
- *     cdef void add_neighbor(self, mc_neighborObj neighbor_obj):             # <<<<<<<<<<<<<<
+ *     cdef void add_neighbor(self, mc_neighborObj neighbor):             # <<<<<<<<<<<<<<
+ *         cdef mc_neighborObj neighbor_obj = <mc_neighborObj>neighbor
  *         self.neighbors.append(neighbor_obj)
  */
 
-static void __pyx_f_12mc_siteObjCY_10mc_siteObj_add_neighbor(struct __pyx_obj_12mc_siteObjCY_mc_siteObj *__pyx_v_self, struct __pyx_obj_16mc_neighborObjCY_mc_neighborObj *__pyx_v_neighbor_obj) {
+static void __pyx_f_12mc_siteObjCY_10mc_siteObj_add_neighbor(struct __pyx_obj_12mc_siteObjCY_mc_siteObj *__pyx_v_self, struct __pyx_obj_16mc_neighborObjCY_mc_neighborObj *__pyx_v_neighbor) {
+  struct __pyx_obj_16mc_neighborObjCY_mc_neighborObj *__pyx_v_neighbor_obj = 0;
   __Pyx_RefNannyDeclarations
-  int __pyx_t_1;
+  PyObject *__pyx_t_1 = NULL;
+  int __pyx_t_2;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
@@ -1733,27 +1736,41 @@ static void __pyx_f_12mc_siteObjCY_10mc_siteObj_add_neighbor(struct __pyx_obj_12
 
   /* "mc_siteObjCY.pyx":41
  * 
- *     cdef void add_neighbor(self, mc_neighborObj neighbor_obj):
+ *     cdef void add_neighbor(self, mc_neighborObj neighbor):
+ *         cdef mc_neighborObj neighbor_obj = <mc_neighborObj>neighbor             # <<<<<<<<<<<<<<
+ *         self.neighbors.append(neighbor_obj)
+ */
+  __pyx_t_1 = ((PyObject *)__pyx_v_neighbor);
+  __Pyx_INCREF(__pyx_t_1);
+  __pyx_v_neighbor_obj = ((struct __pyx_obj_16mc_neighborObjCY_mc_neighborObj *)__pyx_t_1);
+  __pyx_t_1 = 0;
+
+  /* "mc_siteObjCY.pyx":42
+ *     cdef void add_neighbor(self, mc_neighborObj neighbor):
+ *         cdef mc_neighborObj neighbor_obj = <mc_neighborObj>neighbor
  *         self.neighbors.append(neighbor_obj)             # <<<<<<<<<<<<<<
  */
   if (unlikely(__pyx_v_self->neighbors == Py_None)) {
     PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%s'", "append");
-    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 41; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 42; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
-  __pyx_t_1 = __Pyx_PyList_Append(__pyx_v_self->neighbors, ((PyObject *)__pyx_v_neighbor_obj)); if (unlikely(__pyx_t_1 == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 41; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_PyList_Append(__pyx_v_self->neighbors, ((PyObject *)__pyx_v_neighbor_obj)); if (unlikely(__pyx_t_2 == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 42; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
   /* "mc_siteObjCY.pyx":40
  *         self.phase = new_value
  * 
- *     cdef void add_neighbor(self, mc_neighborObj neighbor_obj):             # <<<<<<<<<<<<<<
+ *     cdef void add_neighbor(self, mc_neighborObj neighbor):             # <<<<<<<<<<<<<<
+ *         cdef mc_neighborObj neighbor_obj = <mc_neighborObj>neighbor
  *         self.neighbors.append(neighbor_obj)
  */
 
   /* function exit code */
   goto __pyx_L0;
   __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
   __Pyx_WriteUnraisable("mc_siteObjCY.mc_siteObj.add_neighbor", __pyx_clineno, __pyx_lineno, __pyx_filename, 0, 0);
   __pyx_L0:;
+  __Pyx_XDECREF((PyObject *)__pyx_v_neighbor_obj);
   __Pyx_RefNannyFinishContext();
 }
 
