@@ -1032,23 +1032,6 @@ static CYTHON_INLINE int __Pyx_PySequence_ContainsTF(PyObject* item, PyObject* s
 }
 
 #if CYTHON_COMPILING_IN_CPYTHON
-#define __Pyx_PyObject_DelAttrStr(o,n) __Pyx_PyObject_SetAttrStr(o,n,NULL)
-static CYTHON_INLINE int __Pyx_PyObject_SetAttrStr(PyObject* obj, PyObject* attr_name, PyObject* value) {
-    PyTypeObject* tp = Py_TYPE(obj);
-    if (likely(tp->tp_setattro))
-        return tp->tp_setattro(obj, attr_name, value);
-#if PY_MAJOR_VERSION < 3
-    if (likely(tp->tp_setattr))
-        return tp->tp_setattr(obj, PyString_AS_STRING(attr_name), value);
-#endif
-    return PyObject_SetAttr(obj, attr_name, value);
-}
-#else
-#define __Pyx_PyObject_DelAttrStr(o,n)   PyObject_DelAttr(o,n)
-#define __Pyx_PyObject_SetAttrStr(o,n,v) PyObject_SetAttr(o,n,v)
-#endif
-
-#if CYTHON_COMPILING_IN_CPYTHON
 static CYTHON_INLINE int __Pyx_PyList_Append(PyObject* list, PyObject* x) {
     PyListObject* L = (PyListObject*) list;
     Py_ssize_t len = Py_SIZE(list);
@@ -1347,7 +1330,6 @@ static char __pyx_k_main[] = "__main__";
 static char __pyx_k_mart[] = "mart";
 static char __pyx_k_rand[] = "rand";
 static char __pyx_k_size[] = "size";
-static char __pyx_k_spin[] = "spin";
 static char __pyx_k_test[] = "__test__";
 static char __pyx_k_brian[] = "brian";
 static char __pyx_k_dtype[] = "dtype";
@@ -1408,7 +1390,6 @@ static PyObject *__pyx_n_s_set_site_phase;
 static PyObject *__pyx_n_s_size;
 static PyObject *__pyx_n_s_species;
 static PyObject *__pyx_n_s_species_init;
-static PyObject *__pyx_n_s_spin;
 static PyObject *__pyx_n_s_spin_init;
 static PyObject *__pyx_n_s_test;
 static PyObject *__pyx_kp_u_unknown_dtype_code_in_numpy_pxd;
@@ -2892,7 +2873,7 @@ static int __pyx_pf_14mc_supercellCY_15mc_supercellObj___init__(struct __pyx_obj
  *                         species_not_0 = False
  *                         while species_not_0 == False:             # <<<<<<<<<<<<<<
  *                             rand_index = [np.random.randint(0,size[0]),np.random.randint(0,size[1]),np.random.randint(0,size[2])]
- *                             if self.supercell[rand_index[0],rand_index[1],rand_index[2]].species != species[0]:
+ *                             if self.get_site_species([rand_index[0],rand_index[1],rand_index[2]]) != species[0]:
  */
           while (1) {
             __pyx_t_14 = ((__pyx_v_species_not_0 == 0) != 0);
@@ -2902,7 +2883,7 @@ static int __pyx_pf_14mc_supercellCY_15mc_supercellObj___init__(struct __pyx_obj
  *                         species_not_0 = False
  *                         while species_not_0 == False:
  *                             rand_index = [np.random.randint(0,size[0]),np.random.randint(0,size[1]),np.random.randint(0,size[2])]             # <<<<<<<<<<<<<<
- *                             if self.supercell[rand_index[0],rand_index[1],rand_index[2]].species != species[0]:
+ *                             if self.get_site_species([rand_index[0],rand_index[1],rand_index[2]]) != species[0]:
  *                                 species_not_0 = True
  */
             __pyx_t_6 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 91; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
@@ -3045,7 +3026,7 @@ static int __pyx_pf_14mc_supercellCY_15mc_supercellObj___init__(struct __pyx_obj
             /* "mc_supercellCY.pyx":92
  *                         while species_not_0 == False:
  *                             rand_index = [np.random.randint(0,size[0]),np.random.randint(0,size[1]),np.random.randint(0,size[2])]
- *                             if self.supercell[rand_index[0],rand_index[1],rand_index[2]].species != species[0]:             # <<<<<<<<<<<<<<
+ *                             if self.get_site_species([rand_index[0],rand_index[1],rand_index[2]]) != species[0]:             # <<<<<<<<<<<<<<
  *                                 species_not_0 = True
  *                                 if rand_index not in rand_index_list:
  */
@@ -3055,51 +3036,48 @@ static int __pyx_pf_14mc_supercellCY_15mc_supercellObj___init__(struct __pyx_obj
             __Pyx_GOTREF(__pyx_t_5);
             __pyx_t_6 = __Pyx_GetItemInt_List(__pyx_v_rand_index, 2, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(__pyx_t_6 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 92; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
             __Pyx_GOTREF(__pyx_t_6);
-            __pyx_t_4 = PyTuple_New(3); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 92; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+            __pyx_t_4 = PyList_New(3); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 92; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
             __Pyx_GOTREF(__pyx_t_4);
             __Pyx_GIVEREF(__pyx_t_3);
-            PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_3);
+            PyList_SET_ITEM(__pyx_t_4, 0, __pyx_t_3);
             __Pyx_GIVEREF(__pyx_t_5);
-            PyTuple_SET_ITEM(__pyx_t_4, 1, __pyx_t_5);
+            PyList_SET_ITEM(__pyx_t_4, 1, __pyx_t_5);
             __Pyx_GIVEREF(__pyx_t_6);
-            PyTuple_SET_ITEM(__pyx_t_4, 2, __pyx_t_6);
+            PyList_SET_ITEM(__pyx_t_4, 2, __pyx_t_6);
             __pyx_t_3 = 0;
             __pyx_t_5 = 0;
             __pyx_t_6 = 0;
-            __pyx_t_6 = PyObject_GetItem(((PyObject *)__pyx_v_self->supercell), __pyx_t_4); if (unlikely(__pyx_t_6 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 92; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
+            __pyx_t_6 = __Pyx_PyInt_From_int(((struct __pyx_vtabstruct_14mc_supercellCY_mc_supercellObj *)__pyx_v_self->__pyx_vtab)->get_site_species(__pyx_v_self, ((PyObject*)__pyx_t_4))); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 92; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
             __Pyx_GOTREF(__pyx_t_6);
             __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-            __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_species); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 92; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-            __Pyx_GOTREF(__pyx_t_4);
-            __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
             if (unlikely(__pyx_v_species == Py_None)) {
               PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
               {__pyx_filename = __pyx_f[0]; __pyx_lineno = 92; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
             }
-            __pyx_t_6 = __Pyx_GetItemInt_List(__pyx_v_species, 0, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(__pyx_t_6 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 92; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
-            __Pyx_GOTREF(__pyx_t_6);
-            __pyx_t_5 = PyObject_RichCompare(__pyx_t_4, __pyx_t_6, Py_NE); __Pyx_XGOTREF(__pyx_t_5); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 92; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-            __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+            __pyx_t_4 = __Pyx_GetItemInt_List(__pyx_v_species, 0, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(__pyx_t_4 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 92; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
+            __Pyx_GOTREF(__pyx_t_4);
+            __pyx_t_5 = PyObject_RichCompare(__pyx_t_6, __pyx_t_4, Py_NE); __Pyx_XGOTREF(__pyx_t_5); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 92; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
             __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+            __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
             __pyx_t_14 = __Pyx_PyObject_IsTrue(__pyx_t_5); if (unlikely(__pyx_t_14 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 92; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
             __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
             if (__pyx_t_14) {
 
               /* "mc_supercellCY.pyx":93
  *                             rand_index = [np.random.randint(0,size[0]),np.random.randint(0,size[1]),np.random.randint(0,size[2])]
- *                             if self.supercell[rand_index[0],rand_index[1],rand_index[2]].species != species[0]:
+ *                             if self.get_site_species([rand_index[0],rand_index[1],rand_index[2]]) != species[0]:
  *                                 species_not_0 = True             # <<<<<<<<<<<<<<
  *                                 if rand_index not in rand_index_list:
- *                                     self.supercell[rand_index[0],rand_index[1],rand_index[2]].species = species[2]
+ *                                     self.set_site_species([rand_index[0],rand_index[1],rand_index[2]],species[2])
  */
               __pyx_v_species_not_0 = 1;
 
               /* "mc_supercellCY.pyx":94
- *                             if self.supercell[rand_index[0],rand_index[1],rand_index[2]].species != species[0]:
+ *                             if self.get_site_species([rand_index[0],rand_index[1],rand_index[2]]) != species[0]:
  *                                 species_not_0 = True
  *                                 if rand_index not in rand_index_list:             # <<<<<<<<<<<<<<
- *                                     self.supercell[rand_index[0],rand_index[1],rand_index[2]].species = species[2]
- *                                     self.supercell[rand_index[0],rand_index[1],rand_index[2]].spin = 0
+ *                                     self.set_site_species([rand_index[0],rand_index[1],rand_index[2]],species[2])
+ *                                     self.set_site_spin([rand_index[0],rand_index[1],rand_index[2]],0)
  */
               __pyx_t_14 = (__Pyx_PySequence_ContainsTF(__pyx_v_rand_index, __pyx_v_rand_index_list, Py_NE)); if (unlikely(__pyx_t_14 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 94; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
               __pyx_t_13 = (__pyx_t_14 != 0);
@@ -3108,73 +3086,68 @@ static int __pyx_pf_14mc_supercellCY_15mc_supercellObj___init__(struct __pyx_obj
                 /* "mc_supercellCY.pyx":95
  *                                 species_not_0 = True
  *                                 if rand_index not in rand_index_list:
- *                                     self.supercell[rand_index[0],rand_index[1],rand_index[2]].species = species[2]             # <<<<<<<<<<<<<<
- *                                     self.supercell[rand_index[0],rand_index[1],rand_index[2]].spin = 0
+ *                                     self.set_site_species([rand_index[0],rand_index[1],rand_index[2]],species[2])             # <<<<<<<<<<<<<<
+ *                                     self.set_site_spin([rand_index[0],rand_index[1],rand_index[2]],0)
  *                                     rand_index_list.append(rand_index)
  */
+                __pyx_t_5 = __Pyx_GetItemInt_List(__pyx_v_rand_index, 0, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(__pyx_t_5 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 95; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
+                __Pyx_GOTREF(__pyx_t_5);
+                __pyx_t_4 = __Pyx_GetItemInt_List(__pyx_v_rand_index, 1, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(__pyx_t_4 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 95; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
+                __Pyx_GOTREF(__pyx_t_4);
+                __pyx_t_6 = __Pyx_GetItemInt_List(__pyx_v_rand_index, 2, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(__pyx_t_6 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 95; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
+                __Pyx_GOTREF(__pyx_t_6);
+                __pyx_t_3 = PyList_New(3); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 95; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+                __Pyx_GOTREF(__pyx_t_3);
+                __Pyx_GIVEREF(__pyx_t_5);
+                PyList_SET_ITEM(__pyx_t_3, 0, __pyx_t_5);
+                __Pyx_GIVEREF(__pyx_t_4);
+                PyList_SET_ITEM(__pyx_t_3, 1, __pyx_t_4);
+                __Pyx_GIVEREF(__pyx_t_6);
+                PyList_SET_ITEM(__pyx_t_3, 2, __pyx_t_6);
+                __pyx_t_5 = 0;
+                __pyx_t_4 = 0;
+                __pyx_t_6 = 0;
                 if (unlikely(__pyx_v_species == Py_None)) {
                   PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
                   {__pyx_filename = __pyx_f[0]; __pyx_lineno = 95; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
                 }
-                __pyx_t_5 = __Pyx_GetItemInt_List(__pyx_v_species, 2, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(__pyx_t_5 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 95; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
-                __Pyx_GOTREF(__pyx_t_5);
-                __pyx_t_6 = __Pyx_GetItemInt_List(__pyx_v_rand_index, 0, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(__pyx_t_6 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 95; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
+                __pyx_t_6 = __Pyx_GetItemInt_List(__pyx_v_species, 2, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(__pyx_t_6 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 95; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
                 __Pyx_GOTREF(__pyx_t_6);
-                __pyx_t_4 = __Pyx_GetItemInt_List(__pyx_v_rand_index, 1, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(__pyx_t_4 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 95; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
-                __Pyx_GOTREF(__pyx_t_4);
-                __pyx_t_3 = __Pyx_GetItemInt_List(__pyx_v_rand_index, 2, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(__pyx_t_3 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 95; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
-                __Pyx_GOTREF(__pyx_t_3);
-                __pyx_t_17 = PyTuple_New(3); if (unlikely(!__pyx_t_17)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 95; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-                __Pyx_GOTREF(__pyx_t_17);
-                __Pyx_GIVEREF(__pyx_t_6);
-                PyTuple_SET_ITEM(__pyx_t_17, 0, __pyx_t_6);
-                __Pyx_GIVEREF(__pyx_t_4);
-                PyTuple_SET_ITEM(__pyx_t_17, 1, __pyx_t_4);
-                __Pyx_GIVEREF(__pyx_t_3);
-                PyTuple_SET_ITEM(__pyx_t_17, 2, __pyx_t_3);
-                __pyx_t_6 = 0;
-                __pyx_t_4 = 0;
-                __pyx_t_3 = 0;
-                __pyx_t_3 = PyObject_GetItem(((PyObject *)__pyx_v_self->supercell), __pyx_t_17); if (unlikely(__pyx_t_3 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 95; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
-                __Pyx_GOTREF(__pyx_t_3);
-                __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
-                if (__Pyx_PyObject_SetAttrStr(__pyx_t_3, __pyx_n_s_species, __pyx_t_5) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 95; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-                __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+                __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_6); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 95; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+                __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+                ((struct __pyx_vtabstruct_14mc_supercellCY_mc_supercellObj *)__pyx_v_self->__pyx_vtab)->set_site_species(__pyx_v_self, ((PyObject*)__pyx_t_3), __pyx_t_2);
                 __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
                 /* "mc_supercellCY.pyx":96
  *                                 if rand_index not in rand_index_list:
- *                                     self.supercell[rand_index[0],rand_index[1],rand_index[2]].species = species[2]
- *                                     self.supercell[rand_index[0],rand_index[1],rand_index[2]].spin = 0             # <<<<<<<<<<<<<<
+ *                                     self.set_site_species([rand_index[0],rand_index[1],rand_index[2]],species[2])
+ *                                     self.set_site_spin([rand_index[0],rand_index[1],rand_index[2]],0)             # <<<<<<<<<<<<<<
  *                                     rand_index_list.append(rand_index)
  *                                     species_count += 1
  */
                 __pyx_t_3 = __Pyx_GetItemInt_List(__pyx_v_rand_index, 0, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(__pyx_t_3 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 96; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
                 __Pyx_GOTREF(__pyx_t_3);
-                __pyx_t_5 = __Pyx_GetItemInt_List(__pyx_v_rand_index, 1, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(__pyx_t_5 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 96; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
-                __Pyx_GOTREF(__pyx_t_5);
-                __pyx_t_17 = __Pyx_GetItemInt_List(__pyx_v_rand_index, 2, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(__pyx_t_17 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 96; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
-                __Pyx_GOTREF(__pyx_t_17);
-                __pyx_t_4 = PyTuple_New(3); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 96; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+                __pyx_t_6 = __Pyx_GetItemInt_List(__pyx_v_rand_index, 1, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(__pyx_t_6 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 96; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
+                __Pyx_GOTREF(__pyx_t_6);
+                __pyx_t_4 = __Pyx_GetItemInt_List(__pyx_v_rand_index, 2, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(__pyx_t_4 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 96; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
                 __Pyx_GOTREF(__pyx_t_4);
+                __pyx_t_5 = PyList_New(3); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 96; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+                __Pyx_GOTREF(__pyx_t_5);
                 __Pyx_GIVEREF(__pyx_t_3);
-                PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_3);
-                __Pyx_GIVEREF(__pyx_t_5);
-                PyTuple_SET_ITEM(__pyx_t_4, 1, __pyx_t_5);
-                __Pyx_GIVEREF(__pyx_t_17);
-                PyTuple_SET_ITEM(__pyx_t_4, 2, __pyx_t_17);
+                PyList_SET_ITEM(__pyx_t_5, 0, __pyx_t_3);
+                __Pyx_GIVEREF(__pyx_t_6);
+                PyList_SET_ITEM(__pyx_t_5, 1, __pyx_t_6);
+                __Pyx_GIVEREF(__pyx_t_4);
+                PyList_SET_ITEM(__pyx_t_5, 2, __pyx_t_4);
                 __pyx_t_3 = 0;
-                __pyx_t_5 = 0;
-                __pyx_t_17 = 0;
-                __pyx_t_17 = PyObject_GetItem(((PyObject *)__pyx_v_self->supercell), __pyx_t_4); if (unlikely(__pyx_t_17 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 96; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
-                __Pyx_GOTREF(__pyx_t_17);
-                __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-                if (__Pyx_PyObject_SetAttrStr(__pyx_t_17, __pyx_n_s_spin, __pyx_int_0) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 96; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-                __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
+                __pyx_t_6 = 0;
+                __pyx_t_4 = 0;
+                ((struct __pyx_vtabstruct_14mc_supercellCY_mc_supercellObj *)__pyx_v_self->__pyx_vtab)->set_site_spin(__pyx_v_self, ((PyObject*)__pyx_t_5), 0);
+                __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
                 /* "mc_supercellCY.pyx":97
- *                                     self.supercell[rand_index[0],rand_index[1],rand_index[2]].species = species[2]
- *                                     self.supercell[rand_index[0],rand_index[1],rand_index[2]].spin = 0
+ *                                     self.set_site_species([rand_index[0],rand_index[1],rand_index[2]],species[2])
+ *                                     self.set_site_spin([rand_index[0],rand_index[1],rand_index[2]],0)
  *                                     rand_index_list.append(rand_index)             # <<<<<<<<<<<<<<
  *                                     species_count += 1
  *                 if species_init == "ordered":
@@ -3182,7 +3155,7 @@ static int __pyx_pf_14mc_supercellCY_15mc_supercellObj___init__(struct __pyx_obj
                 __pyx_t_18 = __Pyx_PyList_Append(__pyx_v_rand_index_list, __pyx_v_rand_index); if (unlikely(__pyx_t_18 == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 97; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
                 /* "mc_supercellCY.pyx":98
- *                                     self.supercell[rand_index[0],rand_index[1],rand_index[2]].spin = 0
+ *                                     self.set_site_spin([rand_index[0],rand_index[1],rand_index[2]],0)
  *                                     rand_index_list.append(rand_index)
  *                                     species_count += 1             # <<<<<<<<<<<<<<
  *                 if species_init == "ordered":
@@ -3191,18 +3164,18 @@ static int __pyx_pf_14mc_supercellCY_15mc_supercellObj___init__(struct __pyx_obj
                 __pyx_v_species_count = (__pyx_v_species_count + 1);
 
                 /* "mc_supercellCY.pyx":94
- *                             if self.supercell[rand_index[0],rand_index[1],rand_index[2]].species != species[0]:
+ *                             if self.get_site_species([rand_index[0],rand_index[1],rand_index[2]]) != species[0]:
  *                                 species_not_0 = True
  *                                 if rand_index not in rand_index_list:             # <<<<<<<<<<<<<<
- *                                     self.supercell[rand_index[0],rand_index[1],rand_index[2]].species = species[2]
- *                                     self.supercell[rand_index[0],rand_index[1],rand_index[2]].spin = 0
+ *                                     self.set_site_species([rand_index[0],rand_index[1],rand_index[2]],species[2])
+ *                                     self.set_site_spin([rand_index[0],rand_index[1],rand_index[2]],0)
  */
               }
 
               /* "mc_supercellCY.pyx":92
  *                         while species_not_0 == False:
  *                             rand_index = [np.random.randint(0,size[0]),np.random.randint(0,size[1]),np.random.randint(0,size[2])]
- *                             if self.supercell[rand_index[0],rand_index[1],rand_index[2]].species != species[0]:             # <<<<<<<<<<<<<<
+ *                             if self.get_site_species([rand_index[0],rand_index[1],rand_index[2]]) != species[0]:             # <<<<<<<<<<<<<<
  *                                 species_not_0 = True
  *                                 if rand_index not in rand_index_list:
  */
@@ -3241,26 +3214,16 @@ static int __pyx_pf_14mc_supercellCY_15mc_supercellObj___init__(struct __pyx_obj
           PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
           {__pyx_filename = __pyx_f[0]; __pyx_lineno = 100; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         }
-        __pyx_t_17 = __Pyx_GetItemInt_List(__pyx_v_composition, 0, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(__pyx_t_17 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 100; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
-        __Pyx_GOTREF(__pyx_t_17);
+        __pyx_t_5 = __Pyx_GetItemInt_List(__pyx_v_composition, 0, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(__pyx_t_5 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 100; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
+        __Pyx_GOTREF(__pyx_t_5);
         if (unlikely(__pyx_v_composition == Py_None)) {
           PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
           {__pyx_filename = __pyx_f[0]; __pyx_lineno = 100; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         }
         __pyx_t_4 = __Pyx_GetItemInt_List(__pyx_v_composition, 1, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(__pyx_t_4 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 100; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
         __Pyx_GOTREF(__pyx_t_4);
-        __pyx_t_5 = PyNumber_Add(__pyx_t_17, __pyx_t_4); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 100; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-        __Pyx_GOTREF(__pyx_t_5);
-        __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
-        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-        if (unlikely(__pyx_v_composition == Py_None)) {
-          PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-          {__pyx_filename = __pyx_f[0]; __pyx_lineno = 100; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-        }
-        __pyx_t_4 = __Pyx_GetItemInt_List(__pyx_v_composition, 2, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(__pyx_t_4 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 100; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
-        __Pyx_GOTREF(__pyx_t_4);
-        __pyx_t_17 = PyNumber_Add(__pyx_t_5, __pyx_t_4); if (unlikely(!__pyx_t_17)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 100; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-        __Pyx_GOTREF(__pyx_t_17);
+        __pyx_t_6 = PyNumber_Add(__pyx_t_5, __pyx_t_4); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 100; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        __Pyx_GOTREF(__pyx_t_6);
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
         if (unlikely(__pyx_v_composition == Py_None)) {
@@ -3269,13 +3232,23 @@ static int __pyx_pf_14mc_supercellCY_15mc_supercellObj___init__(struct __pyx_obj
         }
         __pyx_t_4 = __Pyx_GetItemInt_List(__pyx_v_composition, 2, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(__pyx_t_4 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 100; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
         __Pyx_GOTREF(__pyx_t_4);
-        __pyx_t_5 = __Pyx_PyNumber_Divide(__pyx_t_17, __pyx_t_4); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 100; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        __pyx_t_5 = PyNumber_Add(__pyx_t_6, __pyx_t_4); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 100; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_GOTREF(__pyx_t_5);
-        __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
+        __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-        __pyx_t_4 = __Pyx_PyInt_EqObjC(__pyx_t_5, __pyx_int_8, 8, 0); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 100; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        if (unlikely(__pyx_v_composition == Py_None)) {
+          PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+          {__pyx_filename = __pyx_f[0]; __pyx_lineno = 100; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        }
+        __pyx_t_4 = __Pyx_GetItemInt_List(__pyx_v_composition, 2, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(__pyx_t_4 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 100; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
         __Pyx_GOTREF(__pyx_t_4);
+        __pyx_t_6 = __Pyx_PyNumber_Divide(__pyx_t_5, __pyx_t_4); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 100; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        __Pyx_GOTREF(__pyx_t_6);
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+        __pyx_t_4 = __Pyx_PyInt_EqObjC(__pyx_t_6, __pyx_int_8, 8, 0); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 100; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        __Pyx_GOTREF(__pyx_t_4);
+        __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
         __pyx_t_14 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely(__pyx_t_14 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 100; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
         if (__pyx_t_14) {
@@ -3320,45 +3293,45 @@ static int __pyx_pf_14mc_supercellCY_15mc_supercellObj___init__(struct __pyx_obj
  *                                         if np.mod(i*.5+(j+1)*.5+k*.5,2) == 0:
  *                                             self.set_site_species([i,j,k],species[2])
  */
-                __pyx_t_5 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 104; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+                __pyx_t_6 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 104; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+                __Pyx_GOTREF(__pyx_t_6);
+                __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_mod); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 104; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
                 __Pyx_GOTREF(__pyx_t_5);
-                __pyx_t_17 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_mod); if (unlikely(!__pyx_t_17)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 104; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-                __Pyx_GOTREF(__pyx_t_17);
-                __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-                __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_k); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 104; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-                __Pyx_GOTREF(__pyx_t_5);
+                __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+                __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_v_k); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 104; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+                __Pyx_GOTREF(__pyx_t_6);
                 __pyx_t_3 = NULL;
                 __pyx_t_15 = 0;
-                if (CYTHON_COMPILING_IN_CPYTHON && unlikely(PyMethod_Check(__pyx_t_17))) {
-                  __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_17);
+                if (CYTHON_COMPILING_IN_CPYTHON && unlikely(PyMethod_Check(__pyx_t_5))) {
+                  __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_5);
                   if (likely(__pyx_t_3)) {
-                    PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_17);
+                    PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_5);
                     __Pyx_INCREF(__pyx_t_3);
                     __Pyx_INCREF(function);
-                    __Pyx_DECREF_SET(__pyx_t_17, function);
+                    __Pyx_DECREF_SET(__pyx_t_5, function);
                     __pyx_t_15 = 1;
                   }
                 }
-                __pyx_t_6 = PyTuple_New(2+__pyx_t_15); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 104; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-                __Pyx_GOTREF(__pyx_t_6);
+                __pyx_t_17 = PyTuple_New(2+__pyx_t_15); if (unlikely(!__pyx_t_17)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 104; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+                __Pyx_GOTREF(__pyx_t_17);
                 if (__pyx_t_3) {
-                  __Pyx_GIVEREF(__pyx_t_3); PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_3); __pyx_t_3 = NULL;
+                  __Pyx_GIVEREF(__pyx_t_3); PyTuple_SET_ITEM(__pyx_t_17, 0, __pyx_t_3); __pyx_t_3 = NULL;
                 }
-                __Pyx_GIVEREF(__pyx_t_5);
-                PyTuple_SET_ITEM(__pyx_t_6, 0+__pyx_t_15, __pyx_t_5);
+                __Pyx_GIVEREF(__pyx_t_6);
+                PyTuple_SET_ITEM(__pyx_t_17, 0+__pyx_t_15, __pyx_t_6);
                 __Pyx_INCREF(__pyx_int_2);
                 __Pyx_GIVEREF(__pyx_int_2);
-                PyTuple_SET_ITEM(__pyx_t_6, 1+__pyx_t_15, __pyx_int_2);
-                __pyx_t_5 = 0;
-                __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_17, __pyx_t_6, NULL); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 104; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+                PyTuple_SET_ITEM(__pyx_t_17, 1+__pyx_t_15, __pyx_int_2);
+                __pyx_t_6 = 0;
+                __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_17, NULL); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 104; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
                 __Pyx_GOTREF(__pyx_t_4);
-                __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
                 __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
-                __pyx_t_17 = __Pyx_PyInt_EqObjC(__pyx_t_4, __pyx_int_0, 0, 0); if (unlikely(!__pyx_t_17)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 104; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-                __Pyx_GOTREF(__pyx_t_17);
+                __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+                __pyx_t_5 = __Pyx_PyInt_EqObjC(__pyx_t_4, __pyx_int_0, 0, 0); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 104; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+                __Pyx_GOTREF(__pyx_t_5);
                 __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-                __pyx_t_14 = __Pyx_PyObject_IsTrue(__pyx_t_17); if (unlikely(__pyx_t_14 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 104; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-                __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
+                __pyx_t_14 = __Pyx_PyObject_IsTrue(__pyx_t_5); if (unlikely(__pyx_t_14 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 104; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+                __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
                 if (__pyx_t_14) {
 
                   /* "mc_supercellCY.pyx":105
@@ -3370,27 +3343,27 @@ static int __pyx_pf_14mc_supercellCY_15mc_supercellObj___init__(struct __pyx_obj
  */
                   __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 105; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
                   __Pyx_GOTREF(__pyx_t_4);
-                  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_mod); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 105; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-                  __Pyx_GOTREF(__pyx_t_6);
+                  __pyx_t_17 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_mod); if (unlikely(!__pyx_t_17)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 105; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+                  __Pyx_GOTREF(__pyx_t_17);
                   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
                   __pyx_t_4 = PyFloat_FromDouble((((__pyx_v_i * .5) + ((__pyx_v_j + 1) * .5)) + (__pyx_v_k * .5))); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 105; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
                   __Pyx_GOTREF(__pyx_t_4);
-                  __pyx_t_5 = NULL;
+                  __pyx_t_6 = NULL;
                   __pyx_t_15 = 0;
-                  if (CYTHON_COMPILING_IN_CPYTHON && unlikely(PyMethod_Check(__pyx_t_6))) {
-                    __pyx_t_5 = PyMethod_GET_SELF(__pyx_t_6);
-                    if (likely(__pyx_t_5)) {
-                      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_6);
-                      __Pyx_INCREF(__pyx_t_5);
+                  if (CYTHON_COMPILING_IN_CPYTHON && unlikely(PyMethod_Check(__pyx_t_17))) {
+                    __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_17);
+                    if (likely(__pyx_t_6)) {
+                      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_17);
+                      __Pyx_INCREF(__pyx_t_6);
                       __Pyx_INCREF(function);
-                      __Pyx_DECREF_SET(__pyx_t_6, function);
+                      __Pyx_DECREF_SET(__pyx_t_17, function);
                       __pyx_t_15 = 1;
                     }
                   }
                   __pyx_t_3 = PyTuple_New(2+__pyx_t_15); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 105; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
                   __Pyx_GOTREF(__pyx_t_3);
-                  if (__pyx_t_5) {
-                    __Pyx_GIVEREF(__pyx_t_5); PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_5); __pyx_t_5 = NULL;
+                  if (__pyx_t_6) {
+                    __Pyx_GIVEREF(__pyx_t_6); PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_6); __pyx_t_6 = NULL;
                   }
                   __Pyx_GIVEREF(__pyx_t_4);
                   PyTuple_SET_ITEM(__pyx_t_3, 0+__pyx_t_15, __pyx_t_4);
@@ -3398,15 +3371,15 @@ static int __pyx_pf_14mc_supercellCY_15mc_supercellObj___init__(struct __pyx_obj
                   __Pyx_GIVEREF(__pyx_int_2);
                   PyTuple_SET_ITEM(__pyx_t_3, 1+__pyx_t_15, __pyx_int_2);
                   __pyx_t_4 = 0;
-                  __pyx_t_17 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_t_3, NULL); if (unlikely(!__pyx_t_17)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 105; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-                  __Pyx_GOTREF(__pyx_t_17);
+                  __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_17, __pyx_t_3, NULL); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 105; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+                  __Pyx_GOTREF(__pyx_t_5);
                   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-                  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-                  __pyx_t_6 = __Pyx_PyInt_EqObjC(__pyx_t_17, __pyx_int_0, 0, 0); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 105; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-                  __Pyx_GOTREF(__pyx_t_6);
                   __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
-                  __pyx_t_14 = __Pyx_PyObject_IsTrue(__pyx_t_6); if (unlikely(__pyx_t_14 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 105; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-                  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+                  __pyx_t_17 = __Pyx_PyInt_EqObjC(__pyx_t_5, __pyx_int_0, 0, 0); if (unlikely(!__pyx_t_17)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 105; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+                  __Pyx_GOTREF(__pyx_t_17);
+                  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+                  __pyx_t_14 = __Pyx_PyObject_IsTrue(__pyx_t_17); if (unlikely(__pyx_t_14 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 105; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+                  __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
                   if (__pyx_t_14) {
 
                     /* "mc_supercellCY.pyx":106
@@ -3416,22 +3389,22 @@ static int __pyx_pf_14mc_supercellCY_15mc_supercellObj___init__(struct __pyx_obj
  *                                         else: self.set_site_species([i,j,k],species[1])
  *                                     else: self.set_site_species([i,j,k],species[0])
  */
-                    __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_v_i); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 106; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-                    __Pyx_GOTREF(__pyx_t_6);
-                    __pyx_t_17 = __Pyx_PyInt_From_int(__pyx_v_j); if (unlikely(!__pyx_t_17)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 106; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+                    __pyx_t_17 = __Pyx_PyInt_From_int(__pyx_v_i); if (unlikely(!__pyx_t_17)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 106; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
                     __Pyx_GOTREF(__pyx_t_17);
+                    __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_j); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 106; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+                    __Pyx_GOTREF(__pyx_t_5);
                     __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_k); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 106; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
                     __Pyx_GOTREF(__pyx_t_3);
                     __pyx_t_4 = PyList_New(3); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 106; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
                     __Pyx_GOTREF(__pyx_t_4);
-                    __Pyx_GIVEREF(__pyx_t_6);
-                    PyList_SET_ITEM(__pyx_t_4, 0, __pyx_t_6);
                     __Pyx_GIVEREF(__pyx_t_17);
-                    PyList_SET_ITEM(__pyx_t_4, 1, __pyx_t_17);
+                    PyList_SET_ITEM(__pyx_t_4, 0, __pyx_t_17);
+                    __Pyx_GIVEREF(__pyx_t_5);
+                    PyList_SET_ITEM(__pyx_t_4, 1, __pyx_t_5);
                     __Pyx_GIVEREF(__pyx_t_3);
                     PyList_SET_ITEM(__pyx_t_4, 2, __pyx_t_3);
-                    __pyx_t_6 = 0;
                     __pyx_t_17 = 0;
+                    __pyx_t_5 = 0;
                     __pyx_t_3 = 0;
                     if (unlikely(__pyx_v_species == Py_None)) {
                       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
@@ -3466,29 +3439,29 @@ static int __pyx_pf_14mc_supercellCY_15mc_supercellObj___init__(struct __pyx_obj
                     __Pyx_GOTREF(__pyx_t_4);
                     __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_j); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 107; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
                     __Pyx_GOTREF(__pyx_t_3);
-                    __pyx_t_17 = __Pyx_PyInt_From_int(__pyx_v_k); if (unlikely(!__pyx_t_17)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 107; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+                    __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_k); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 107; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+                    __Pyx_GOTREF(__pyx_t_5);
+                    __pyx_t_17 = PyList_New(3); if (unlikely(!__pyx_t_17)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 107; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
                     __Pyx_GOTREF(__pyx_t_17);
-                    __pyx_t_6 = PyList_New(3); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 107; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-                    __Pyx_GOTREF(__pyx_t_6);
                     __Pyx_GIVEREF(__pyx_t_4);
-                    PyList_SET_ITEM(__pyx_t_6, 0, __pyx_t_4);
+                    PyList_SET_ITEM(__pyx_t_17, 0, __pyx_t_4);
                     __Pyx_GIVEREF(__pyx_t_3);
-                    PyList_SET_ITEM(__pyx_t_6, 1, __pyx_t_3);
-                    __Pyx_GIVEREF(__pyx_t_17);
-                    PyList_SET_ITEM(__pyx_t_6, 2, __pyx_t_17);
+                    PyList_SET_ITEM(__pyx_t_17, 1, __pyx_t_3);
+                    __Pyx_GIVEREF(__pyx_t_5);
+                    PyList_SET_ITEM(__pyx_t_17, 2, __pyx_t_5);
                     __pyx_t_4 = 0;
                     __pyx_t_3 = 0;
-                    __pyx_t_17 = 0;
+                    __pyx_t_5 = 0;
                     if (unlikely(__pyx_v_species == Py_None)) {
                       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
                       {__pyx_filename = __pyx_f[0]; __pyx_lineno = 107; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
                     }
-                    __pyx_t_17 = __Pyx_GetItemInt_List(__pyx_v_species, 1, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(__pyx_t_17 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 107; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
-                    __Pyx_GOTREF(__pyx_t_17);
-                    __pyx_t_12 = __Pyx_PyInt_As_int(__pyx_t_17); if (unlikely((__pyx_t_12 == (int)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 107; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+                    __pyx_t_5 = __Pyx_GetItemInt_List(__pyx_v_species, 1, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(__pyx_t_5 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 107; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
+                    __Pyx_GOTREF(__pyx_t_5);
+                    __pyx_t_12 = __Pyx_PyInt_As_int(__pyx_t_5); if (unlikely((__pyx_t_12 == (int)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 107; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+                    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+                    ((struct __pyx_vtabstruct_14mc_supercellCY_mc_supercellObj *)__pyx_v_self->__pyx_vtab)->set_site_species(__pyx_v_self, ((PyObject*)__pyx_t_17), __pyx_t_12);
                     __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
-                    ((struct __pyx_vtabstruct_14mc_supercellCY_mc_supercellObj *)__pyx_v_self->__pyx_vtab)->set_site_species(__pyx_v_self, ((PyObject*)__pyx_t_6), __pyx_t_12);
-                    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
                   }
                   __pyx_L42:;
 
@@ -3510,22 +3483,22 @@ static int __pyx_pf_14mc_supercellCY_15mc_supercellObj___init__(struct __pyx_obj
  * 
  */
                 /*else*/ {
-                  __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_v_i); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 108; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-                  __Pyx_GOTREF(__pyx_t_6);
-                  __pyx_t_17 = __Pyx_PyInt_From_int(__pyx_v_j); if (unlikely(!__pyx_t_17)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 108; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+                  __pyx_t_17 = __Pyx_PyInt_From_int(__pyx_v_i); if (unlikely(!__pyx_t_17)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 108; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
                   __Pyx_GOTREF(__pyx_t_17);
+                  __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_j); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 108; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+                  __Pyx_GOTREF(__pyx_t_5);
                   __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_k); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 108; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
                   __Pyx_GOTREF(__pyx_t_3);
                   __pyx_t_4 = PyList_New(3); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 108; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
                   __Pyx_GOTREF(__pyx_t_4);
-                  __Pyx_GIVEREF(__pyx_t_6);
-                  PyList_SET_ITEM(__pyx_t_4, 0, __pyx_t_6);
                   __Pyx_GIVEREF(__pyx_t_17);
-                  PyList_SET_ITEM(__pyx_t_4, 1, __pyx_t_17);
+                  PyList_SET_ITEM(__pyx_t_4, 0, __pyx_t_17);
+                  __Pyx_GIVEREF(__pyx_t_5);
+                  PyList_SET_ITEM(__pyx_t_4, 1, __pyx_t_5);
                   __Pyx_GIVEREF(__pyx_t_3);
                   PyList_SET_ITEM(__pyx_t_4, 2, __pyx_t_3);
-                  __pyx_t_6 = 0;
                   __pyx_t_17 = 0;
+                  __pyx_t_5 = 0;
                   __pyx_t_3 = 0;
                   if (unlikely(__pyx_v_species == Py_None)) {
                     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
@@ -10998,7 +10971,6 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_size, __pyx_k_size, sizeof(__pyx_k_size), 0, 0, 1, 1},
   {&__pyx_n_s_species, __pyx_k_species, sizeof(__pyx_k_species), 0, 0, 1, 1},
   {&__pyx_n_s_species_init, __pyx_k_species_init, sizeof(__pyx_k_species_init), 0, 0, 1, 1},
-  {&__pyx_n_s_spin, __pyx_k_spin, sizeof(__pyx_k_spin), 0, 0, 1, 1},
   {&__pyx_n_s_spin_init, __pyx_k_spin_init, sizeof(__pyx_k_spin_init), 0, 0, 1, 1},
   {&__pyx_n_s_test, __pyx_k_test, sizeof(__pyx_k_test), 0, 0, 1, 1},
   {&__pyx_kp_u_unknown_dtype_code_in_numpy_pxd, __pyx_k_unknown_dtype_code_in_numpy_pxd, sizeof(__pyx_k_unknown_dtype_code_in_numpy_pxd), 0, 1, 0, 0},

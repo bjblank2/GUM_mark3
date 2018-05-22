@@ -130,15 +130,9 @@ def ridge_simple(m_structure_list,alpha,Cluster_rules,J_rules):
     plt.savefig('scores.pdf')
     
     # determine regularization parameter using cross-validation
-    ridge_fit = linear_model.RidgeCV(alphas=alpha_list,fit_intercept=True,normalize=True)
+    ridge_fit = linear_model.RidgeCV(alphas=alpha_list,fit_intercept=False,normalize=False)
     ridge_fit.fit(predictors,data)
     print('Selected regularization parameter using cross validation: ',ridge_fit.alpha_)
-
-    ridge_fit = linear_model.Ridge(alpha=0.00001,fit_intercept=False,normalize=True) ###################################
-    ridge_fit.fit(predictors,data)
-
-    #ridge_fit = linear_model.Ridge(alpha=1e-10,fit_intercept=False)
-    #ridge_fit.fit(a,b)
 
     Js = ridge_fit.coef_[0]
     #intercept = ridge_fit.intercept_[0]

@@ -89,11 +89,11 @@ cdef class mc_supercellObj:
                         species_not_0 = False
                         while species_not_0 == False:
                             rand_index = [np.random.randint(0,size[0]),np.random.randint(0,size[1]),np.random.randint(0,size[2])]
-                            if self.supercell[rand_index[0],rand_index[1],rand_index[2]].species != species[0]:
+                            if self.get_site_species([rand_index[0],rand_index[1],rand_index[2]]) != species[0]:
                                 species_not_0 = True
                                 if rand_index not in rand_index_list:
-                                    self.supercell[rand_index[0],rand_index[1],rand_index[2]].species = species[2]
-                                    self.supercell[rand_index[0],rand_index[1],rand_index[2]].spin = 0
+                                    self.set_site_species([rand_index[0],rand_index[1],rand_index[2]],species[2])
+                                    self.set_site_spin([rand_index[0],rand_index[1],rand_index[2]],0)
                                     rand_index_list.append(rand_index)
                                     species_count += 1
                 if species_init == "ordered":
