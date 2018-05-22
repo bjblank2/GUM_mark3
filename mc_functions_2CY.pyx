@@ -312,8 +312,6 @@ cpdef void run_WA_MCA(mc_supercellObj supercell, int numb_passes, int num_sub_pa
                                     random_site = [np.random.randint(0,supercell_obj.i_length),np.random.randint(0,supercell_obj.j_length),np.random.randint(0,supercell_obj.k_length)]
                                     if supercell_obj.get_site_species(random_site) != 0:
                                         random_site_not_0 = True
-                                    if supercell_obj.get_site_species(random_site) != supercell_obj.get_site_species(site):
-                                        species_not_same = True
                                 old_Ham = eval_site_new(site,supercell_obj,Cluster_rules,J_rules,ghost_Js,T)
                                 old_Ham += eval_site_new(random_site,supercell_obj,Cluster_rules,J_rules,ghost_Js,T)
                                 old_site_species,old_randsite_species = flip_species(site,random_site,supercell_obj)
