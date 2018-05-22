@@ -10,10 +10,11 @@ __author__ = 'brian'
 # in front of their comment.
 
 import numpy as np
-import mpmath as math
 cimport numpy as np
 from mc_supercellCY cimport mc_supercellObj
+import mpmath as math
 import matplotlib.pyplot as plt
+#cimport matplotlib.pyplot as plt
 import mc_supercell as mcs
 from copy import deepcopy
 from mpl_toolkits.mplot3d import Axes3D
@@ -26,8 +27,11 @@ cdef calc_BEG_params(list site,mc_supercellObj supercell,Cluster_rules,J_rules,n
     cdef float H_BEG_K = 0
     cdef float Kb = .000086173324
     cdef int neighbor
+    cdef int neighbor_spin
+    cdef int rule
     cdef mc_supercellObj supercell_obj = <mc_supercellObj>supercell
     cdef int home_spin = supercell_obj.get_site_spin(site)
+
     for neighbor in range(supercell_obj.get_number_of_neighbors(site)):
         neighbor_spin = supercell_obj.get_neighbor_spin(site,neighbor)
         for rule in range(len(Cluster_rules)):
@@ -83,11 +87,23 @@ cdef calc_BEG_params(list site,mc_supercellObj supercell,Cluster_rules,J_rules,n
 
 #-# Determine the total energy of the entire lattice and return that energy
 ### COMMENT FROM ELIF: IS THIS THE ENTIRE LATTICE OR IS THIS A GIVEN SITE SPECIFIC CONTRIBUTION TO THE ENERGY??????
-def eval_site_new(site,supercell_obj,Cluster_rules,J_ruels,Js,T):
-    Kb = .000086173324
-    total_Ham = 0
+
+cdef float eval_site_new(list site, mc_supercellObj supercell, Cluster_rules,J_ruels, np.ndarray Js, float T):
+    cdef mc_supercellObj supercell_obj
+    cdef float Kb = .000086173324
+    cdef float total_Ham = 0
+    cdef int site_phase
+    cdef int neighbor_phase
+    cdef list BEG_params
+    cdef float J
+    cdef float K
+    cdef int neighbor
+
+    supercell_obj = <mc_supercellObj>supercell
     site_phase = supercell_obj.get_site_phase(site)
-    J,K = calc_BEG_params(site,supercell_obj,Cluster_rules,J_ruels,Js,T)
+    BEG_params = calc_BEG_params(site,supercell_obj,Cluster_rules,J_ruels,Js,T)
+    J = BEG_params[0]
+    K = BEG_params[1]
     for neighbor in range(supercell_obj.get_number_of_neighbors(site)):
         if supercell_obj.get_neighbor_order(site,neighbor) == 1:
             neighbor_phase = supercell_obj.get_neighbor_phase(site,neighbor)
@@ -97,15 +113,23 @@ def eval_site_new(site,supercell_obj,Cluster_rules,J_ruels,Js,T):
 
 
 #-# Determine the total energy of the entire lattice and return that energy
-def eval_lattice_new(supercell_obj,Cluster_rules,J_rules,Js,T):
-    total_Ham = 0
-    total_phase = 0
-    total_phase2 = 0
-    total_spin = 0
-    total_spin2 = 0
-######### START ELIF COMMENT #############
-# I am assuming that this is now summing over all lattice points and each lattice point neighbors, so that each interaction does get summed twice???
-######### END ELIF COMMENT #############
+cdef list eval_lattice_new(mc_supercellObj supercell, Cluster_rules, J_rules, list Js, float T):
+    cdef float total_Ham = 0
+    cdef float total_phase = 0
+    cdef float total_phase2 = 0
+    cdef float total_spin = 0
+    cdef float total_spin2 = 0
+    cdef mc_supercellObj supercell_obj
+    cdef int i
+    cdef int j
+    cdef int k
+    cdef list site
+
+    ######### START ELIF COMMENT #############
+    # I am assuming that this is now summing over all lattice points and each lattice point neighbors, so that each interaction does get summed twice???
+    ######### END ELIF COMMENT #############
+
+    supercell_obj = <mc_supercellObj>supercell
     for i in range(supercell_obj.i_length):
         for j in range(supercell_obj.j_length):
             for k in range(supercell_obj.k_length):
@@ -115,10 +139,18 @@ def eval_lattice_new(supercell_obj,Cluster_rules,J_rules,Js,T):
                 total_phase2 += np.absolute(supercell_obj.get_site_phase(site))/supercell_obj.num_sites
                 total_spin += supercell_obj.get_site_spin(site)/supercell_obj.num_sites
                 total_spin2 += np.absolute(supercell_obj.get_site_spin(site))/supercell_obj.num_sites
-    return total_Ham,total_phase,total_phase2,total_spin,total_spin2
+    return [total_Ham,total_phase,total_phase2,total_spin,total_spin2]
 
 #-# Randomly change the phase of a specific element in the lattice and return the value of the original phase
-def flip_phase(site,neighbor,supercell_obj):
+cdef list flip_phase(list site, int neighbor,mc_supercellObj supercell):
+    cdef mc_supercellObj supercell_obj
+    cdef int old_neighbor_phase
+    cdef int old_phase
+    cdef bint phase_changed
+    cdef float rand
+    cdef int phase
+
+    supercell_obj = <mc_supercellObj>supercell
     old_neighbor_phase = supercell_obj.get_neighbor_phase(site,neighbor)
     old_phase = supercell_obj.get_site_phase(site)
     phase_changed = False
@@ -134,18 +166,30 @@ def flip_phase(site,neighbor,supercell_obj):
             phase_changed = True
     supercell_obj.set_site_phase(site,phase)
     supercell_obj.set_neighbor_phase(site,neighbor,phase)
-    return old_phase, old_neighbor_phase
+    return [old_phase, old_neighbor_phase]
 
 #-# Randomly change the species of a specific element in the lattice and return the value of the original species
-def flip_species(site_1,site_2,supercell_obj):
+cdef list flip_species(list site_1, list site_2, mc_supercellObj supercell):
+    cdef mc_supercellObj supercell_obj
+    cdef int old_species_1
+    cdef int old_species_2
+
+    supercell_obj = <mc_supercellObj>supercell
     old_species_1 = supercell_obj.get_site_species(site_1)
     old_species_2 = supercell_obj.get_site_species(site_2)
     supercell_obj.set_site_species(site_1,old_species_2)
     supercell_obj.set_site_species(site_2,old_species_1)
-    return old_species_1,old_species_2
+    return [old_species_1,old_species_2]
 
 #-# Randomly change the spin of a specific element in the lattice and return the value of the original spin
-def flip_spin(site,supercell_obj):
+cdef int flip_spin(list site,mc_supercellObj supercell):
+    cdef mc_supercellObj supercell_obj
+    cdef int old_spin
+    cdef bint spin_changed
+    cdef float rand
+    cdef int spin
+
+    supercell_obj = <mc_supercellObj>supercell
     old_spin = supercell_obj.get_site_spin(site)
     spin_changed = False
     while spin_changed == False:
@@ -162,7 +206,14 @@ def flip_spin(site,supercell_obj):
     return old_spin
 
 #-# ELIF: THIS ALSO APPEARS TO BE USED
-def get_new_phase(site,supercell_obj):
+cdef int get_new_phase(list site, mc_supercellObj supercell):
+    cdef mc_supercellObj supercell_obj
+    cdef int old_phase
+    cdef bint phase_changed
+    cdef float rand
+    cdef int phase
+
+    supercell_obj = <mc_supercellObj>supercell
     old_phase = supercell_obj.get_site_phase(site)
     phase_changed = False
     while phase_changed == False:
@@ -178,7 +229,14 @@ def get_new_phase(site,supercell_obj):
     return phase
 
 #-# ELIF: THIS ALSO APPEARS TO BE USED
-def calc_avg_spin(site,supercell_obj):
+cdef float calc_avg_spin(list site, mc_supercellObj supercell):
+    cdef mc_supercellObj supercell_obj
+    cdef float M
+    cdef int count
+    cdef int i
+    cdef int neighbor
+
+    supercell_obj = <mc_supercellObj>supercell
     M = 0
     count = 0
     for i in range(supercell_obj.get_number_of_neighbors(site)):
@@ -197,13 +255,20 @@ def calc_avg_spin(site,supercell_obj):
 # I changed x-axis from "T" to "passes"
 ######### END ELIF COMMENT #############
 
-def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,temp_inc,tempf,Cluster_rules,J_rules,Js,do_figs=True):
-    T = temp
-    Kb = .000086173324
-    inc_down = 0
-    inc_up = 0
-    inc_not = 0
-    M = 0
+cdef void run_WA_MCA(mc_supercellObj supercell, int numb_passes, int num_sub_passes,float temp,float temp_inc,float tempf,Cluster_rules,J_rules,list Js, bint do_figs=True):
+    cdef mc_supercellObj supercell_obj
+    cdef float T = temp
+    cdef float Kb = .000086173324
+    cdef float M = 0
+    cdef float H_total,total_phase,total_phase2,total_spin,total_spin2,old_ham,new_ham,rand,prob,H_cluster_old
+    cdef float H_cluster_new, X_axis
+    cdef int inc_down,inc_up,inc_not = 0
+    cdef int passes,i,j,k,new_spin,old_site_species,old_randsite_species,seed_phase,new_phase
+    cdef list ghost_Js,site,random_site,cluster,seed
+    cdef str c
+    cdef bint random_site_not_0
+
+    supercell_obj = <mc_supercellObj>supercell
     ghost_Js = apply_diffusion_ghost_field(2,Cluster_rules,J_rules,Js)
     H_total,total_phase,total_phase2,total_spin,total_spin2 = eval_lattice_new(supercell_obj,Cluster_rules,J_rules,Js,T)
 
@@ -410,11 +475,26 @@ def run_WA_MCA(supercell_obj,numb_passes,num_sub_passes,temp,temp_inc,tempf,Clus
     plt.show()
 
 #-# Grows the clusters
-def grow_cluster(site,supercell_obj,seed_phase,new_phase,links,Cluster_rules,J_rules,Js,T): # Recursive function
-    Kb = .000086173324
-    B = 1/(Kb*T)
-    site_phase = supercell_obj.get_site_phase(site)
-    J,K = calc_BEG_params(site,supercell_obj,Cluster_rules,J_rules,Js,T)
+cdef void grow_cluster(list site, mc_supercellObj supercell, int seed_phase,int new_phase,list links, Cluster_rules, J_rules, list Js, float T): # Recursive function
+    cdef mc_supercellObj supercell_obj
+    supercell_obj = <mc_supercellObj>supercell
+
+    cdef float Kb = .000086173324
+    cdef float B = 1/(Kb*T)
+    cdef int site_phase = supercell_obj.get_site_phase(site)
+    cdef list BEG_params
+    cdef float J
+    cdef float K
+    cdef float BEG_K
+    cdef float BEG_M
+    cdef int neighbor
+    cdef float rand
+    cdef float prob
+    cdef list new_site
+
+    BEG_params = calc_BEG_params(site,supercell_obj,Cluster_rules,J_rules,Js,T)
+    BEG_params[0] = J
+    BEG_params[1] = K
 ######### START ELIF MODIFICATIONS #############
 # I think here is where we need to translate the Entel terminology into the cluster algorithms terminology.
 # I think Brian did not switch the J,K to K,M.  I will do it including this swap so I don't go crazy.
@@ -491,9 +571,23 @@ def grow_cluster(site,supercell_obj,seed_phase,new_phase,links,Cluster_rules,J_r
                                 grow_cluster(new_site,supercell_obj,seed_phase,new_phase,links,Cluster_rules,J_rules,Js,T)
 
 #-# Evaluates the total energy of the cluster
-def eval_cluster(supercell_obj,seed_phase,new_phase,links,Cluster_rules,J_ruels,Js,T):
-    Kb = .000086173324
-    total_H = 0
+cdef float eval_cluster(mc_supercellObj supercell, int seed_phase,int new_phase,list links,Cluster_rules,J_ruels,list Js,float T):
+    cdef mc_supercellObj supercell_obj
+    supercell_obj = <mc_supercellObj>supercell
+
+    cdef float Kb = .000086173324
+    cdef float total_H = 0
+    cdef list site
+    cdef int i
+    cdef int site_phase
+    cdef list BEG_params
+    cdef float BEG_J
+    cdef float BEG_K
+    cdef float total_H_inc
+    cdef int inc_count
+    cdef int neighbor
+    cdef int neighbor_phase
+
     if len(links) == 1:
         site = links[0]
         total_H = eval_site_new(site,supercell_obj,Cluster_rules,J_ruels,Js,T)
@@ -501,7 +595,9 @@ def eval_cluster(supercell_obj,seed_phase,new_phase,links,Cluster_rules,J_ruels,
         for i in range(len(links)):
             site = links[i]
             site_phase = supercell_obj.get_site_phase(site)
-            BEG_J,BEG_K = calc_BEG_params(site,supercell_obj,Cluster_rules,J_ruels,Js,T)
+            BEG_params = calc_BEG_params(site,supercell_obj,Cluster_rules,J_ruels,Js,T)
+            BEG_J = BEG_params[0]
+            BEG_K = BEG_params[1]
             total_H_inc = 0
             inc_count = 0
             for neighbor in range(supercell_obj.get_number_of_neighbors(site)):
@@ -515,7 +611,12 @@ def eval_cluster(supercell_obj,seed_phase,new_phase,links,Cluster_rules,J_ruels,
 
 
 #-# flips the cluster
-def flip_cluster(supercell_obj,seed_phase,new_phase,links):
+cdef void flip_cluster(mc_supercellObj supercell, int seed_phase,int new_phase,list links):
+    cdef mc_supercellObj supercell_obj
+    supercell_obj = <mc_supercellObj>supercell
+
+    cdef int i,old_phase
+
     if seed_phase*new_phase == -1:
         for i in range(len(links)):
             supercell_obj.set_site_phase(links[i],new_phase)
@@ -535,8 +636,9 @@ def flip_cluster(supercell_obj,seed_phase,new_phase,links):
                     supercell_obj.set_site_phase(links[i],1)
 
 
-def apply_diffusion_ghost_field(strength,Cluster_rules,J_ruels,Js):
-    ghost_Js = Js[:]
+cdef list apply_diffusion_ghost_field(float strength,Cluster_rules,J_ruels,list Js):
+    cdef list ghost_Js = Js[:]
+    cdef int i
     for i in range(len(Cluster_rules)):
         if Cluster_rules[i].neighbor_arrangement == 'COMB':
             if 0 not in Cluster_rules[i].home_atom_list:
