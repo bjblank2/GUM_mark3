@@ -161,81 +161,6 @@ def calc_BEG_params2(site,supercell_obj,Cluster_rules,J_rules,Js,T,SUMS):
     return BEG_J,BEG_K
 
 
-# def calc_BEG_params(site,supercell_obj,Cluster_rules,J_rules,Js,T):
-#     H_BEG_J = 0
-#     H_BEG_K = 0
-#     Kb = .000086173324
-#     for neighbor in range(supercell_obj.get_number_of_neighbors(site)):
-#         for Cluster_rule in range(len(Cluster_rules)):
-#             if supercell_obj.get_neighbor_order(site,neighbor) == Cluster_rules[Cluster_rule].neighbor_order and Cluster_rules[Cluster_rule].neighbor_order != 0:
-#                 if supercell_obj.get_neighbor_plain(site,neighbor) == Cluster_rules[Cluster_rule].plane or Cluster_rules[Cluster_rule].plane == 'ALL':
-#                     if supercell_obj.get_site_species(site) in Cluster_rules[Cluster_rule].home_atom_list:
-#                         if supercell_obj.get_neighbor_species(site,neighbor) in Cluster_rules[Cluster_rule].neighbor_atom_list:
-#                             if Cluster_rules[Cluster_rule].neighbor_arrangement == 'PERM':
-#                                 if supercell_obj.get_site_species(site) != supercell_obj.get_neighbor_species(site,neighbor):
-#                                     if Cluster_rules[Cluster_rule].phase == "mart":
-#                                         H_BEG_J += float(Js[Cluster_rule])
-#                                     if Cluster_rules[Cluster_rule].phase == "aust":
-#                                         H_BEG_K += float(Js[Cluster_rule])
-#                             if Cluster_rules[Cluster_rule].neighbor_arrangement == 'COMB':
-#                                 if Cluster_rules[Cluster_rule].phase == "mart":
-#                                     H_BEG_J += float(Js[Cluster_rule])
-#                                 if Cluster_rules[Cluster_rule].phase == "aust":
-#                                     H_BEG_K += float(Js[Cluster_rule])
-#         for J_rule in range(len(J_rules)):
-#             if supercell_obj.get_neighbor_order(site,neighbor) == J_rules[J_rule].neighbor_order and J_rules[J_rule].neighbor_order != 0:
-#                 if supercell_obj.get_neighbor_plain(site,neighbor) == J_rules[J_rule].plane or J_rules[J_rule].plane == 'ALL':
-#                     if supercell_obj.get_site_species(site) in J_rules[J_rule].home_atom_list:
-#                         if supercell_obj.get_neighbor_species(site,neighbor) in J_rules[J_rule].neighbor_atom_list:
-#                             if J_rules[J_rule].neighbor_arrangement == 'PERM':
-#                                 if supercell_obj.get_site_species(site) != supercell_obj.get_neighbor_species(site,neighbor):
-#                                     home_spin = supercell_obj.get_site_spin(site)
-#                                     neighbor_spin = supercell_obj.get_neighbor_spin(site,neighbor)
-#                                     if J_rules[J_rule].phase == "mart":
-#                                         H_BEG_J += float(Js[J_rule+len(Cluster_rules)])*home_spin*neighbor_spin
-#                                     if J_rules[J_rule].phase == "aust":
-#                                         H_BEG_K += float(Js[J_rule+len(Cluster_rules)])*home_spin*neighbor_spin
-#                             if J_rules[J_rule].neighbor_arrangement == 'COMB':
-#                                 home_spin = supercell_obj.get_site_spin(site)
-#                                 neighbor_spin = supercell_obj.get_neighbor_spin(site,neighbor)
-#                                 if J_rules[J_rule].phase == "mart":
-#                                     H_BEG_J += float(Js[J_rule+len(Cluster_rules)])*home_spin*neighbor_spin
-#                                 if J_rules[J_rule].phase == "aust":
-#                                     H_BEG_K += float(Js[J_rule+len(Cluster_rules)])*home_spin*neighbor_spin
-#
-#     for rule in range(len(Cluster_rules)):
-#         if Cluster_rules[rule].neighbor_order == 0:
-#             if supercell_obj.get_site_species(site) in Cluster_rules[rule].home_atom_list:
-#                 if Cluster_rules[rule].phase == 'mart':
-#                     H_BEG_J += Js[rule]
-#                 if Cluster_rules[rule].phase == 'aust':
-#                     H_BEG_K += Js[rule]
-#     for rule in range(len(J_rules)):
-#         if J_rules[rule].neighbor_order == 0:
-#             if supercell_obj.get_site_species(site) in Cluster_rules[rule].home_atom_list:
-#                 if J_rules[rule].phase == 'mart':
-#                     H_BEG_J += Js[rule+len(Cluster_rules)]
-#                 if J_rules[rule].phase == 'aust':
-#                     H_BEG_K += Js[rule+len(Cluster_rules)]
-# ######### START ELIF MODIFICATIONS #############
-#     #K = -1*(H_BEG_K/(-1*8)-Kb*T*np.log(2)/8)
-#     #delta = 8*K+Kb*T*np.log(2)
-#     #J = -1*((H_BEG_J-delta)/(-1*8)-K)
-#     K = H_BEG_K/8
-#     J = H_BEG_J/8
-# # As I understand it, we are just evaluating a site-specific J, K here.
-# # Not an energy.
-# # Consequently we do not need to add these delta and kB*T*log(2) type terms in here
-# ######## END ELIF MODIFICATIONS  ##############################
-#     return J,K
-
-
-
-
-
-
-
-
 #-# Determine the total energy of the entire lattice and return that energy
 ### COMMENT FROM ELIF: IS THIS THE ENTIRE LATTICE OR IS THIS A GIVEN SITE SPECIFIC CONTRIBUTION TO THE ENERGY??????
 def eval_site_new(site,supercell_obj,Cluster_rules,J_ruels,Js,T):
@@ -296,22 +221,6 @@ def eval_lattice_new(supercell_obj,Cluster_rules,J_rules,Js,T):
                 total_spin2 += np.absolute(supercell_obj.get_site_spin(site))/supercell_obj.num_sites
     print(SUMS)
     return total_Ham,total_phase,total_phase2,total_spin,total_spin2
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 #-# Randomly change the phase of a specific element in the lattice and return the value of the original phase
