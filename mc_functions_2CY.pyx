@@ -275,7 +275,7 @@ cpdef void run_WA_MCA(mc_supercellObj supercell, int numb_passes, int num_sub_pa
     H_total,total_phase,total_phase2,total_spin,total_spin2 = eval_lattice_new(supercell_obj,Cluster_rules,J_rules,Js,T)
 
     while T<=tempf:
-        print('\nCURRENT TEMP = ',T)
+        print('CURRENT TEMP = ',T)
         print('starting details of phase: total phase = ',total_phase,' ; total |phase| = ',total_phase2)
         print('starting details of magnetization: total spin = ',total_spin,' ; total |spin| = ',total_spin2,'. energy = ',H_total,'\n' )
         for passes in range(numb_passes):
@@ -329,8 +329,8 @@ cpdef void run_WA_MCA(mc_supercellObj supercell, int numb_passes, int num_sub_pa
                                         supercell_obj.set_site_species(random_site,old_randsite_species)
                                         inc_not += 1
             H_total,total_phase,total_phase2,total_spin,total_spin2 = eval_lattice_new(supercell_obj,Cluster_rules,J_rules,Js,T)
-            print('\tdetails of phase: total phase = ',total_phase,' ; total |phase| = ',total_phase2)
-            print('\tdetails of magnetization: total spin = ',total_spin,' ; total |spin| = ',total_spin2,'. energy = ',H_total,'\n' )
+            print('details of phase: total phase = ',total_phase,' ; total |phase| = ',total_phase2)
+            print('details of magnetization: total spin = ',total_spin,' ; total |spin| = ',total_spin2,'. energy = ',H_total,'\n' )
 
             #Randdom Seed
             print('...sub-passes done, start cluster growth!')
@@ -350,24 +350,24 @@ cpdef void run_WA_MCA(mc_supercellObj supercell, int numb_passes, int num_sub_pa
                 H_cluster_old = eval_cluster(supercell_obj,seed_phase,new_phase,cluster,Cluster_rules,J_rules,Js,T)
                 flip_cluster(supercell_obj,seed_phase,new_phase,cluster)
                 H_cluster_new = eval_cluster(supercell_obj,seed_phase,new_phase,cluster,Cluster_rules,J_rules,Js,T)
-                print('\tnew Ham = ',H_cluster_new,' ; old Ham = ',H_cluster_old)
+                print('new Ham = ',H_cluster_new,' ; old Ham = ',H_cluster_old)
                 if H_cluster_new <= H_cluster_old:
                     inc_down += 1
-                    print('\taccepting MC cluster flip: new energy < old energy')
+                    print('accepting MC cluster flip: new energy < old energy')
                 else:
                     rand = np.random.random()
                     prob = math.exp(-1/(Kb*T)*(H_cluster_new-H_cluster_old))
                     if rand < prob:
-                        print('\taccepting MC cluster flip: prob is ',prob,' ... rand is ',rand)
+                        print('accepting MC cluster flip: prob is ',prob,' ... rand is ',rand)
                         inc_up += 1
                     else:
-                        print('\trejecting MC cluster flip: prob is ',prob,' ... rand is ',rand)
+                        print('rejecting MC cluster flip: prob is ',prob,' ... rand is ',rand)
                         flip_cluster(supercell_obj,new_phase,seed_phase,cluster)
                         inc_not += 1
 
             H_total,total_phase,total_phase2,total_spin,total_spin2 = eval_lattice_new(supercell_obj,Cluster_rules,J_rules,Js,T)
-            print('\tdetails of phase: total phase = ',total_phase,' ; total |phase| = ',total_phase2)
-            print('\tdetails of magnetization: total spin = ',total_spin,' ; total |spin| = ',total_spin2,'. energy = ',H_total,'\n' )
+            print('details of phase: total phase = ',total_phase,' ; total |phase| = ',total_phase2)
+            print('details of magnetization: total spin = ',total_spin,' ; total |spin| = ',total_spin2,'. energy = ',H_total,'\n' )
 
             print('...finish cluster moves, run subpasses')
             for sub_passes in range(num_sub_passes):
@@ -392,8 +392,8 @@ cpdef void run_WA_MCA(mc_supercellObj supercell, int numb_passes, int num_sub_pa
                             M += calc_avg_spin(site,supercell_obj)
 
             H_total,total_phase,total_phase2,total_spin,total_spin2 = eval_lattice_new(supercell_obj,Cluster_rules,J_rules,Js,T)
-            print('\tdetails of phase: total phase = ',total_phase,' ; total |phase| = ',total_phase2)
-            print('\tdetails of magnetization: total spin = ',total_spin,' ; total |spin| = ',total_spin2,'\n' )
+            print('details of phase: total phase = ',total_phase,' ; total |phase| = ',total_phase2)
+            print('details of magnetization: total spin = ',total_spin,' ; total |spin| = ',total_spin2,'\n' )
 
             temp_output = open('Temp_data','a')
             temp_output.write(str(supercell_obj.i_length)+','+str(T)+','+str(passes)+','+str(H_total)+','+str(M/supercell_obj.num_sites)+','+str(total_spin)+','+str(total_spin2)+','+str(total_phase)+','+str(total_phase2)+'\n')
