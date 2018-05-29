@@ -137,11 +137,11 @@ cdef list eval_lattice_new(mc_supercellObj supercell, Cluster_rules, J_rules, li
             for k in range(supercell_obj.k_length):
                 site = [i,j,k]
                 total_Ham += eval_site_new(site,supercell_obj,Cluster_rules,J_rules,Js,T)
-                total_phase += supercell_obj.get_site_phase(site)/supercell_obj.num_sites
-                total_phase2 += np.absolute(supercell_obj.get_site_phase(site))/supercell_obj.num_sites
-                total_spin += supercell_obj.get_site_spin(site)/supercell_obj.num_sites
-                total_spin2 += np.absolute(supercell_obj.get_site_spin(site))/supercell_obj.num_sites
-    return [total_Ham,total_phase,total_phase2,total_spin,total_spin2]
+                total_phase += supercell_obj.get_site_phase(site)
+                total_phase2 += np.absolute(supercell_obj.get_site_phase(site))
+                total_spin += supercell_obj.get_site_spin(site)
+                total_spin2 += np.absolute(supercell_obj.get_site_spin(site))
+    return [total_Ham,total_phase/supercell_obj.num_sites,total_phase2/supercell_obj.num_sites,total_spin/supercell_obj.num_sites,total_spin2/supercell_obj.num_sites]
 
 #-# Randomly change the phase of a specific element in the lattice and return the value of the original phase
 cdef list flip_phase(list site, int neighbor,mc_supercellObj supercell):
