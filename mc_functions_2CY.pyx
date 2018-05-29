@@ -269,6 +269,10 @@ cpdef void run_WA_MCA(mc_supercellObj supercell, int numb_passes, int num_sub_pa
     cdef list ghost_Js,site,random_site,cluster,seed
     cdef str c
     cdef bint random_site_not_0
+    cdef int neighbor
+    cdef list neighbor_site
+    cdef int old_neighbor_species
+    cdef int site_species
 
     supercell_obj = <mc_supercellObj>supercell
     ghost_Js = apply_diffusion_ghost_field(2,Cluster_rules,J_rules,Js)
@@ -305,29 +309,52 @@ cpdef void run_WA_MCA(mc_supercellObj supercell, int numb_passes, int num_sub_pa
                             ##############
                             # FLIP SPECIES
                             ##############
-                            if supercell_obj.get_site_species(site) != 0:
-                                random_site_not_0 = False
-                                while random_site_not_0 != True:
-                                    random_site_not_0 = False
-                                    random_site = [np.random.randint(0,supercell_obj.i_length),np.random.randint(0,supercell_obj.j_length),np.random.randint(0,supercell_obj.k_length)]
-                                    if supercell_obj.get_site_species(random_site) != 0:
-                                        random_site_not_0 = True
-                                old_Ham = eval_site_new(site,supercell_obj,Cluster_rules,J_rules,ghost_Js,T)
-                                old_Ham += eval_site_new(random_site,supercell_obj,Cluster_rules,J_rules,ghost_Js,T)
-                                old_site_species,old_randsite_species = flip_species(site,random_site,supercell_obj)
-                                new_Ham = eval_site_new(site,supercell_obj,Cluster_rules,J_rules,ghost_Js,T)
-                                new_Ham += eval_site_new(random_site,supercell_obj,Cluster_rules,J_rules,ghost_Js,T)
-                                if new_Ham < old_Ham:
-                                    inc_down += 1
-                                else:
-                                    rand = np.random.random()
-                                    prob = math.exp(-1/(Kb*T)*(new_Ham-old_Ham))
-                                    if rand < prob:
-                                        inc_up += 1
-                                    else:
-                                        supercell_obj.set_site_species(site,old_site_species)
-                                        supercell_obj.set_site_species(random_site,old_randsite_species)
-                                        inc_not += 1
+                            site_species = supercell_obj.get_site_species(site)
+                            if site_species != 0:
+                                for neighbor in range(supercell_obj.get_number_of_neighbors(site)):
+                                    if supercell_obj.get_neighbor_order(site,neighbor) != 0:
+                                        if supercell_obj.get_neighbor_order(site,neighbor) != 1:
+                                            if supercell_obj.get_neighbor_species(site,neighbor) != site_species:
+                                                neighbor_site = supercell_obj.get_neighbor_pos(site,neighbor)
+                                                old_Ham = eval_site_new(site,supercell_obj,Cluster_rules,J_rules,ghost_Js,T)
+                                                old_Ham += eval_site_new(neighbor_site,supercell_obj,Cluster_rules,J_rules,ghost_Js,T)
+                                                old_site_species,old_neighbor_species = flip_species(site,neighbor_site,supercell_obj)
+                                                new_Ham = eval_site_new(site,supercell_obj,Cluster_rules,J_rules,ghost_Js,T)
+                                                new_Ham += eval_site_new(neighbor_site,supercell_obj,Cluster_rules,J_rules,ghost_Js,T)
+                                                if new_Ham < old_Ham:
+                                                    inc_down += 1
+                                                else:
+                                                    rand = np.random.random()
+                                                    prob = math.exp(-1/(Kb*T)*(new_Ham-old_Ham))
+                                                    if rand < prob:
+                                                        inc_up += 1
+                                                    else:
+                                                        supercell_obj.set_site_species(site,old_site_species)
+                                                        supercell_obj.set_site_species(neighbor_site,old_neighbor_species)
+                                                        inc_not += 1
+#                            if supercell_obj.get_site_species(site) != 0:
+#                                random_site_not_0 = False
+#                                while random_site_not_0 != True:
+#                                    random_site_not_0 = False
+#                                    random_site = [np.random.randint(0,supercell_obj.i_length),np.random.randint(0,supercell_obj.j_length),np.random.randint(0,supercell_obj.k_length)]
+#                                    if supercell_obj.get_site_species(random_site) != 0:
+#                                        random_site_not_0 = True
+#                                old_Ham = eval_site_new(site,supercell_obj,Cluster_rules,J_rules,ghost_Js,T)
+#                                old_Ham += eval_site_new(random_site,supercell_obj,Cluster_rules,J_rules,ghost_Js,T)
+#                                old_site_species,old_randsite_species = flip_species(site,random_site,supercell_obj)
+#                                new_Ham = eval_site_new(site,supercell_obj,Cluster_rules,J_rules,ghost_Js,T)
+#                                new_Ham += eval_site_new(random_site,supercell_obj,Cluster_rules,J_rules,ghost_Js,T)
+#                                if new_Ham < old_Ham:
+#                                    inc_down += 1
+#                                else:
+#                                    rand = np.random.random()
+#                                    prob = math.exp(-1/(Kb*T)*(new_Ham-old_Ham))
+#                                    if rand < prob:
+#                                        inc_up += 1
+#                                    else:
+#                                        supercell_obj.set_site_species(site,old_site_species)
+#                                        supercell_obj.set_site_species(random_site,old_randsite_species)
+#                                        inc_not += 1
             H_total,total_phase,total_phase2,total_spin,total_spin2 = eval_lattice_new(supercell_obj,Cluster_rules,J_rules,Js,T)
             print('details of phase: total phase = ',total_phase,' ; total |phase| = ',total_phase2)
             print('details of magnetization: total spin = ',total_spin,' ; total |spin| = ',total_spin2,'. energy = ',H_total,'\n' )
