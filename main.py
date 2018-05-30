@@ -108,7 +108,7 @@ species_init = 'rand'
 num_passes = 10 # number of cluster/wolf moves done
 num_sub_passes = 10 # number of spin/species flips done per cluster/wolf move
 Temp0 = 100 # initial temperature in K
-TempF = 150 # final temperature in K
+TempF = 800 # final temperature in K
 Temp_inc = 5 # temperature increase per pass in K
 
 ## Initialize an array of atoms with ms.mc_supercellObj(size,species,composition)

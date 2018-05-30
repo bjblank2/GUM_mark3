@@ -520,8 +520,8 @@ cdef void grow_cluster(list site, mc_supercellObj supercell, int seed_phase,int 
     cdef list new_site
 
     BEG_params = calc_BEG_params(site,supercell_obj,Cluster_rules,J_rules,Js,T)
-    BEG_params[0] = J
-    BEG_params[1] = K
+    J = BEG_params[0]
+    K = BEG_params[1]
 ######### START ELIF MODIFICATIONS #############
 # I think here is where we need to translate the Entel terminology into the cluster algorithms terminology.
 # I think Brian did not switch the J,K to K,M.  I will do it including this swap so I don't go crazy.
