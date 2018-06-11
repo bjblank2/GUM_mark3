@@ -100,6 +100,10 @@ cdef float eval_site_new(list site, mc_supercellObj supercell, Cluster_rules,J_r
     cdef float J
     cdef float K
     cdef int neighbor
+    ###################
+    cdef float B_field = .001
+    ###################
+
 
     supercell_obj = <mc_supercellObj>supercell
     site_phase = supercell_obj.get_site_phase(site)
@@ -111,6 +115,7 @@ cdef float eval_site_new(list site, mc_supercellObj supercell, Cluster_rules,J_r
             neighbor_phase = supercell_obj.get_neighbor_phase(site,neighbor)
             total_Ham += (J*(site_phase*neighbor_phase)+K*(1-site_phase**2)*(1-neighbor_phase**2))/8
     total_Ham += Kb*T*np.log(8)*(site_phase**2)
+    total_Ham -= B_field*supercell_obj.get_site_spin(site)
     return total_Ham
 
 
@@ -499,7 +504,7 @@ cpdef void run_WA_MCA(mc_supercellObj supercell, int numb_passes, int num_sub_pa
     ax.quiver(xs,ys,zs,us,vs,ws,pivot='middle',length=.5)
     ax.scatter(xs,ys,zs,c=cs,marker='o',s=50)
     plt.savefig('3D_plt.png')
-    plt.show()
+    #plt.show()
 
 #-# Grows the clusters
 cdef void grow_cluster(list site, mc_supercellObj supercell, int seed_phase,int new_phase,list links, Cluster_rules, J_rules, list Js, float T): # Recursive function
