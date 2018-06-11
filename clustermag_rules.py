@@ -79,15 +79,17 @@ def read_cluster_rules(rule_file):
     Cluster_rule_list = []
     for i in range(len(lines)):
         if '#' in lines[i]:
-            Cluster_rule = clusters.ClusterObj()
-            name = lines[i]
-            Cluster_rule.set_name(name.strip('# '))
-            Cluster_rule.set_neighbor_order(int(lines[i + 1]))
-            Cluster_rule.set_neighbor_arrangement(lines[i + 2].strip())
-            Cluster_rule.set_home_atom_list(lines[i + 3].split())
-            Cluster_rule.set_neighbor_atom_list(lines[i + 4].split())
-            Cluster_rule.set_phase(lines[i + 5].strip())
-            Cluster_rule.set_plane(lines[i + 6].strip())
+            rule_name = lines[i]
+            rule_name = rule_name.strip('# ')
+            rule_neighbor_order = int(lines[i + 1])
+            rule_neighbor_arrangement = lines[i + 2].strip()
+            rule_home_atom_list = lines[i + 3].split()
+            rule_home_atom_list = [int(i) for i in rule_home_atom_list]###### still part of the ugly thing I don't like
+            rule_neighbor_atom_list = lines[i + 4].split()
+            rule_neighbor_atom_list = [int(i) for i in rule_neighbor_atom_list]###### still part of the ugly thing I don't like
+            rule_phase = lines[i + 5].strip()
+            rule_plane = lines[i + 6].strip()
+            Cluster_rule = clusters.ClusterObj(rule_name,rule_neighbor_order,rule_neighbor_arrangement,rule_home_atom_list,rule_neighbor_atom_list,rule_phase,rule_plane)
             Cluster_rule_list.append(Cluster_rule)
     input_file.close()
     return Cluster_rule_list
@@ -117,15 +119,17 @@ def read_j_rules(rule_file):
     J_rule_list = []
     for i in range(len(lines)):
         if '#' in lines[i]:
-            J_rule = js.JObj()
-            name = lines[i]
-            J_rule.set_name(name.strip('# '))
-            J_rule.set_neighbor_order(int(lines[i + 1]))
-            J_rule.set_neighbor_arrangement(lines[i + 2].strip())
-            J_rule.set_home_atom_list(lines[i + 3].split())
-            J_rule.set_neighbor_atom_list(lines[i + 4].split())
-            J_rule.set_phase(lines[i + 5].strip())
-            J_rule.set_plane(lines[i + 6].strip())
+            rule_name = lines[i]
+            rule_name = rule_name.strip('# ')
+            rule_neighbor_order = int(lines[i + 1])
+            rule_neighbor_arrangement = lines[i + 2].strip()
+            rule_home_atom_list = lines[i + 3].split()
+            rule_home_atom_list = [int(i) for i in rule_home_atom_list]###### still part of the ugly thing I don't like
+            rule_neighbor_atom_list = lines[i + 4].split()
+            rule_neighbor_atom_list = [int(i) for i in rule_neighbor_atom_list]###### still part of the ugly thing I don't like
+            rule_phase = lines[i + 5].strip()
+            rule_plane = lines[i + 6].strip()
+            J_rule = js.JObj(rule_name,rule_neighbor_order,rule_neighbor_arrangement,rule_home_atom_list,rule_neighbor_atom_list,rule_phase,rule_plane)
             J_rule_list.append(J_rule)
     input_file.close()
     return J_rule_list

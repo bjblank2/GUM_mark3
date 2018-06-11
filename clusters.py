@@ -2,14 +2,22 @@ __author__ = 'brian'
 
 
 class ClusterObj:
-    def __init__(self):
-        self.name = ''
-        self.neighbor_order = 0
-        self.neighbor_arrangement = ''
-        self.home_atom_list = []
-        self.neighbor_atom_list = []
-        self.phase = ''
-        self.plane = ''
+    def __init__(self,name,neighbor_order,neighbor_arrangement,home_atom_list,neighbor_atom_list,phase,plane):
+        self.name = name
+        self.neighbor_order = neighbor_order
+        self.neighbor_arrangement = neighbor_arrangement
+        self.home_atom_list = home_atom_list
+        self.neighbor_atom_list = neighbor_atom_list
+        self.phase = phase
+        self.plane = plane
+        self.HAL_uniform = [999] * 5####### This is ugly and I dont like it
+        self.NAL_uniform = [999] * 5#######
+        for i in range(len(home_atom_list)):
+            self.HAL_uniform[i] = int(home_atom_list[i])
+        for i in range(len(neighbor_atom_list)):
+            self.NAL_uniform[i] = int(home_atom_list[i])
+        self.tag = [self.neighbor_order,self.neighbor_arrangement,self.phase,self.plane]
+        self.tag += self.HAL_uniform + self.NAL_uniform
 
     def create_rule(self):
         self.name = input('Input J name:  ')
