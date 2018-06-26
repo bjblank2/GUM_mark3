@@ -663,3 +663,86 @@ def apply_diffusion_ghost_field(strength,Cluster_rules,J_ruels,Js):
                         if 1 not in Cluster_rules[i].neighbor_atom_list:
                             ghost_Js[i] = ghost_Js[i]+strength
     return ghost_Js
+
+def BEG_flip_test(supercell_obj,temp,Cluster_rules,J_rules,Js,flip_size):
+    Kb = .000086173324
+    x_size = supercell_obj.i_length
+    y_size = supercell_obj.j_length
+    z_size = supercell_obj.k_length
+    x_flip = x_size*flip_size
+    y_flip = y_size*flip_size
+    z_flip = z_size*flip_size
+    H_init,total_phase,total_phase2,total_spin,total_spin2 = eval_lattice_new(supercell_obj,Cluster_rules,J_rules,Js,temp)
+    for i in range(x_size):
+        for j in range(y_size):
+            for k in range(z_size):
+                if i<=x_flip and j<=y_flip and k<=z_flip:
+                    phase = supercell_obj.get_site_phase([i,j,k])
+                    if phase == 0:
+                        supercell_obj.set_site_phase([i,j,k],1)
+                    elif abs(phase) == 1:
+                        supercell_obj.set_site_phase([i,j,k],0)
+
+    # phase = supercell_obj.get_site_phase([0,0,0])
+    # if phase == 0:
+    #     supercell_obj.set_site_phase([0,0,0],1)
+    # elif abs(phase) == 1:
+    #     supercell_obj.set_site_phase([0,0,0],0)
+    #
+    # phase = supercell_obj.get_site_phase([1,0,0])
+    # if phase == 0:
+    #     supercell_obj.set_site_phase([1,0,0],1)
+    # elif abs(phase) == 1:
+    #     supercell_obj.set_site_phase([1,0,0],0)
+    # flip_3rd = True
+    # if flip_3rd == True:
+    #     phase = supercell_obj.get_site_phase([2,0,0])
+    #     if phase == 0:
+    #         supercell_obj.set_site_phase([2,0,0],1)
+    #     elif abs(phase) == 1:
+    #         supercell_obj.set_site_phase([2,0,0],0)
+
+    H_final,total_phase,total_phase2,total_spin,total_spin2 = eval_lattice_new(supercell_obj,Cluster_rules,J_rules,Js,temp)
+    ########### Check THIS!!!!!
+    prob = math.exp(-1/(Kb*temp)*(H_final-H_init))
+    ###########
+    print('\n')
+    print("initial energy: "+str(H_init))
+    print("final energy: "+str(H_final))
+    print("delta energy: "+str(H_final-H_init))
+    print('flip prob: '+str(prob))
+    fig = plt.figure(5)
+    ax = fig.add_subplot(111, projection='3d')
+    xs = []
+    ys = []
+    zs = []
+    cs = []
+    us = []
+    vs = []
+    ws = []
+    for i in range(supercell_obj.i_length):
+        for j in range(supercell_obj.j_length):
+            for k in range(supercell_obj.k_length):
+                if np.mod(k,2) == 0:
+                    offset = 0
+                else:
+                    offset = .5
+                site = [i,j,k]
+                pos = supercell_obj.get_site_pos(site)
+                xs.append(pos[0]+offset)
+                ys.append(pos[1]+offset)
+                zs.append(pos[2]*.5)
+                us.append(0)
+                vs.append(0)
+                ws.append(supercell_obj.get_site_spin(site))
+                if supercell_obj.get_site_phase(site) == 0:
+                    cs.append('r')
+                if supercell_obj.get_site_phase(site) == 1:
+                    cs.append('b')
+                if supercell_obj.get_site_phase(site) == -1:
+                    cs.append('b')
+    #ax.quiver(xs,ys,zs,us,vs,ws,pivot='middle',length=.5)
+    ax.scatter(xs,ys,zs,c=cs,marker='o',s=50)
+    plt.savefig('3D_plt.png')
+    plt.show()
+
