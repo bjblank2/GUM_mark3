@@ -26,6 +26,8 @@ def calc_BEG_params(site,supercell_obj,Cluster_rules,J_rules,Js,T):
     BEG_J = 0
     BEG_K = 0
     home_spin = supercell_obj.get_site_spin(site)
+    # .tag consists of name,neighbor_order,neighbor_arrangement,home_atom_list,neighbor_atom_list,phase,plane
+    # home_atom_list and neighbor_atom_list are each five elements long, with unused elements assigned a value of 999
     for neighbor in range(supercell_obj.get_number_of_neighbors(site)):
         neighbor_spin = supercell_obj.get_neighbor_spin(site,neighbor)
         for rule in range(len(Cluster_rules)):

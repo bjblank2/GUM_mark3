@@ -119,10 +119,10 @@ print(rule2.tag)
 ## Initialize an array of atoms with ms.mc_supercellObj(size,species,composition)
 ## size is (x,y,z)dimensions, species is types of atoms allowed (0=Ni,1=Mn,2=In)
 ## composition is number of each atom (#Ni,#Mn,#In)
-#lattice = ms.mc_supercellObj((x_pts,y_pts,z_pts),(0,1,2),[8,8,0],phase_init,spin_init,species_init)
+lattice = ms.mc_supercellObj((x_pts,y_pts,z_pts),(0,1,2),[8,8,0],phase_init,spin_init,species_init)
 #sys.setrecursionlimit(lattice.num_sites+2)
 ## To actually run the simulation use
 ## mc.run_montecarlo(reference_to_atom_array,number_of_passes,starting_temp, BEG_rules,Cluster_rules,J_rules,plot_figs=TRUE)
 ## BEG_rules,Cluster_rules,J_rules are objects that determine when and how the fitted parameters are applied
 print("Beginning MonteCarlo\n")
-#mc2.run_WA_MCA(lattice,num_passes,num_sub_passes,Temp0,Temp_inc,TempF,Cluster_rules,J_rules,Js,do_figs=True)
+mc2.run_WA_MCA(lattice,num_passes,num_sub_passes,Temp0,Temp_inc,TempF,Cluster_rules,J_rules,Js,do_figs=True)
