@@ -99,16 +99,16 @@ else:
 ## temp_data.write('size,Temp,passes,H_avg,mimj_avg,mag_avg,absmag_avg,phase_avg,absphase_avg\n')
 ## temp_data.close()
 
-x_pts = 2 #|
-y_pts = 2 #|- Dimensions of the mc_supercellObj (simulation supercell)
-z_pts = 4 #|
+x_pts = 4 #|
+y_pts = 4 #|- Dimensions of the mc_supercellObj (simulation supercell)
+z_pts = 8 #|
 phase_init = 'mart' # initial phase configuration
 spin_init = 'rand' # initial spin configuration
 species_init = 'rand'
-num_passes = 400 # number of cluster/wolf moves done
+num_passes = 20 # number of cluster/wolf moves done
 num_sub_passes = 30 # number of spin/species flips done per cluster/wolf move
-Temp0 = 100 # initial temperature in K
-TempF = 210 # final temperature in K
+Temp0 = 150 # initial temperature in K
+TempF = 500 # final temperature in K
 Temp_inc = 5 # temperature increase per pass in K
 
 rule1 = J_rules[1]
@@ -119,10 +119,10 @@ print(rule2.tag)
 ## Initialize an array of atoms with ms.mc_supercellObj(size,species,composition)
 ## size is (x,y,z)dimensions, species is types of atoms allowed (0=Ni,1=Mn,2=In)
 ## composition is number of each atom (#Ni,#Mn,#In)
-lattice = ms.mc_supercellObj((x_pts,y_pts,z_pts),(0,1,2),[8,8,0],phase_init,spin_init,species_init)
+lattice = ms.mc_supercellObj((x_pts,y_pts,z_pts),(0,1,2),[64,48,16],phase_init,spin_init,species_init)
 #sys.setrecursionlimit(lattice.num_sites+2)
 ## To actually run the simulation use
 ## mc.run_montecarlo(reference_to_atom_array,number_of_passes,starting_temp, BEG_rules,Cluster_rules,J_rules,plot_figs=TRUE)
 ## BEG_rules,Cluster_rules,J_rules are objects that determine when and how the fitted parameters are applied
 print("Beginning MonteCarlo\n")
-mc2.run_WA_MCA(lattice,num_passes,num_sub_passes,Temp0,Temp_inc,TempF,Cluster_rules,J_rules,Js,do_figs=True)
+mc2.run_WA_MCA_nested(lattice,num_passes,num_sub_passes,Temp0,Temp_inc,TempF,Cluster_rules,J_rules,Js,do_figs=True)
