@@ -3,6 +3,7 @@ import calc_params as Cp
 import mc_functions as mc
 import mc_functions_2 as mc2
 import mc_supercell as ms
+import time
 import sys
 
 # This is the main file that calculates the fit and runs the
@@ -27,7 +28,7 @@ Data_file_exists = True
 BEG_file_exists = True
 Cluster_rules_exist = True
 J_ruels_exist = True
-Js_exist = True
+Js_exist = False
 # Set all rules and structure data
 if Data_file_exists is False:
     Cp.import_data(num_species, root_dir, data_file)
@@ -87,11 +88,16 @@ Mag_field = 0
 # composition is number of each atom (#Ni,#Mn,#In)
 
 #sys.setrecursionlimit(2000)
-lattice = ms.mc_supercellObj((x_pts,y_pts,z_pts),(0,1,2),comp,phase_init,spin_init,species_init)#(64,48,16))
+#lattice = ms.mc_supercellObj((x_pts,y_pts,z_pts),(0,1,2),comp,phase_init,spin_init,species_init)#(64,48,16))
 #sys.setrecursionlimit(lattice.num_sites+2)
 # To actually run the simulation use
 # mc.run_montecarlo(reference_to_atom_array,number_of_passes,starting_temp, BEG_rules,Cluster_rules,J_rules,plot_figs=TRUE)
 # BEG_rules,Cluster_rules,J_rules are objects that determine when and how the fitted parameters are applied
 
-print("Beginning MonteCarlo\n")
-mc2.run_WA_MCA(lattice,num_passes,num_sub_passes,Temp0,Temp_inc,TempF,Mag_field,Cluster_rules,J_rules,Js,species_flips)
+#print("Beginning MonteCarlo\n")
+##mc2.run_WA_MCA(lattice,num_passes,num_sub_passes,Temp0,Temp_inc,TempF,Mag_field,Cluster_rules,J_rules,Js,species_flips)
+#t1 = time.time()
+#site_eval = mc2.eval_site_new([0,0,0],lattice,Cluster_rules,J_rules,Js,10,0)
+#print(site_eval)
+#t2 = time.time()
+#print(t2-t1)
