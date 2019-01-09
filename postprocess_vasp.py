@@ -39,6 +39,28 @@ def generate_m_structure(data_file, num_Cluster_rules, num_J_rules, aust_tol, sp
             #norms.append(j_count)
     return m_struct_list
 
+def scale_enrg(M_structures):
+    e_comp0 = []
+    e_comp50 = []
+    for i in range(len(M_structures)):
+        if M_structures[i].phase_name != "pmmmm":
+            structure = M_structures[i]
+            comp = structure.composition[2]/structure.composition[0]
+            if comp == 0:
+                e_comp0.append(structure.enrg)
+            if comp == .5:
+                e_comp50.append(structure.enrg)
+    comp0_min = min(e_comp0)
+    comp50_min = min(e_comp50)
+    offset = (comp50_min-comp0_min)/.5
+    #offset = 0
+    enrg_list = []
+    for i in range(len(M_structures)):
+        if M_structures[i].phase_name != "pmmmm":
+            comp = M_structures[i].composition[2]/M_structures[i].composition[0]
+            old_enrg = M_structures[i].enrg
+            M_structures[i].enrg = old_enrg-(offset*comp + comp0_min)
+
 def write_structures_processedvasp(structures,data_file_pp):
     file = open(data_file_pp, 'w')
     for i in range(len(structures)):

@@ -71,7 +71,7 @@ def ridge_simple(m_structure_list,alpha,Cluster_rules,J_rules):
 
 # evaluate coefficients for different regularization parameters and plot results
 # would like to make this label the different curves with the parameter name
-    n_alphas = 51
+    n_alphas = 510
     alpha_list = np.logspace(-15,10,n_alphas)
     
     # initialize dataframe for storing coefficients
@@ -130,12 +130,12 @@ def ridge_simple(m_structure_list,alpha,Cluster_rules,J_rules):
     plt.savefig('scores.pdf')
     
     # determine regularization parameter using cross-validation
-    ridge_fit = linear_model.RidgeCV(alphas=alpha_list,fit_intercept=True,normalize=True)
+    ridge_fit = linear_model.RidgeCV(alphas=alpha_list,fit_intercept=False,normalize=True)
     ridge_fit.fit(predictors,data)
     print('Selected regularization parameter using cross validation: ',ridge_fit.alpha_)
 
-    ridge_fit = linear_model.Ridge(alpha=0.00001,fit_intercept=False,normalize=True) ###################################
-    ridge_fit.fit(predictors,data)
+    #ridge_fit = linear_model.Ridge(alpha=0.00001,fit_intercept=False,normalize=True) ###################################
+    #ridge_fit.fit(predictors,data)
 
     #ridge_fit = linear_model.Ridge(alpha=1e-10,fit_intercept=False)
     #ridge_fit.fit(a,b)
@@ -202,7 +202,7 @@ def write_fitting_parameters(structures, clusters_list, j_list, Js, intercept, l
 
 
 # plotting function not written very generally here, just does NiMnIn
-def plot_data3(M_structures, clusters_list, j_list, Js, intercept, limit):
+def plot_data3(M_structures, clusters_list, j_list, Js, intercept, limit,hull):
     plt.figure(4)           # do we really need to keep count of the number of figures?
     colors = {'mart': 'g', 'aus': 'b', 'pre-mart': 'r'}
     markers = {'none': 'x', 'FM': 'o', 'AFM': 's', 'spin disordered':'D'}
@@ -226,7 +226,10 @@ def plot_data3(M_structures, clusters_list, j_list, Js, intercept, limit):
     for i in range(len(M_structures)):
         if M_structures[i].phase_name != "pmmmm":
             comp = M_structures[i].composition[2]/M_structures[i].composition[0]
-            enrg_list.append(M_structures[i].enrg-(offset*comp + comp0_min))
+            if hull == True:
+                enrg_list.append(M_structures[i].enrg)
+            else:
+                enrg_list.append(M_structures[i].enrg-(offset*comp + comp0_min))
     new_enrg_list = []
     for i in range(len(M_structures)):
         mat = M_structures[i]
